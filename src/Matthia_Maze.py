@@ -14,8 +14,6 @@ from matplotlib import pyplot
 
 def create_matrix(matrix_height, matrix_width,
                   n_blocks, n_enter, n_exits):
-
-
     Matrix = [[0 for i in xrange(matrix_width)] for j in xrange(matrix_height)]
 
     # Defintion of 0s matrix this corresponds to the Maze where the vehicles will drive, 
