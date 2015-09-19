@@ -1,10 +1,22 @@
 #!/usr/bin/env python
 
-from World import World
+
+def signal_handler(signal, frame):
+    import sys
+    print('Byebye.')
+    sys.exit(0)
 
 
 def main(args):
+    import signal
+    from World import World
+    from Simulation import Simulation
+
+    signal.signal(signal.SIGINT, signal_handler)
+
     world = World(args.grid_size, args.num_agents)
+    simulation = Simulation(world)
+    simulation.run()
 
 
 def get_args():

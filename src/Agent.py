@@ -1,8 +1,19 @@
+from Utils import Point
+
+
 class Agent:
     def __init__(self, world):
         self._world = world
-        self._position = (0, 0)
-        self._start = (-1, -1)
-        self._end = (-1, -1)
+        self._position = Point(0, 0)
+        self._start = Point()
+        self._end = Point()
         self._velocity = 0
-        self._nowaypoints = []  # initially empty, add points for A* to avoid
+
+    def is_travelling(self):
+        return self._end.is_set()
+
+    def update(self):
+        pass
+
+    def __str__(self):
+        return "(Agent @ %s - %s -> %s)" % (self._position, self._start, self._end)
