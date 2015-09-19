@@ -10,10 +10,35 @@ from __future__ import print_function
 
 
 class Grid():
+    """
+    A grid class with a list as content of each cell. This list can be used to
+    add arbitrary content to the grid.
+    """
     def __init__(self, width, height, n_blocked=0):
         self.width = width
         self.height = height
         self._grid = self._create_matrix(width, height, n_blocked)
+
+    def get_items_at(self, x, y=None):
+        """
+        Returns the list of items at the given position, it can be manipulated.
+        """
+        from Utils import Point
+        if isinstance(x, Point):
+            x, y = x.x, x.y
+
+        assert x >= 0 and x < self.width and y >= 0 and y < self.height, \
+            "grid coordinates out of bounds"
+        return self._grid[y][x]
+
+    def clear_items_at(self, x, y=None):
+        del self.get_items_at(x, y)[:]
+
+    def remove_item_at(self, v, x, y=None):
+        self.get_items_at(x, y).remove(v)
+
+    def append_item_at(self, v, x, y=None):
+        self.get_items_at(x, y).append(v)
 
     def _create_matrix(self, width, height, n_blocked=0, n_enter=0, n_exits=0):
         from random import random, randint
@@ -29,7 +54,8 @@ class Grid():
                     x = -1
             return (x, y)
 
-        matrix = [[0 for i in xrange(width)] for j in xrange(height)]
+        # create a list of lists (2D matrix) with another empty list as content
+        matrix = [[[] for i in xrange(width)] for j in xrange(height)]
 
         for i in xrange(n_blocked):
             x_to_block = randint(0, width - 1)
@@ -47,6 +73,13 @@ class Grid():
             matrix[y][x] = 3  # 3 means it's an ending point
 
         return matrix
+
+    def __str__(self):
+        s = ""
+        rows = []
+        for y in xrange(self.height):
+            rows.append(' '.join(map(lambda c: "%02i" % len(c), self._grid[y])))
+        return '\n'.join(rows)
 
 
 if __name__ == '__main__':

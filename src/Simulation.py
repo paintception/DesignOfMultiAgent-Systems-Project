@@ -7,9 +7,13 @@ class Simulation():
 
     def run(self):
         w = self._world
+        day_count = -1
 
         while True:
-            print("Time: %s" % self._world.get_time())
+            if self._world.get_time() == 0:
+                day_count += 1
+                print("===== Day: %i =====" % day_count)
+                print(self._world.get_grid())
 
             cars = w.get_agents()
 
@@ -28,8 +32,6 @@ class Simulation():
                     car.reset_pos()
 
             for car in cars:
-                print(car)
                 car.update()
-                #TODO: update grid with new car position
 
             w.next_time_step()
