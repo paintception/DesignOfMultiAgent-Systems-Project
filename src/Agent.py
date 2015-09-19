@@ -12,6 +12,15 @@ class Agent:
     def is_travelling(self):
         return self._end.is_set()
 
+    def set_start_point(self, p):
+        self._start = p
+
+    def set_end_point(self, p):
+        self._end = p
+
+    def reset_pos(self):
+        self._position = self._start
+
     def update(self):
         pass
 

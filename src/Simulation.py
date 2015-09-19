@@ -6,19 +6,30 @@ class Simulation():
         self._world = world
 
     def run(self):
+        w = self._world
+
         while True:
             print("Time: %s" % self._world.get_time())
 
-            cars = self._world.get_agents()
+            cars = w.get_agents()
 
+            gw, gh = w.get_grid().width, w.get_grid().height
             for car in cars:
                 if not car.is_travelling():
-                    pass
-                    # generate start + end points
-                    # set both on car
-                    # teleport car to start point, but only if no car is there yet
+                    # TEMP: randomly route cars
+                    from Utils import Point
+                    from random import randint
+                    # TODO: check if no car is at (sx,sy) yet
+                    sx, sy = randint(0, gw), randint(0, gh)
+                    ex, ey = randint(0, gw), randint(0, gh)
+                    
+                    car.set_start_point(Point(sx, sy))
+                    car.set_end_point(Point(ex, ey))
+                    car.reset_pos()
 
             for car in cars:
+                print(car)
                 car.update()
+                #TODO: update grid with new car position
 
-            self._world.next_time_step()
+            w.next_time_step()

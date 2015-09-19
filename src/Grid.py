@@ -11,6 +11,8 @@ from __future__ import print_function
 
 class Grid():
     def __init__(self, width, height, n_blocked=0):
+        self.width = width
+        self.height = height
         self._grid = self._create_matrix(width, height, n_blocked)
 
     def _create_matrix(self, width, height, n_blocked=0, n_enter=0, n_exits=0):
