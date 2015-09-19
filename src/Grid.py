@@ -1,6 +1,8 @@
+from __future__ import print_function
+
 # The program creates a grid where our agents will drive through, the grid is created by the function create_matrix 
 # and is represented by a list of lists. The function receives as input the width (matrix_width) and the height (matrix_height) of the maze,
-# n_blocks which is the number of cells of the matrix that will correspond to the obstancles the agents will encounter when driving, these are made # randomly and represented inside the grid by 1's. The same logic has been used for the creation of some starting points (n_enter) and destinations # (n_exits) but this time they may only "appear" on the borders of the maze.
+# n_blocked which is the number of cells of the matrix that will correspond to the obstancles the agents will encounter when driving, these are made # randomly and represented inside the grid by 1's. The same logic has been used for the creation of some starting points (n_enter) and destinations # (n_exits) but this time they may only "appear" on the borders of the maze.
 
 # YELLOW = STARTING POINTS
 # BROWN = DESTINATION POINTS
@@ -8,10 +10,10 @@
 
 
 class Grid():
-    def __init__(self, width, height):
-        self._grid = self._create_matrix(width, height)
+    def __init__(self, width, height, n_blocked=0):
+        self._grid = self._create_matrix(width, height, n_blocked)
 
-    def _create_matrix(self, width, height, n_blocks=0, n_enter=0, n_exits=0):
+    def _create_matrix(self, width, height, n_blocked=0, n_enter=0, n_exits=0):
         from random import random, randint
 
         def pick_edge_point():
@@ -27,11 +29,7 @@ class Grid():
 
         matrix = [[0 for i in xrange(width)] for j in xrange(height)]
 
-        # Definition of 0s matrix this corresponds to the Maze where the vehicles will drive, 
-        # Lista di Liste
-        # Lista = [[1,2,3] for i in xrange(10)]
-
-        for i in xrange(n_blocks):
+        for i in xrange(n_blocked):
             x_to_block = randint(0, width - 1)
             y_to_block = randint(0, height - 1)
 
@@ -52,11 +50,34 @@ class Grid():
 if __name__ == '__main__':
     import numpy
     from matplotlib import pyplot
+    import astar
 
-    grid = Grid(0, 0)
-    matrix = grid._create_matrix(100, 100, 200, 25, 12)
-    np_matrix = numpy.asarray(matrix)
+    grid_size = 100
+    dirs = astar.getDirectionsArray()
+    grid = Grid(grid_size, grid_size, 4000)
+    start, end = (0, 0), (50, 50)
+    route = astar.path_find(grid._grid, grid_size, grid_size, start, end)
+
+    print("route: %s" % route)
+
+    if len(route) > 0:
+        x = start[0]
+        y = start[1]
+        grid._grid[y][x] = 2
+        for i in range(len(route)):
+            j = int(route[i])
+            x += dirs[0][j]
+            y += dirs[1][j]
+            grid._grid[y][x] = 3
+        grid._grid[y][x] = 4
+
+    np_matrix = numpy.asarray(grid._grid)
     pyplot.pcolor(np_matrix)
     pyplot.show()
 
-    #print(Matrix)
+
+    # matrix = grid._create_matrix(100, 100, 200, 25, 12)
+    # np_matrix = numpy.asarray(matrix)
+    # pyplot.pcolor(np_matrix)
+    # pyplot.show()
+    # print(Matrix)
