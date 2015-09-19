@@ -21,12 +21,12 @@ class Simulation():
             for car in cars:
                 if not car.is_travelling():
                     # TEMP: randomly route cars
-                    from Utils import Point
+                    from utils import Point
                     from random import randint
-                    # TODO: check if no car is at (sx,sy) yet
-                    sx, sy = randint(0, gw), randint(0, gh)
-                    ex, ey = randint(0, gw), randint(0, gh)
-                    
+                    # TODO: check if no car is at (sx,sy) yet (and if so: wait? or pick another point?)
+                    sx, sy = randint(0, gw - 1), randint(0, gh - 1)
+                    ex, ey = randint(0, gw - 1), randint(0, gh - 1)
+
                     car.set_start_point(Point(sx, sy))
                     car.set_end_point(Point(ex, ey))
                     car.reset_pos()

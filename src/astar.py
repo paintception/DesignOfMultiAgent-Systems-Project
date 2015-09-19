@@ -2,14 +2,16 @@ from heapq import heappush, heappop  # for priority queue
 import math
 
 
-NUM_DIRECTIONS = 8  # number of possible directions to move on the map
+NUM_DIRECTIONS = 4  # number of possible directions to move on the map
 
 if NUM_DIRECTIONS == 4:
-    _DIRS_X = [1, 0, -1, 0]
-    _DIRS_Y = [0, 1, 0, -1]
+    # N E S W
+    _DIRS_X = [0, 1, 0, -1]
+    _DIRS_Y = [-1, 0, 1, 0]
 elif NUM_DIRECTIONS == 8:
-    _DIRS_X = [1, 1, 0, -1, -1, -1, 0, 1]
-    _DIRS_Y = [0, 1, 1, 1, 0, -1, -1, -1]
+    # N NE E SE S SW W NW
+    _DIRS_X = [0, 1, 1, 1, 0, -1, -1, -1]
+    _DIRS_Y = [-1, -1, 0, 1, 1, 1, 0, -1]
 
 
 def getDirectionsArray():

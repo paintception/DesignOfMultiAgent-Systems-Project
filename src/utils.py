@@ -1,4 +1,16 @@
+def enum(**enums):
+    return type('Enum', (), enums)
+
+# These numbers match the indices in astar.py.
+DIR = enum(N=0, E=1, S=2, W=3)
+
+DIR_DELTA = enum(N=(0, -1), E=(1, 0), S=(0, 1), W=(-1, 0))
+
+
 class Point():
+    """
+    A simple 2D point.
+    """
     def __init__(self, x=-1, y=-1):
         self.x = x
         self.y = y

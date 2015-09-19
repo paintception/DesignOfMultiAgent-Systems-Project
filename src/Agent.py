@@ -1,4 +1,4 @@
-from Utils import Point
+from utils import DIR, Point
 
 
 class Agent:
@@ -10,6 +10,7 @@ class Agent:
         self._start = Point()
         self._end = Point()
         self._velocity = 0
+        self._direction = DIR.N
 
         world.get_grid().append_item_at(self, self._position)
 
@@ -23,7 +24,9 @@ class Agent:
         self._end = p
 
     def reset_pos(self):
+        self._last_position = self._position
         self._position = self._start
+        self._update_map_position()
 
     def get_pos(self):
         return self._position
@@ -45,4 +48,6 @@ class Agent:
             g.append_item_at(self, np)
 
     def __str__(self):
-        return "(Agent %s @ %s - %s -> %s)" % (self._name, self._position, self._start, self._end)
+        return "<<agent %s @ %s; %s -> %s; v: %.2f, d: %s>>" % \
+            (self._name, self._position, self._start, self._end,
+                self._velocity, self._direction)

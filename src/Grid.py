@@ -23,13 +23,14 @@ class Grid():
         """
         Returns the list of items at the given position, it can be manipulated.
         """
-        from Utils import Point
+        from utils import Point
         if isinstance(x, Point):
             x, y = x.x, x.y
 
         assert x >= 0 and x < self.width and y >= 0 and y < self.height, \
             "grid coordinates out of bounds"
-        return self._grid[y][x]
+
+        return self._grid[int(y)][int(x)]
 
     def clear_items_at(self, x, y=None):
         del self.get_items_at(x, y)[:]
