@@ -8,25 +8,20 @@ class Simulation():
     def run(self):
         from datetime import datetime as dt
 
-        w = self._world
+        w, g = self._world, self._world.get_grid()
         day_count = 0
 
         start = dt.now()
         while True:
             cars = w.get_agents()
 
-            gw, gh = w.get_grid().width, w.get_grid().height
+            gw, gh = g.width, g.height
             for car in cars:
                 if not car.is_travelling():
                     # TEMP: randomly route cars
-                    from utils import Point
-                    from random import randint
                     # TODO: check if no car is at (sx,sy) yet (and if so: wait? or pick another point?)
-                    sx, sy = randint(0, gw - 1), randint(0, gh - 1)
-                    ex, ey = randint(0, gw - 1), randint(0, gh - 1)
-
-                    car.set_start_point(Point(sx, sy))
-                    car.set_end_point(Point(ex, ey))
+                    car.set_start_point(g.get_random_position())
+                    car.set_end_point(g.get_random_position())
                     car.reset_pos()
 
             for car in cars:

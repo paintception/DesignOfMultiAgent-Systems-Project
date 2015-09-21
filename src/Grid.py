@@ -1,34 +1,40 @@
-from __future__ import print_function
-
-# The program creates a grid where our agents will drive through, the grid is created by the function create_matrix 
-# and is represented by a list of lists. The function receives as input the width (matrix_width) and the height (matrix_height) of the maze,
-# n_blocked which is the number of cells of the matrix that will correspond to the obstancles the agents will encounter when driving, these are made # randomly and represented inside the grid by 1's. The same logic has been used for the creation of some starting points (n_enter) and destinations # (n_exits) but this time they may only "appear" on the borders of the maze.
-
-# YELLOW = STARTING POINTS
-# BROWN = DESTINATION POINTS
-# LIGHT_BLUE = OBSTACLES
+from __future__ import print_function, division
+import numpy as np
+from utils import Point
+import astar
 
 
 class Grid():
     """
     A grid class with a list as content of each cell. This list can be used to
     add arbitrary content to the grid.
+
+    FIXME: n_blocked is ignored by _astar_grid, while it should mimic _grid
     """
-    def __init__(self, width, height, n_blocked=0):
+    def __init__(self, width, height, junction_step=1, n_blocked=0):
         self.width = width
         self.height = height
+        self.junction_step = junction_step
+
+        # These are calculated such that we have exactly the requested number of junctions
+        self._real_width = (width - 1) * junction_step + 1
+        self._real_height = (height - 1) * junction_step + 1
+
+        # _grid is used to contain refs to agents (aka cars) nearby
         self._grid = self._create_matrix(width, height, n_blocked)
+
+        # _astar_grid is used as a basis in get_path() for the A* path finder
+        self._astar_grid = np.zeros((self._real_height, self._real_width), dtype=np.int)
+        for y in xrange(self._real_height):
+            for x in xrange(self._real_width):
+                if y % junction_step != 0 and x % junction_step != 0:
+                    self._astar_grid[y][x] = 1
 
     def get_items_at(self, x, y=None):
         """
         Returns the list of items at the given position, it can be manipulated.
         """
-        from utils import Point
-        if isinstance(x, Point):
-            x, y = x.x, x.y
-
-        assert x >= 0 and x < self.width and y >= 0 and y < self.height, \
-            "grid coordinates out of bounds"
+        x, y = self._transform_coords(True, x, y)
 
         return self._grid[int(y)][int(x)]
 
@@ -40,6 +46,58 @@ class Grid():
 
     def append_item_at(self, v, x, y=None):
         self.get_items_at(x, y).append(v)
+
+    def get_random_position(self):
+        """
+        Returns a random grid position on an accessible cell (i.e. on a road or junction).
+        """
+        from random import randint
+
+        x = randint(0, self._real_width - 1)
+        if x % self.junction_step == 0:
+            y = randint(0, self._real_height - 1)
+        else:
+            y = randint(0, self.height - 1) * self.junction_step
+
+        return Point(x, y)
+
+    def round_to_junction(self, x, y=None):
+        """
+        Rounds given coordinates to a multiple of self.junction_step.
+        """
+        from utils import number_rounder
+        rounder = number_rounder(self.junction_step)
+        point_given = isinstance(x, Point)
+
+        if point_given:
+            x, y = x.x, x.y
+
+        x, y = rounder(x), rounder(y)
+
+        if point_given:
+            return Point(x, y)
+        else:
+            return x, y
+
+    def get_path(self, src, tgt, avoid=None, show_route=False):
+        """
+        Find a path from src to tgt, avoiding points specified in avoid.
+        """
+        temp_grid = np.copy(self._astar_grid)
+        if type(avoid) is list:
+            for p in avoid:
+                temp_grid[p.y][p.x] = 1
+
+        r = astar.path_find(temp_grid, self._real_width, self._real_height,
+                            (src.x, src.y), (tgt.x, tgt.y))
+
+        if (show_route):
+            self._show_route(temp_grid, src, tgt, r)
+
+        if len(r) > 0:
+            return [int(d) for d in r]
+
+        return None
 
     def _create_matrix(self, width, height, n_blocked=0, n_enter=0, n_exits=0):
         from random import random, randint
@@ -75,45 +133,60 @@ class Grid():
 
         return matrix
 
-    def __str__(self):
-        s = ""
-        rows = []
-        for y in xrange(self.height):
-            rows.append(' '.join(map(lambda c: "%02i" % len(c), self._grid[y])))
-        return '\n'.join(rows)
+    def _transform_coords(self, round_to_junction, x, y=None):
+        """
+        Transforms given 'real' coordinates to 'junction' coordinates usable
+        with self._grid. The x parameter is allowed to be a Point object.
+        Coordinates are checked to be within bounds, to lie on the junction grid
+        and to lie on a junction.
+        If round_to_junction is true, coordinates will be 'snapped' to the
+        nearest junction (and the last assert will thus never trigger).
+        """
+        if isinstance(x, Point):
+            x, y = x.x, x.y
 
+        assert x >= 0 and x < self._real_width and y >= 0 and y < self._real_height, \
+            "grid coordinates out of bounds (%i, %i)" % (x, y)
 
-if __name__ == '__main__':
-    import numpy
-    from matplotlib import pyplot
-    import astar
+        x_on_jgrid = x % self.junction_step == 0
+        y_on_jgrid = y % self.junction_step == 0
 
-    grid_size = 100
-    dirs = astar.getDirectionsArray()
-    grid = Grid(grid_size, grid_size, 4000)
-    start, end = (0, 0), (50, 50)
-    route = astar.path_find(grid._grid, grid_size, grid_size, start, end)
+        assert x_on_jgrid or y_on_jgrid, \
+            "grid coordinates not on road (%i, %i)" % (x, y)
 
-    print("route: %s" % route)
+        if round_to_junction:
+            x, y = self.round_to_junction(x, y)
+        else:
+            assert x_on_jgrid and y_on_jgrid, \
+                "grid coordinates not on junction (%i, %i)" % (x, y)
 
-    if len(route) > 0:
-        x = start[0]
-        y = start[1]
-        grid._grid[y][x] = 2
+        return x / self.junction_step, y / self.junction_step
+
+    def _show_route(self, scribble_map, src, tgt, route):
+        if len(route) > 0:
+            print("showing route: %s" % route)
+        else:
+            print("no route to show")
+            return
+
+        from matplotlib import pyplot
+        dirs = astar.getDirectionsArray()
+
+        x = src.x
+        y = src.y
+        scribble_map[y][x] = 2
         for i in range(len(route)):
             j = int(route[i])
             x += dirs[0][j]
             y += dirs[1][j]
-            grid._grid[y][x] = 3
-        grid._grid[y][x] = 4
+            scribble_map[y][x] = 3
+        scribble_map[y][x] = 4
 
-    np_matrix = numpy.asarray(grid._grid)
-    pyplot.pcolor(np_matrix)
-    pyplot.show()
+        pyplot.pcolor(scribble_map)
+        pyplot.show()
 
-
-    # matrix = grid._create_matrix(100, 100, 200, 25, 12)
-    # np_matrix = numpy.asarray(matrix)
-    # pyplot.pcolor(np_matrix)
-    # pyplot.show()
-    # print(Matrix)
+    def __str__(self):
+        rows = []
+        for y in xrange(self.height):
+            rows.append(' '.join(map(lambda c: "%02i" % len(c), self._grid[y])))
+        return '\n'.join(rows)
