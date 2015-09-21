@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-
 class Simulation():
     def __init__(self, world):
         self._world = world
@@ -14,7 +13,7 @@ class Simulation():
                 day_count += 1
                 print("===== Day: %i =====" % day_count)
                 print(self._world.get_grid())
-
+             
             cars = w.get_agents()
 
             gw, gh = w.get_grid().width, w.get_grid().height
