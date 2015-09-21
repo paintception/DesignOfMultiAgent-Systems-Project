@@ -1,2 +1,14 @@
-- change grid class to contain lists of car references: a ref to each agent is stored in the nearest grid point
+# implementation
+
+- test avoid list in Grid.get_path()
 - replace direction map in astar.py with the one from Utils.py?
+
+
+# larger picture
+
+- combine junctions with Krauss model as described in paper
+  maybe: <http://eprints.whiterose.ac.uk/2149/1/ITS159_WP431_uploadable.pdf>
+- with 60*24=1440 timesteps per day and 1 agent, each day takes ~.6s to compute (update: with the larger grid that's 18s)
+  so, either make A* simpler (less routing choices) or lower number of timesteps or find a different algorithm
+  NOTE 1: using a direct ref to self._astar_grid takes >3 times as long
+  NOTE 2: creating local ref but not copying is twice as fast

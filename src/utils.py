@@ -1,3 +1,6 @@
+from __future__ import division
+
+
 def enum(**enums):
     return type('Enum', (), enums)
 
@@ -5,6 +8,10 @@ def enum(**enums):
 DIR = enum(N=0, E=1, S=2, W=3)
 
 DIR_DELTA = enum(N=(0, -1), E=(1, 0), S=(0, 1), W=(-1, 0))
+
+
+def number_rounder(to_number):
+    return lambda v: int(round(v / to_number) * to_number)
 
 
 class Point():

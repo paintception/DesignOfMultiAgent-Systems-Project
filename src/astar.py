@@ -1,3 +1,10 @@
+"""
+An A* path finder implementation.
+About faster alternatives:
+- overview: http://aigamedev.com/open/tutorial/symmetry-in-pathfinding/
+- jump point search: http://gamedevelopment.tutsplus.com/tutorials/how-to-speed-up-a-pathfinding-with-the-jump-point-search-algorithm--gamedev-5818
+"""
+
 from heapq import heappush, heappop  # for priority queue
 import math
 

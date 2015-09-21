@@ -36,6 +36,10 @@ class Agent:
 
         # TODO: do movement and memory updates
 
+        # TEMP
+        route = self._world.get_grid().get_path(self._position, self._end)
+        # print "agent %s route: %s" % (self._name, route)
+
         self._update_map_position()
 
     def _update_map_position(self):
