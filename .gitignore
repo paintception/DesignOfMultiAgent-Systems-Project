@@ -1,3 +1,14 @@
 *~
 
 *.pyc
+
+# LateX artifacts
+*.pdf
+*-blx.bib
+*.aux
+*.bbl
+*.blg
+*.run.xml
+*.synctex.gz
+doc/report/*.bib
+doc/report/*.log

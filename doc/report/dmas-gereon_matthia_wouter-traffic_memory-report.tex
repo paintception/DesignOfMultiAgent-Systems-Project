@@ -1,0 +1,60 @@
+\documentclass[hidelinks]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage[backend=bibtex,style=authoryear,citestyle=authoryear]{biblatex}
+\usepackage{filecontents}
+%\usepackage{graphicx}
+%\usepackage{listings}
+%\usepackage{titlesec}
+%\usepackage{hyperref}
+
+\geometry{a4paper, lmargin=2cm, rmargin=2cm, tmargin=2cm, bmargin=2cm}
+%\titleformat{\subsubsection}[runin]{\slshape}{}{}{}[]
+%\newcommand{\whiteline}{\vspace{1em}}
+
+\bibliography{dmas-gereon_matthia_wouter-traffic_memory-report}
+
+
+\title{Project report: ...}
+\author{
+    Gereon Vienken (s2738805) \\
+    \and Matthia Sabatelli (s2847485) \\
+    \and Wouter Reckman (s2231166)
+}
+\date{}
+
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\section{What is the problem addressed?}
+
+\section{What is the state of the art concerning this problem?}
+
+\section{What is the new idea for addressing the problem?}
+Add memory. Why would memory help? Unlike in the paper we assume that in reality people will not behave cooperative. They will however, remember when and where the roads are busy and try to avoid those locations.
+
+\section{What are the results (expected or established)?}
+TODO: describe the simulation \\
+TODO: how do we want to present results? (graphs, avg. flow/speed/fuel/jams)
+
+\section{What is the relevance of this work?}
+
+\printbibliography
+
+\begin{filecontents}{dmas-gereon_matthia_wouter-traffic_memory-report.bib}
+@article{gabel2012cooperative,
+  title={The cooperative driver: Multi-agent learning for preventing traffic jams},
+  author={Gabel, Thomas and Riedmiller, Martin},
+  journal={International journal of traffic and transportation engineering},
+  volume={1},
+  number={4},
+  pages={67--76},
+  year={2012},
+  publisher={Scientific \& Academic Publishing}
+}
+\end{filecontents}
+
+\end{document}
