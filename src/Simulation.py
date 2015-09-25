@@ -12,15 +12,8 @@ class Simulation():
 
         start = dt.now()
         while True:
-
-            if self._world.get_time() == 0:
-                day_count += 1
-                print("===== Day: %i =====" % day_count)
-                print(self._world.get_grid())
-             
             cars = w.get_agents()
 
-            gw, gh = g.width, g.height
             for car in cars:
                 if not car.is_travelling():
                     # TEMP: randomly route cars
@@ -34,7 +27,7 @@ class Simulation():
 
             if self._world.get_time() == 0:
                 duration = dt.now() - start
-                print("===== Day: %i (%.2f msecs) =====" %
+                print("===== Day: %i (%.2f secs) =====" %
                     (day_count, duration.seconds + (duration.microseconds / 1000000)))
                 print(self._world.get_grid())
                 start = dt.now()

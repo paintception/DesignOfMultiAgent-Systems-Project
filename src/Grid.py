@@ -30,6 +30,8 @@ class Grid():
                 if y % junction_step != 0 and x % junction_step != 0:
                     self._astar_grid[y][x] = 1
 
+        self._astar = astar.AStar(self._real_width, self._real_height, self.junction_step)
+
     def get_items_at(self, x, y=None):
         """
         Returns the list of items at the given position, it can be manipulated.
@@ -88,8 +90,8 @@ class Grid():
             for p in avoid:
                 temp_grid[p.y][p.x] = 1
 
-        r = astar.path_find(temp_grid, self._real_width, self._real_height,
-                            (src.x, src.y), (tgt.x, tgt.y))
+        r = self._astar.path_find(temp_grid, self._real_width, self._real_height,
+                                  (src.x, src.y), (tgt.x, tgt.y))
 
         if (show_route):
             self._show_route(temp_grid, src, tgt, r)
@@ -170,7 +172,7 @@ class Grid():
             return
 
         from matplotlib import pyplot
-        dirs = astar.getDirectionsArray()
+        dirs = astar.get_directions_array()
 
         x = src.x
         y = src.y
