@@ -14,7 +14,7 @@ def main(args):
 
     signal.signal(signal.SIGINT, signal_handler)
 
-    world = World(args.grid_size, args.junction_step, args.num_agents)
+    world = World(args.grid_size, args.num_agents)
     simulation = Simulation(world)
     simulation.run()
 
@@ -24,8 +24,7 @@ def get_args():
 
     parser = argparse.ArgumentParser(description='Run traffic simulation', add_help=True, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('-g', '--grid-size', type=int, help="Grid size determines the number of junctions in each dimension", default=18)
-    parser.add_argument('-j', '--junction-step', type=int, help="Junction step determines the amount of space between junctions", default=5)
+    parser.add_argument('-g', '--grid-size', type=int, help="Grid size determines the number of junctions in each dimension", default=50)
     parser.add_argument('-a', '--num-agents', type=int, help="Number of agents", default=100)
 
     args = parser.parse_args()

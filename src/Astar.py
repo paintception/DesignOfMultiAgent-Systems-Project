@@ -33,27 +33,25 @@ def unshared_copy(inList):
 
 
 class AStar():
-    def __init__(self, width, height, junction_step):
-        self.w = 0
-        self.h = 0
-        self.js = 0
-        self._create_maps(width, height, junction_step)
+    def __init__(self, width, height):
+        # set to zero to trigger recreation of map in _create_maps
+        self.w, self.h = 0, 0
+        self._create_maps(width, height)
 
 
-    def path_find(self, map, width, height, start_pos, end_pos):
+    def path_find(self, the_map, width, height, start_pos, end_pos):
         """
         Find a path from start_pos to end_pos on map which has given width and height.
         """
-        self._create_maps(width, height, self.junction_step)
-        return self._path_find(map, width, height, NUM_DIRECTIONS, _DIRS_X, _DIRS_Y,
+        self._create_maps(width, height)
+        return self._path_find(the_map, width, height, NUM_DIRECTIONS, _DIRS_X, _DIRS_Y,
                 start_pos[0], start_pos[1], end_pos[0], end_pos[1])
 
 
-    def _create_maps(self, width, height, junction_step):
-        if self.w != width or self.h != height or self.junction_step != junction_step:
+    def _create_maps(self, width, height):
+        if self.w != width or self.h != height:
             self.w = width
             self.h = height
-            self.junction_step = junction_step
             self._closed_nodes_map = []  # map of closed (tried-out) nodes
             self._open_nodes_map = []  # map of open (not-yet-tried) nodes
             self._dir_map = []  # map of dirs
@@ -63,11 +61,6 @@ class AStar():
                 self._closed_nodes_map.append(list(row))
                 self._open_nodes_map.append(list(row))
                 self._dir_map.append(list(row))
-
-            for y in xrange(height):
-                for x in xrange(width):
-                    if y % junction_step != 0 and x % junction_step != 0:
-                        self._closed_nodes_map[y][x] = 1
 
     # A-star algorithm.
     # The path returned will be a string of digits of directions.
