@@ -2,7 +2,7 @@ from __future__ import print_function, division
 from random import random, randint
 import numpy as np
 from utils import Point
-import astar
+import Astar
 
 
 class Grid():
@@ -12,6 +12,9 @@ class Grid():
 
     FIXME: n_blocked is ignored by _astar_grid, while it should mimic _grid
     """
+
+    DEFAULT_ROAD_WEIGHT = 1
+    BLOCKED_CELL = -1
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -21,7 +24,15 @@ class Grid():
 
         # _astar_grid is used as a basis in get_path() for the A* path finder
         self._astar_grid = np.zeros((self.width, self.height), dtype=np.int)
-        self._astar = astar.AStar(self.width, self.height)
+        self._astar_grid.fill(self.DEFAULT_ROAD_WEIGHT)
+
+        # test code for weighted path A*
+        for y in xrange(self.height):
+            for x in xrange(self.width):
+                xv = self.width - abs(x - self.width / 2)
+                yv = self.height - abs(y - self.height / 2)
+                self._astar_grid[y][x] = 10 + (xv + yv) / 30
+        self._astar = Astar.AStar(self.width, self.height)
 
     def get_item_at(self, x, y=None):
         """
@@ -38,14 +49,18 @@ class Grid():
         x, y = randint(0, self.width - 1), randint(0, self.height - 1)
         return Point(x, y)
 
-    def get_path(self, src, tgt, avoid=None, show_route=False):
+    def get_path(self, src, tgt, weights=None, show_route=False):
         """
-        Find a path from src to tgt, avoiding points specified in avoid.
+        Find a path from src to tgt. Roads have a default weight of 1, blocked
+        cells are indicated by a value < 0. Road weights can be set to higher
+        values by specifying them in the weights parameter in the form of a
+        tuple (x, y, weight).
         """
         temp_grid = np.copy(self._astar_grid)
-        if type(avoid) is list:
-            for p in avoid:
-                temp_grid[p.y][p.x] = 1
+        if type(weights) is list:
+            for p in weights:
+                x, y, w = p
+                temp_grid[y][x] = w
 
         r = self._astar.path_find(temp_grid, self.width, self.height,
                                   (src.x, src.y), (tgt.x, tgt.y))
@@ -102,7 +117,7 @@ class Grid():
             return
 
         from matplotlib import pyplot
-        dirs = astar.get_directions_array()
+        dirs = Astar.get_directions_array()
 
         x = src.x
         y = src.y

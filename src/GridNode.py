@@ -7,7 +7,7 @@ class GridNode():
     	Returns a concise, fixed with representation for display in the grid.
     	Idea: maybe colorize them?
     	"""
-    	return "%02i[%02i]" % (0, 0)
+    	return "%02i/%01i" % (0, 0)
 
     def __str__(self):
     	return "Node..."

@@ -43,7 +43,6 @@ class Agent:
 
             #Here if you like some fancy interface
             # self._route = self._world.get_grid().get_path(self._position, self._end, None, True)
-            print "agent %s route: %s" % (self._name, self._route)
 
             if self._route == []:
                 raise Exception("could not find route for agent %s from %s to %s" % (self._name, self._start, self._end))
