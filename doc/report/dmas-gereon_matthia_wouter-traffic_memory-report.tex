@@ -1,48 +1,65 @@
-\documentclass[hidelinks]{article}
+\documentclass[a4paper,hidelinks]{article}
+\usepackage{bnaic}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{geometry}
-\usepackage[backend=bibtex,style=authoryear,citestyle=authoryear]{biblatex}
+
 \usepackage{filecontents}
-%\usepackage{graphicx}
-%\usepackage{listings}
-%\usepackage{titlesec}
-%\usepackage{hyperref}
-
-\geometry{a4paper, lmargin=2cm, rmargin=2cm, tmargin=2cm, bmargin=2cm}
-%\titleformat{\subsubsection}[runin]{\slshape}{}{}{}[]
-%\newcommand{\whiteline}{\vspace{1em}}
-
-\bibliography{dmas-gereon_matthia_wouter-traffic_memory-report}
+\usepackage{hyperref}
+\usepackage{graphicx}
 
 
-\title{Project report: ...}
-\author{
-    Gereon Vienken (s2738805) \\
-    \and Matthia Sabatelli (s2847485) \\
-    \and Wouter Reckman (s2231166)
+\title{\textbf{\huge DMAS Project report\\ <Project Title>}%
+}
+\author{Gereon Vienken (s2738805) \and
+    Matthia Sabatelli (s2847485) \and
+    Wouter Reckman (s2231166)
 }
 \date{}
 
+\pagestyle{empty}
 
 \begin{document}
-\maketitle
+\ttl
 \thispagestyle{empty}
 
-\section{What is the problem addressed?}
+%\bibliography{dmas-gereon_matthia_wouter-traffic_memory-report}
 
-\section{What is the state of the art concerning this problem?}
 
-\section{What is the new idea for addressing the problem?}
+\begin{abstract}
+\noindent
+This is the abstract of my paper. Please start the first paragraph of your abstract with a \verb+\noindent+ command.
+...
+\end{abstract}
+
+
+\section{Introduction}
+Citation \cite{gabel2012cooperative}.
+
+\subsection{Problem}
+\subsection{State of the art}
+\subsection{New idea}
 Add memory. Why would memory help? Unlike in the paper we assume that in reality people will not behave cooperative. They will however, remember when and where the roads are busy and try to avoid those locations.
 
-\section{What are the results (expected or established)?}
-TODO: describe the simulation \\
+
+\section{Method}
+\subsection{Simulation model}
+\subsection{Experiment design}
+
+
+\section{Results}
+\subsection{Experiment findings}
 TODO: how do we want to present results? (graphs, avg. flow/speed/fuel/jams)
 
-\section{What is the relevance of this work?}
+\subsection{Interpretation of findings}
 
-\printbibliography
+
+\section{Conclusion}
+\subsection{Discussion}
+\subsection{Relevance}
+
+
+\bibliographystyle{plain}
+\bibliography{dmas-gereon_matthia_wouter-traffic_memory-report}
 
 \begin{filecontents}{dmas-gereon_matthia_wouter-traffic_memory-report.bib}
 @article{gabel2012cooperative,
