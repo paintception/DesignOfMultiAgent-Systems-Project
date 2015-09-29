@@ -24,7 +24,7 @@ def get_args():
 
     parser = argparse.ArgumentParser(description='Run traffic simulation', add_help=True, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('-g', '--grid-size', type=int, help="Grid size determines the number of junctions in each dimension", default=50)
+    parser.add_argument('-g', '--grid-size', type=int, help="Grid size determines the number of junctions in each dimension", default=45)
     parser.add_argument('-a', '--num-agents', type=int, help="Number of agents", default=100)
 
     args = parser.parse_args()

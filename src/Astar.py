@@ -7,6 +7,7 @@ About faster alternatives:
 """
 
 from heapq import heappush, heappop  # for priority queue
+import math
 
 
 NUM_DIRECTIONS = 4  # number of possible directions to move on the map
@@ -45,7 +46,7 @@ class AStar():
         """
         self._create_maps(width, height)
         return self._path_find(the_map, width, height, NUM_DIRECTIONS, _DIRS_X, _DIRS_Y,
-                start_pos[0], start_pos[1], end_pos[0], end_pos[1])
+                               start_pos[0], start_pos[1], end_pos[0], end_pos[1])
 
 
     def _create_maps(self, width, height):
@@ -62,11 +63,10 @@ class AStar():
                 self._open_nodes_map.append(list(row))
                 self._dir_map.append(list(row))
 
-    # A-star algorithm.
+    # A-star algorithm, probably from:
+    # http://code.activestate.com/recipes/577519-a-star-shortest-path-algorithm.
     # The path returned will be a string of digits of directions.
     def _path_find(self, the_map, n, m, dirs, dx, dy, xA, yA, xB, yB):
-        # import math
-
         closed_nodes_map = unshared_copy(self._closed_nodes_map)
         open_nodes_map = unshared_copy(self._open_nodes_map)
         dir_map = unshared_copy(self._dir_map)
@@ -110,10 +110,10 @@ class AStar():
                 xdx = x + dx[i]
                 ydy = y + dy[i]
                 if not (xdx < 0 or xdx > n-1 or ydy < 0 or ydy > m - 1
-                        or the_map[ydy][xdx] == 1 or closed_nodes_map[ydy][xdx] == 1):
+                        or the_map[ydy][xdx] < 0 or closed_nodes_map[ydy][xdx] == 1):
                     # generate a child node
                     m0 = _node(xdx, ydy, n0.distance, n0.priority)
-                    m0.nextMove(dirs, i)
+                    m0.nextMove(dirs, i, the_map[ydy][xdx])  # TODO: hier, klopt de cost zo?
                     m0.updatePriority(xB, yB)
                     # if it is not in the open list then add into that
                     if open_nodes_map[ydy][xdx] == 0:
@@ -164,20 +164,20 @@ class _node:
         self.priority = self.distance + self.estimate(xDest, yDest) * 10  # A*
 
     # give higher priority to going straight instead of diagonally
-    def nextMove(self, dirs, d):  # d: direction to move
+    def nextMove(self, dirs, d, cost=1):  # d: direction to move
         if dirs == 8 and d % 2 != 0:
-            self.distance += 14
+            self.distance += math.sqrt(cost * cost + cost * cost) * 10
         else:
-            self.distance += 10
+            self.distance += cost * 10
 
     # Estimation function for the remaining distance to the goal.
     def estimate(self, xDest, yDest):
         xd = xDest - self.xPos
         yd = yDest - self.yPos
         # Euclidian Distance
-        # d = math.sqrt(xd * xd + yd * yd)
+        d = math.sqrt(xd * xd + yd * yd)
         # Manhattan distance
-        d = abs(xd) + abs(yd)
+        # d = abs(xd) + abs(yd)
         # Chebyshev distance
         # d = max(abs(xd), abs(yd))
         return(d)

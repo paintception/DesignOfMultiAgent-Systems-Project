@@ -4,7 +4,7 @@ from __future__ import division
 def enum(**enums):
     return type('Enum', (), enums)
 
-# These numbers match the indices in astar.py.
+# These numbers match the indices in Astar.py.
 DIR = enum(N=0, E=1, S=2, W=3)
 
 DIR_DELTA = enum(N=(0, -1), E=(1, 0), S=(0, 1), W=(-1, 0))
