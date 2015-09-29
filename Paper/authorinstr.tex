@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage{bnaic}
+
+
+
+
+\title{\textbf{\huge Traffic sucks\\ Does memory help to make it run smoother?}}
+
+
+\author{Wouter Reckman \affila \and
+    Matthia Sabatelli \affilb \and
+    Gereon Vienken \affila}
+
+
+\pagestyle{empty}
+
+\begin{document}
+\ttl
+\thispagestyle{empty}
+
+
+\begin{abstract}
+
+\end{abstract}
+
+
+\section{Introduction}
+
+\subsection{Problem}
+The Problem we try to address with our project is the inaffitenties in traffic. Even though many peope don't think about it, traffic is an important issue in our sociaty. Many studies have modelt the flow of traffic under various conditions and measured ist impact. This paper tries to add to this reservour by trying to understand the impact of driver memory on repeating traffic situations. We all know the situation of drivers that face traffic jams on thier daily commute. But how come these drivers face jams at the same junction every day and still decide to drive the same route? And would it help if they decided to try their luck of the beaten path next time? This article tries to get closer to an answer for these questions. 
+
+\subsection{State of the art}
+Our apporach was inspired by an article of Gehrke et al.\cite{gehrke2008traffic}. In this article the authors compared two microscopic traffic simulations. One with a selfish and one with a selfless driver model. The selfish driver simply tried to maxemise his own speed, while the selfless driver used a Markov decition model to maxemise the speed over all cars. In the same way as this article our approach tries to verify the impect of another human trade in traffic simulations, namely the memory aspect.  
+
+\subsection{New Idea}
+The new idea our project proposs is to see if memory can have an impact on the flow of traffic over longer periots of time. This also incooperates with theory of mind but we are not sure if we have enough time to also implement a working version that takes this into account. We hope that our implementation can show that with the se of memory to avoid previously encountered situations, the traffic flow over the map is going to go smoother and that the average traveling speed per car increases. in contrast to Gehrke we only use selfish agents, but by making them more intelligent to persue their own goals we hope that they indirectly help other agents in the process.
+
+
+\section{Method}
+
+  \subsection{Simulation Method}
+Tomake our trafic simulation we programmed a grid of nodes. Each node represents a junction of streats, the streets beeing represented by simple lists. Each junction and street are allowed to hold a specific number of cars passing them through with a first-in-first-out scema. A traffic jam in this situation would accour if cars wuld try to enter a junction from more directions then they are trying to leave it, turning that junction into a bottleneck. The simulation is focust on this aspect of the traffic. The cars on the road a re controlled by seperate agents, which give them a spawn location and a destination. The agents then determin the fastest route with an weigted a* algorithem. The weigts on the a* can be influenced by the memory of previous traffic jam. This memory consits of a global array that holds the roadswhere traffic jams accoured previously. We decided to go with a global memory model for now because its easier to implement and reflects the facts these information are available for evey driver with a navigation system. 
+
+  \subsection{Experiment Design}
+For
+
+\section{Results}
+
+	\subsubsection{Experimental Results}
+	
+	\subsubsection{Interpretation}
+  
+
+\section{Conclusion}
+
+	\subsubsection{Discussion}
+
+	\subsubsection{Relevance}
+
+\bibliographystyle{plain}
+\bibliography{mybibfile}
+
+
+
+\end{document}
+
+
+
+
+
+
+
+

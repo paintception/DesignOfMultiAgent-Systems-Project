@@ -2,7 +2,7 @@ from __future__ import print_function, division
 from random import random, randint
 import numpy as np
 from utils import Point
-import astar
+import Astar
 
 
 class Grid():
@@ -73,9 +73,21 @@ class Grid():
             return (x, y)
 
         # create a list of lists (2D matrix) with another empty list as content
-        matrix = [[GridNode() for i in xrange(width)] for j in xrange(height)]
+        matrix = [[GridNode(i,j) for i in xrange(width)] for j in xrange(height)]
 
         return matrix
+    
+    def get_neighbour(self, node, direction):
+	x,y = node.get_pos()
+	dx,dy=Astar.get_directions_array()
+	x+=dx[direction]
+	y+=dy[direction]
+	try:
+		self._check_coords(x,y)
+	except AssertionError:
+		return None
+	return self.get_item_at(x,y)
+		
 
     def _check_coords(self, x, y=None):
         """
