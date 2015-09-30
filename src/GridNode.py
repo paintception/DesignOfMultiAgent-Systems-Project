@@ -13,6 +13,7 @@ class GridNode():
 
         self._x = x
         self._y = y
+        self._grid = grid
         self._car_stack = []
         self._neighbours = None
         self._streets = None
@@ -21,23 +22,25 @@ class GridNode():
         self._max_car_on_street = self.model_params['street_length']
 
     def set_neighbours(self):
-        self._neighbours = {
+        grid = self._grid
+        nbs = {
             0 : grid.get_neighbour(self, 0), 
             1 : grid.get_neighbour(self, 1),
             2 : grid.get_neighbour(self, 2),
             3 : grid.get_neighbour(self, 3)}
-        self._streets = {
-            grid.get_neighbour(self, 0) : [None],
-            grid.get_neighbour(self, 1) : [None],
-            grid.get_neighbour(self, 2) : [None],
-            grid.get_neighbour(self, 3) : [None]}
+        self._neighbours = nbs
+        self._streets = {}
+        if nbs[0]: self._streets[nbs[0]] = []
+        if nbs[1]: self._streets[nbs[1]] = []
+        if nbs[2]: self._streets[nbs[2]] = []
+        if nbs[3]: self._streets[nbs[3]] = []
 
     def get_new_car(self, car): 
         """
         incerts car into the main stack of a node
         """
-        if len(_car_stack) < _max_car_stack:
-            _car_stack.append(car)
+        if len(self._car_stack) < self._max_car_stack:
+            self._car_stack.append(car)
             car.update()
             return 1
         else:
@@ -62,12 +65,14 @@ class GridNode():
         """
         moves the next car from the street stack to the mainstack of the corresponding node
         """
-        if len(_streets[direction])> 0: 
-            car = _streets[direction][0]
+        street_stack = self._streets[direction]
+        if len(street_stack)> 0:
+            car = street_stack[0]
+            #FIXME: probably should pop the car and reinsert *or* only pop if get_new_car() succeeded
             if direction.get_new_car(car) == 1:
                 return 1
             else:
-                _streets[direction].insert(0,car)
+                street_stack.insert(0,car)
                 return 0
         return 1
         
@@ -85,14 +90,14 @@ class GridNode():
         """
         for i in xrange(self.ROADPUSHES):
             for k in self._streets:
-                if not push_car(k):
+                if not self.push_car(k):
                     deadstack += 1
         ci = 0
-        cars_to_move = MAX_MOVES
+        cars_to_move = self.MAX_MOVES
         while cars_to_move > 0:
-            if ci >= len(_car_stack):
+            if ci >= len(self._car_stack):
                 break
-            move_car()
+            self.move_car()
             cars_to_move -= 1
             ci += 1
 

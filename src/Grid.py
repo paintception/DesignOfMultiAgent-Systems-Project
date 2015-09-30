@@ -24,7 +24,7 @@ class Grid():
 
         for n in self._grid:
             for m in n:
-                m.set_neighbours
+                m.set_neighbours()
 
         # _astar_grid is used as a basis in get_path() for the A* path finder
         self._astar_grid = np.zeros((self.width, self.height), dtype=np.int)
