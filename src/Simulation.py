@@ -1,5 +1,5 @@
 from __future__ import print_function, division
-
+import Grid as Grid
 class Simulation():
     def __init__(self, world):
         self._world = world
@@ -22,8 +22,7 @@ class Simulation():
                     car.set_end_point(g.get_random_position())
                     car.reset_pos()
 
-            for car in cars:
-                car.update()
+            w.update_grid()
 
             if self._world.get_time() == 0:
                 duration = dt.now() - start

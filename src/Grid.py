@@ -22,6 +22,10 @@ class Grid():
         # _grid is used to contain refs to agents (aka cars) nearby
         self._grid = self._create_matrix(width, height)
 
+        for n in self._grid:
+            for m in n:
+                m.set_neighbours
+
         # _astar_grid is used as a basis in get_path() for the A* path finder
         self._astar_grid = np.zeros((self.width, self.height), dtype=np.int)
         self._astar_grid.fill(self.DEFAULT_ROAD_WEIGHT)
@@ -34,12 +38,16 @@ class Grid():
                 self._astar_grid[y][x] = 10 + (xv + yv) / 30
         self._astar = Astar.AStar(self.width, self.height)
 
+    def update_grid(self):
+        for node in self._grid:
+            for n in node:
+                n.update_node()
+
     def get_item_at(self, x, y=None):
         """
         Returns the item at the given position.
         """
         x, y = self._check_coords(x, y)
-
         return self._grid[y][x]
 
     def get_random_position(self):
@@ -88,7 +96,7 @@ class Grid():
             return (x, y)
 
         # create a list of lists (2D matrix) with another empty list as content
-        matrix = [[GridNode(i,j) for i in xrange(width)] for j in xrange(height)]
+        matrix = [[GridNode(i,j, self) for i in xrange(width)] for j in xrange(height)]
 
         return matrix
     
