@@ -13,8 +13,8 @@ def main(args):
     from Simulation import Simulation
 
     signal.signal(signal.SIGINT, signal_handler)
-
-    world = World(args.grid_size, args.num_agents)
+    world = World()
+    world.setup(args.grid_size, args.num_agents)
     simulation = Simulation(world)
     simulation.run()
 
