@@ -12,7 +12,7 @@ class World():
     def setup(self, grid_size, num_agents):
         self._grid = Grid(grid_size, grid_size)
         self._time = 0
-        self._agents = [Agent(i) for i in xrange(num_agents)]
+        self._agents = [Agent(i, self) for i in xrange(num_agents)]
 
 
     def get_time(self):
@@ -23,6 +23,9 @@ class World():
 
     def get_grid(self):
         return self._grid
+
+    def print_grid(self):
+        return self._grid.print_grid()
 
     def update_grid(self):
         self._grid.update_grid()

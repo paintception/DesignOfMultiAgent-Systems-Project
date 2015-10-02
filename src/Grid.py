@@ -43,6 +43,15 @@ class Grid():
             for n in node:
                 n.update_node()
 
+    def print_grid(self):
+        new_grid=[]
+        for node in self._grid:
+            temp_grid=[]
+            for n in node:
+                temp_grid.append(n.get_cars())
+            new_grid.append(temp_grid)
+        return new_grid        
+
     def get_item_at(self, x, y=None):
         """
         Returns the item at the given position.
@@ -55,7 +64,7 @@ class Grid():
         Returns a random grid position on an accessible cell (i.e. on a road or junction).
         """
         x, y = randint(0, self.width - 1), randint(0, self.height - 1)
-        return Point(x, y)
+        return self._grid[x][y]
 
     def get_path(self, src, tgt, weights=None, show_route=False):
         """
@@ -129,6 +138,11 @@ class Grid():
 
         return x, y
 
+    def add_car(self, car):
+        if car.get_pos().get_new_car(car):
+            return 1
+
+        return 0
     def _show_route(self, scribble_map, src, tgt, route):
         if len(route) > 0:
             print("showing route: %s" % route)

@@ -1,11 +1,14 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Debian) (preloaded format=pdflatex 2015.9.7)  30 SEP 2015 18:38
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2015.9.27)  1 OCT 2015 11:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **authorinstr.tex
 (./authorinstr.tex
-LaTeX2e <2014/05/01>
-Babel <3.9k> and hyphenation patterns for 79 languages loaded.
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, dumylang, nohyphenation, du
+tch, hungarian, latvian, indonesian, esperanto, coptic, welsh, irish, interling
+ua, serbian, serbianc, slovenian, friulan, romansh, estonian, romanian, armenia
+n, uppersorbian, turkish, afrikaans, icelandic, kurmanji, thai, loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
@@ -29,7 +32,7 @@ Package: times 2005/04/12 PSNFSS-v9.2a (SPQR)
 Package: geometry 2002/07/08 v3.2 Page Geometry
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
 )
 \Gm@cnth=\count87
@@ -143,29 +146,31 @@ page 1 undefined on input line 35.
 LaTeX Warning: Citation `gehrke2008traffic' on page 2 undefined on input line 3
 8.
 
-[2]
-No file authorinstr.bbl.
-[3] (./authorinstr.aux)
+[2] (./authorinstr.bbl) [3] (./authorinstr.aux)
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 654 strings out of 493104
- 8640 string characters out of 6136933
- 72330 words of memory out of 5000000
- 4170 multiletter control sequences out of 15000+600000
- 19197 words of font info for 40 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 30i,8n,21p,3914b,182s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 659 strings out of 494432
+ 8700 string characters out of 3168169
+ 67405 words of memory out of 3000000
+ 3921 multiletter control sequences out of 15000+200000
+ 20881 words of font info for 42 fonts, out of 3000000 for 9000
+ 432 hyphenation exceptions out of 8191
+ 30i,8n,21p,3914b,182s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/urw/times/utmr8a.pfb>
-Output written on authorinstr.pdf (3 pages, 47406 bytes).
+1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
+ri8a.pfb>
+Output written on authorinstr.pdf (3 pages, 56813 bytes).
 PDF statistics:
- 27 PDF objects out of 1000 (max. 8388607)
- 18 compressed objects within 1 object stream
+ 31 PDF objects out of 1000 (max. 8388607)
+ 21 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
