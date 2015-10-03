@@ -1,5 +1,6 @@
 from __future__ import print_function, division
 import Grid as Grid
+
 class Simulation():
     def __init__(self, world):
         self._world = world

@@ -19,7 +19,7 @@ class World():
         return self._time
 
     def get_model_parameters(self):
-	return self.model_parameters
+	return self.get_model_parameters
 
     def get_grid(self):
         return self._grid
