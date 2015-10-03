@@ -32,33 +32,33 @@ class GridNode():
         if nbs[2]: self._streets[nbs[2]] = []
         if nbs[3]: self._streets[nbs[3]] = []
 
-    def get_new_car(self, car):
+    def add_car(self, car):
         """
-        incerts car into the main stack of a node
+        Inserts car into the main stack of a node.
         """
         if len(self._car_stack) < self._max_car_stack:
             self._car_stack.append(car)
             car.set_position(self)
             car.update()
-            return 1
+            return True
         else:
-            return 0
-    
-    def move_car(self): 
+            return False
+
+    def move_car(self):
         """
         Moves the next car from the main stack to the streetstack it wants to go to next.
         """
-        if len(self._car_stack) > 0:    
+        if len(self._car_stack) > 0:
             car = self._car_stack.pop(0)
             next_stop = car.get_next_stop()
             if len(self._streets[next_stop]) < self._max_car_on_street:
                 self._streets[next_stop].append(car)
-                return 1
+                return True
             else:
                 self._car_stack.append(car)
-                return 0
+                return False
         else:
-            return 1
+            return True
 
     def push_car(self, direction):
         """
@@ -67,14 +67,13 @@ class GridNode():
         street_stack = self._streets[direction]
         if len(street_stack) > 0:
             car = street_stack[0]
-            #FIXME: probably should pop the car and reinsert *or* only pop if get_new_car() succeeded
-            if direction.get_new_car(car) == 1:
-                return 1
+            if direction.add_car(car):
+                street_stack.pop(0)
+                return True
             else:
-                street_stack.insert(0, car)
-                return 0
-        return 1
-        
+                return False
+        return True
+
     def get_grid_repr(self):
         """
         Returns a concise, fixed with representation for display in the grid.
@@ -83,10 +82,7 @@ class GridNode():
         return "%02i/%01i" % (0, 0)
 
     def update_node(self):
-        """
-        in case we want to check for deadlocks
-        """
-        deadstack = 0
+        deadstack = 0  # in case we want to check for deadlocks
         for i in xrange(self.ROADPUSHES):
             for k in self._streets:
                 if not self.push_car(k):
@@ -96,8 +92,8 @@ class GridNode():
         while cars_to_move > 0:
             if ci >= len(self._car_stack):
                 break
-            self.move_car()
-            cars_to_move -= 1
+            if self.move_car():
+                cars_to_move -= 1
             ci += 1
 
     def get_neighbour(self, direction):

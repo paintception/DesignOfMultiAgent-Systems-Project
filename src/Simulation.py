@@ -18,12 +18,11 @@ class Simulation():
                 if not car.is_travelling():
                     # TEMP: randomly route cars
 
-                    check = 0
+                    check = False
                     while not check:
                         car.set_start_point(g.get_random_position())
                         car.set_end_point(g.get_random_position())
                         car.reset_pos()
-                        print (check)
                         check = self.add_car(car)
 
             w.update_grid()
@@ -40,10 +39,8 @@ class Simulation():
             w.next_time_step()
 
     def add_car(self, car):
-        if self._world.get_grid().add_car(car):
-            return 1
-        return 0
+        return self._world.get_grid().add_car(car)
 
     def print_grid(self, printing_grid):
-        self._printing_grid=printing_grid
+        self._printing_grid = printing_grid
         print (self._printing_grid)

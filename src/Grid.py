@@ -139,10 +139,7 @@ class Grid():
         return x, y
 
     def add_car(self, car):
-        if car.get_pos().get_new_car(car):
-            return 1
-
-        return 0
+        return car.get_pos().add_car(car)
 
     def _show_route(self, scribble_map, src, tgt, route):
         if len(route) > 0:
