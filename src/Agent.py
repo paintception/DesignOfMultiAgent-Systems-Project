@@ -33,7 +33,10 @@ class Agent:
         self._position=new_pos
 
     def get_next_stop(self):
-        return self._position.get_neighbour(self._route)
+        if self._route:
+            return self._position.get_neighbour(self._route[0])
+        else:
+            return None
 
     def update(self):
         #from World import World

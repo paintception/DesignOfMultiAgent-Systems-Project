@@ -80,7 +80,7 @@ class Grid():
                 temp_grid[y][x] = w
 
         r = self._astar.path_find(temp_grid, self.width, self.height,
-                                  (src.x, src.y), (tgt.x, tgt.y))
+                                  (src.get_pos()), (tgt.get_pos()))
 
         if (show_route):
             self._show_route(temp_grid, src, tgt, r)

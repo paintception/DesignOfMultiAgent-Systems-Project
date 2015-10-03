@@ -1,16 +1,13 @@
-             
-
 class GridNode():
     """
     ROADPUSHES gives the number of pusches to the road per timestep.
     MAX_MOVES gives the number of pushes from the roades per timestep.
     """
-    ROADPUSHES = 1 
+
+    ROADPUSHES = 1
     MAX_MOVES = 4
 
     def __init__(self, x, y, grid):
-
-
         self._x = x
         self._y = y
         self._grid = grid
@@ -51,13 +48,14 @@ class GridNode():
         """
         moves the next car from the main stack to the streetstack it wants to go to next
         """
-        if len(_car_stack) > 0:    
-            _car = _car_stack.pop(0)
-            if len(_streets[_car.get_next_stop(self)]) < _max_car_on_street:
-                _streets[_car.get_next_stop(self)].append() 
+        if len(self._car_stack) > 0:    
+            car = self._car_stack.pop(0)
+            next_stop = car.get_next_stop()
+            if len(self._streets[next_stop]) < self._max_car_on_street:
+                self._streets[next_stop].append(car)
                 return 1
             else:
-                _car_stack.append(car)
+                self._car_stack.append(car)
                 return 0
         else:
             return 1
@@ -116,4 +114,7 @@ class GridNode():
         return temp
 
     def __str__(self):
-        return "Node..."
+        return self.__repr__()
+
+    def __repr__(self):
+        return 'GridNode(%i, %i)' % (self._x, self._y)
