@@ -41,6 +41,7 @@ class GridNode():
         """
         if len(self._car_stack) < self._max_car_stack:
             self._car_stack.append(car)
+            car.set_position(self)
             car.update()
             return 1
         else:
@@ -106,6 +107,13 @@ class GridNode():
 
     def get_pos(self):
         return self._x, self._y
+
+    def get_cars(self):
+        temp= [len(self._car_stack)]
+        for k in self._streets:
+            temp.append(self._streets[k])
+
+        return temp
 
     def __str__(self):
         return "Node..."

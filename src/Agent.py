@@ -3,17 +3,18 @@ from GridNode import GridNode
 
 
 class Agent:
-    def __init__(self, name):
+    def __init__(self, name,world):
         self._name = str(name)
-        self._position = GridNode
-        self._start = GridNode
-        self._end = GridNode
+        self._position = None
+        self._start = None
+        self._end = None
         self._velocity = 0
         self._direction = DIR.N
         self._route = None
+        self._world = world
 
     def is_travelling(self):
-        return self._end == self._position 
+        return (self._end == self._position) and not self._position == None
 
     def set_start_point(self, p):
         self._start = p
@@ -28,12 +29,15 @@ class Agent:
     def get_pos(self):
         return self._position
 
+    def set_position(self, new_pos):
+        self._position=new_pos
+
     def get_next_stop(self):
         return self._position.get_neighbour(self._route)
 
     def update(self):
-        from World import World
-        world = World.getInstance()
+        #from World import World
+        #_world = World.getInstance()
         # TODO: do movement and memory updates
         # create list of (Point, weight) tuples to pass to get_path(), which
         # only gets called if we modify the weight list
@@ -48,7 +52,8 @@ class Agent:
             if self._route == []:
                 raise Exception("could not find route for agent %s from %s to %s" % (self._name, self._start, self._end))
 
-        self._update_map_position()
+        #self._update_map_position()
+        self._route.pop()
 
     def _update_map_position(self):
         self._position=self._position.get_neighbour(_route.pop())        
