@@ -1,5 +1,5 @@
 from __future__ import print_function, division
-import Grid as Grid
+
 
 class Simulation():
     def __init__(self, world):
@@ -31,7 +31,7 @@ class Simulation():
             if self._world.get_time() == 0:
                 duration = dt.now() - start
                 print("===== Day: %i (%.2f secs) =====" %
-                    (day_count, duration.seconds + (duration.microseconds / 1000000)))
+                      (day_count, duration.seconds + (duration.microseconds / 1000000)))
                 #printing grid
                 #self.print_grid(self._world.print_grid())
                 start = dt.now()

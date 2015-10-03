@@ -15,6 +15,7 @@ class Grid():
 
     DEFAULT_ROAD_WEIGHT = 1
     BLOCKED_CELL = -1
+
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -44,13 +45,13 @@ class Grid():
                 n.update_node()
 
     def print_grid(self):
-        new_grid=[]
+        new_grid = []
         for node in self._grid:
-            temp_grid=[]
+            temp_grid = []
             for n in node:
                 temp_grid.append(n.get_cars())
             new_grid.append(temp_grid)
-        return new_grid        
+        return new_grid
 
     def get_item_at(self, x, y=None):
         """
@@ -108,18 +109,17 @@ class Grid():
         matrix = [[GridNode(i,j, self) for i in xrange(width)] for j in xrange(height)]
 
         return matrix
-    
+
     def get_neighbour(self, node, direction):
-	x,y = node.get_pos()
-	dx,dy=Astar.get_directions_array()
-	x+=dx[direction]
-	y+=dy[direction]
-	try:
-		self._check_coords(x,y)
-	except AssertionError:
-		return None
-	return self.get_item_at(x,y)
-		
+        x, y = node.get_pos()
+        dx, dy = Astar.get_directions_array()
+        x += dx[direction]
+        y += dy[direction]
+        try:
+            self._check_coords(x, y)
+        except AssertionError:
+            return None
+        return self.get_item_at(x, y)
 
     def _check_coords(self, x, y=None):
         """
@@ -143,6 +143,7 @@ class Grid():
             return 1
 
         return 0
+
     def _show_route(self, scribble_map, src, tgt, route):
         if len(route) > 0:
             print("showing route: %s" % route)

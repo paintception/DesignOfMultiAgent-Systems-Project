@@ -1,8 +1,9 @@
 from Agent import Agent
 from Grid import Grid
-from Singelton import Singelton
+from Singleton import Singleton
 
-@Singelton
+
+@Singleton
 class World():
     TIME_STEPS_PER_DAY = 24 * 60
 
@@ -14,12 +15,11 @@ class World():
         self._time = 0
         self._agents = [Agent(i, self) for i in xrange(num_agents)]
 
-
     def get_time(self):
         return self._time
 
-    def get_model_parameters(self):
-	return self.get_model_parameters
+    # def get_model_parameters(self):
+    #    return self._model_parameters
 
     def get_grid(self):
         return self._grid

@@ -29,7 +29,7 @@ def get_directions_array():
 # from: http://stackoverflow.com/a/1601774
 def unshared_copy(inList):
     if isinstance(inList, list):
-        return list( map(unshared_copy, inList) )
+        return list(map(unshared_copy, inList))
     return inList
 
 
@@ -39,7 +39,6 @@ class AStar():
         self.w, self.h = 0, 0
         self._create_maps(width, height)
 
-
     def path_find(self, the_map, width, height, start_pos, end_pos):
         """
         Find a path from start_pos to end_pos on map which has given width and height.
@@ -47,7 +46,6 @@ class AStar():
         self._create_maps(width, height)
         return self._path_find(the_map, width, height, NUM_DIRECTIONS, _DIRS_X, _DIRS_Y,
                                start_pos[0], start_pos[1], end_pos[0], end_pos[1])
-
 
     def _create_maps(self, width, height):
         if self.w != width or self.h != height:
