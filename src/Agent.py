@@ -13,7 +13,7 @@ class Agent:
         self._world = world
 
     def is_travelling(self):
-        return (self._end == self._position) and not self._position is None
+        return self._position is not None and (self._position != self._end)
 
     def set_start_point(self, p):
         self._start = p
@@ -61,6 +61,5 @@ class Agent:
         self._position = self._position.get_neighbour(self._route.pop())
 
     def __str__(self):
-        return "<<agent %s @ %s; %s -> %s; v: %.2f, d: %s>>" % \
-            (self._name, self._position, self._start, self._end,
-                self._velocity, self._direction)
+        return "<<agent %s @ %s; %s -> %s; d: %s>>" % \
+            (self._name, self._position, self._start, self._end, self._direction)

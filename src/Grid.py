@@ -40,9 +40,9 @@ class Grid():
         self._astar = Astar.AStar(self.width, self.height)
 
     def update_grid(self):
-        for node in self._grid:
-            for n in node:
-                n.update_node()
+        for row in self._grid:
+            for node in row:
+                node.update()
 
     def print_grid(self):
         new_grid = []
@@ -91,6 +91,20 @@ class Grid():
 
         return None
 
+    def get_neighbour(self, node, direction):
+        x, y = node.get_pos()
+        dx, dy = Astar.get_directions_array()
+        x += dx[direction]
+        y += dy[direction]
+        try:
+            self._check_coords(x, y)
+        except AssertionError:
+            return None
+        return self.get_item_at(x, y)
+
+    def add_car(self, car):
+        return car.get_pos().add_car(car)
+
     def _create_matrix(self, width, height):
         from GridNode import GridNode
 
@@ -106,20 +120,9 @@ class Grid():
             return (x, y)
 
         # create a list of lists (2D matrix) with another empty list as content
-        matrix = [[GridNode(i,j, self) for i in xrange(width)] for j in xrange(height)]
+        matrix = [[GridNode(i, j, self) for i in xrange(width)] for j in xrange(height)]
 
         return matrix
-
-    def get_neighbour(self, node, direction):
-        x, y = node.get_pos()
-        dx, dy = Astar.get_directions_array()
-        x += dx[direction]
-        y += dy[direction]
-        try:
-            self._check_coords(x, y)
-        except AssertionError:
-            return None
-        return self.get_item_at(x, y)
 
     def _check_coords(self, x, y=None):
         """
@@ -137,9 +140,6 @@ class Grid():
             "grid coordinates out of bounds (%i, %i)" % (x, y)
 
         return x, y
-
-    def add_car(self, car):
-        return car.get_pos().add_car(car)
 
     def _show_route(self, scribble_map, src, tgt, route):
         if len(route) > 0:

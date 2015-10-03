@@ -14,16 +14,14 @@ class Simulation():
         while True:
             cars = w.get_agents()
             for car in cars:
-                print (car)
                 if not car.is_travelling():
-                    # TEMP: randomly route cars
-
                     check = False
                     while not check:
                         car.set_start_point(g.get_random_position())
                         car.set_end_point(g.get_random_position())
                         car.reset_pos()
                         check = self.add_car(car)
+                        if check: print("new route set for: %s" % car)
 
             w.update_grid()
 

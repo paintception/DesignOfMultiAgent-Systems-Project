@@ -81,7 +81,7 @@ class GridNode():
         """
         return "%02i/%01i" % (0, 0)
 
-    def update_node(self):
+    def update(self):
         deadstack = 0  # in case we want to check for deadlocks
         for i in xrange(self.ROADPUSHES):
             for k in self._streets:
@@ -113,4 +113,4 @@ class GridNode():
         return self.__repr__()
 
     def __repr__(self):
-        return 'GridNode(%i, %i)' % (self._x, self._y)
+        return 'GN(%i, %i)' % (self._x, self._y)
