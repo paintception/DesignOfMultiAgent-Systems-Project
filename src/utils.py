@@ -4,7 +4,7 @@ from __future__ import division
 def enum(**enums):
     return type('Enum', (), enums)
 
-# These numbers match the indices in Astar.py.
+# These numbers match the indices in AStar.py.
 DIR = enum(N=0, E=1, S=2, W=3)
 
 DIR_DELTA = enum(N=(0, -1), E=(1, 0), S=(0, 1), W=(-1, 0))
@@ -24,6 +24,9 @@ class Point():
 
     def get_rounded(self):
         return Point(round(self.x), round(self.y))
+
+    def get_pos(self):
+        return (self.x, self.y)
 
     def is_set(self):
         return self.x >= 0 and self.y >= 0

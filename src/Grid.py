@@ -2,7 +2,7 @@ from __future__ import print_function, division
 from random import random, randint
 import numpy as np
 from utils import Point
-import Astar
+import AStar
 
 
 class Grid():
@@ -37,7 +37,7 @@ class Grid():
                 xv = self.width - abs(x - self.width / 2)
                 yv = self.height - abs(y - self.height / 2)
                 self._astar_grid[y][x] = 10 + (xv + yv) / 30
-        self._astar = Astar.AStar(self.width, self.height)
+        self._astar = AStar.AStar(self.width, self.height)
 
     def update_grid(self):
         for row in self._grid:
@@ -81,7 +81,7 @@ class Grid():
                 temp_grid[y][x] = w
 
         r = self._astar.path_find(temp_grid, self.width, self.height,
-                                  (src.get_pos()), (tgt.get_pos()))
+                                  src.get_pos(), tgt.get_pos())
 
         if (show_route):
             self._show_route(temp_grid, src, tgt, r)
@@ -93,7 +93,7 @@ class Grid():
 
     def get_neighbour(self, node, direction):
         x, y = node.get_pos()
-        dx, dy = Astar.get_directions_array()
+        dx, dy = AStar.get_directions_array()
         x += dx[direction]
         y += dy[direction]
         try:
@@ -103,7 +103,7 @@ class Grid():
         return self.get_item_at(x, y)
 
     def add_car(self, car):
-        return car.get_pos().add_car(car)
+        return car.get_pos_node().add_car(car)
 
     def _create_matrix(self, width, height):
         from GridNode import GridNode
@@ -149,7 +149,7 @@ class Grid():
             return
 
         from matplotlib import pyplot
-        dirs = Astar.get_directions_array()
+        dirs = AStar.get_directions_array()
 
         x = src.x
         y = src.y

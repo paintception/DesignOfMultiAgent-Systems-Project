@@ -25,7 +25,7 @@ class Agent:
         self._position = self._start
         # self._update_map_position()
 
-    def get_pos(self):
+    def get_pos_node(self):
         return self._position
 
     def set_position(self, new_pos):
@@ -51,11 +51,12 @@ class Agent:
             #Here if you like some fancy interface
             # self._route = self._world.get_grid().get_path(self._position, self._end, None, True)
 
-            if self._route == []:
+            if self._route is None:
                 raise Exception("could not find route for agent %s from %s to %s" % (self._name, self._start, self._end))
 
-        #self._update_map_position()
-        self._route.pop()
+        self._route.pop(0)
+        if len(self._route) == 0:
+            self._route = None
 
     def _update_map_position(self):
         self._position = self._position.get_neighbour(self._route.pop())
