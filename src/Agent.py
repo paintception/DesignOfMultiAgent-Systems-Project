@@ -31,6 +31,12 @@ class Agent:
     def set_position(self, new_pos):
         self._position = new_pos
 
+    def get_next_dir(self):
+        if self._route:
+            return self._route[0]
+        else:
+            return -1
+
     def get_next_stop(self):
         if self._route:
             return self._position.get_neighbour(self._route[0])

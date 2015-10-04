@@ -22,17 +22,13 @@ class GridNode(Point):
 
     def set_neighbours(self):
         grid = self._grid
-        nbs = {
-            0: grid.get_neighbour(self, 0),
-            1: grid.get_neighbour(self, 1),
-            2: grid.get_neighbour(self, 2),
-            3: grid.get_neighbour(self, 3)}
-        self._neighbours = nbs
-        self._streets = {}
-        if nbs[0]: self._streets[nbs[0]] = []
-        if nbs[1]: self._streets[nbs[1]] = []
-        if nbs[2]: self._streets[nbs[2]] = []
-        if nbs[3]: self._streets[nbs[3]] = []
+        self._neighbours, self._streets = {}, {}
+        for drx in xrange(4):
+            nb = grid.get_neighbour(self, drx)
+            self._neighbours[drx] = nb
+            # make sure all directions have a key but mark non-existent ones with a None
+            if nb: self._streets[drx] = []
+            else: self._streets[drx] = None
 
     def get_neighbour(self, direction):
         return self._neighbours[direction]
@@ -78,11 +74,14 @@ class GridNode(Point):
         """
         if len(self._car_stack) > 0:
             car = self._car_stack[0]
-            next_stop = car.get_next_stop()
+            next_dir, next_stop = car.get_next_dir(), car.get_next_stop()
+
             if next_stop is None:
                 return False
-            if len(self._streets[next_stop]) < self._max_cars_on_street:
-                self._streets[next_stop].append(car)
+
+            street_stack = self._streets[next_dir]
+            if len(street_stack) < self._max_cars_on_street:
+                street_stack.append(car)
                 self._car_stack.pop(0)
                 return True
             else:
@@ -90,14 +89,14 @@ class GridNode(Point):
         else:
             return True
 
-    def _transfer_car(self, to_neighbour):
+    def _transfer_car(self, direction):
         """
-        Moves the next car from the street stack to the mainstack of the given node.
+        Moves the next car from the street stack to the mainstack of node in the given direction.
         """
-        street_stack = self._streets[to_neighbour]
-        if len(street_stack) > 0:
+        street_stack = self._streets[direction]
+        if street_stack and len(street_stack) > 0:
             car = street_stack[0]
-            if to_neighbour.add_car(car):
+            if self._neighbours[direction].add_car(car):
                 street_stack.pop(0)
                 return True
             else:
