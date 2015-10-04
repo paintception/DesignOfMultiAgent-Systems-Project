@@ -45,3 +45,15 @@ class Simulation():
     def print_grid(self, printing_grid):
         self._printing_grid = printing_grid
         print (self._printing_grid)
+
+    def Json_data(self, data_we_want_to_plot): 
+        
+        from django.utils import simplejson                                         
+
+        json_data_we_want_to_plot = json.dumps(data_we_want_to_plot)
+        render_template("_our_HTML_", {"_our_data", our_js_data})
+
+        "Here we create JSON data. Into the js script file we need to add: type=""text/javascript"">"
+        "data_from_django = {{ :_our_data }};"
+        "widget.init(data_from_django);"
+
