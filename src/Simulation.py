@@ -44,7 +44,7 @@ class Simulation():
 
     def print_grid(self, printing_grid):
         self._printing_grid = printing_grid
-        print (self._printing_grid)
+        #print (self._printing_grid)
 
     def Json_data(self, data_we_want_to_plot): 
         

@@ -64,6 +64,7 @@ class GridNode(Point):
             self._car_stack.append(car)
             car.set_position(self)
             car.update()
+            print('test_add_car')
             return True
         else:
             return False
@@ -83,6 +84,7 @@ class GridNode(Point):
             if len(street_stack) < self._max_cars_on_street:
                 street_stack.append(car)
                 self._car_stack.pop(0)
+                print('moving')
                 return True
             else:
                 return False
@@ -98,6 +100,7 @@ class GridNode(Point):
             car = street_stack[0]
             if self._neighbours[direction].add_car(car):
                 street_stack.pop(0)
+                print('car_transfered')
                 return True
             else:
                 return False
