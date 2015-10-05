@@ -37,18 +37,54 @@ window.onload = function() {
 		};
 
 		this.draw = function() {
+			var renderStart = new Date().getTime();
 			var cs = this.settings.cellSize;
-			var rs = new paper.Size(cs, cs);
-			console.log("grid size: " + this.width + "x" + this.height + ", cell size: " + rs);
+			console.log("draw(): grid size: " + this.width + "x" + this.height + ", cell size: " + cs);
 
-			drawCell = function(v, minV, maxV, x, y) {
-				tl = new paper.Point(x * cs, y * cs);
-				r = new paper.Shape.Rectangle(tl, rs);
-				r.fillColor = 'black'; // non-road color
+			drawCell = function(v, minV, maxV, x, y, cellType) {
+				var cellType = cellType || 'none';
+				var cx = x * cs, cy = y * cs;
 
+				/* cell background */
+				var rectColor = 'black'; //non-road color
 				if (v >= 0) {
-					uv = v * (1.0 / (maxV - minV));
-					r.fillColor = new paper.Color(uv, 1.0 - uv, 0.0); //map v to green-red range
+					colorScale = v * (1.0 / (maxV - minV));
+					rectColor = new paper.Color(colorScale, 1.0 - colorScale, 0.0); //map v to green-red range
+				}
+				var rectParams = {
+					topLeft: [cx, cy],
+					size: [cs, cs],
+					fillColor: rectColor
+				}
+				var rect = new paper.Shape.Rectangle(rectParams);
+
+				/* white stripes */
+				var stripeParams = {
+					strokeWidth: 1,
+					strokeColor: 'white',
+					dashArray: [3, 1]
+				}
+				var stripe; //not sure how paper.js does drawing or keeps its references, but without this 'predeclaration' here, drawing breaks.
+				if (cellType == 'junction') {
+					stripeParams.topLeft = [cx, cy];
+					stripeParams.size = [cs, cs];
+					stripeParams.strokeWidth = 2;
+					stripe = paper.Shape.Rectangle(stripeParams);
+				} else if (cellType == 'hstreet') {
+					stripeParams.from = [cx, cy + cs / 2];
+					stripeParams.to = [cx + cs, cy + cs / 2];
+					stripe = new paper.Path.Line(stripeParams);
+				} else if (cellType == 'vstreet') {
+					stripeParams.from = [cx + cs / 2, cy];
+					stripeParams.to = [cx + cs / 2, cy + cs];
+					stripe = new paper.Path.Line(stripeParams);
+				} else {
+					// var numDots = 10, greyLevel = 0.25;
+					// var dp = { fillColor: new paper.Color(greyLevel), radius: 1 };
+					// for (i = 0; i < numDots; ++i) {
+					// 	dp.center = [cx + getRandomInt(1, cs - 2), cy + getRandomInt(1, cs - 2)];
+					// 	stripe = new paper.Shape.Circle(dp);
+					// }
 				}
 			}
 
@@ -59,11 +95,11 @@ window.onload = function() {
 					cell = this.grid[y][x];
 					// console.log("[" + x + ", " + y + "]: " + cell);
 
-					drawCell(cell.atQueue, 0, s.maxAtJunction, cc.x, cc.y);
-					drawCell(cell.outQueues[0], 0, s.maxInStreet, cc.x, cc.y - 1);
-					drawCell(cell.outQueues[1], 0, s.maxInStreet, cc.x + 1, cc.y);
-					drawCell(cell.outQueues[2], 0, s.maxInStreet, cc.x, cc.y + 1);
-					drawCell(cell.outQueues[3], 0, s.maxInStreet, cc.x - 1, cc.y);
+					drawCell(cell.atQueue, 0, s.maxAtJunction, cc.x, cc.y, 'junction');
+					drawCell(cell.outQueues[0], 0, s.maxInStreet, cc.x, cc.y - 1, 'vstreet');
+					drawCell(cell.outQueues[1], 0, s.maxInStreet, cc.x + 1, cc.y, 'hstreet');
+					drawCell(cell.outQueues[2], 0, s.maxInStreet, cc.x, cc.y + 1, 'vstreet');
+					drawCell(cell.outQueues[3], 0, s.maxInStreet, cc.x - 1, cc.y, 'hstreet');
 
 					drawCell(-1, 0, 0, cc.x - 1, cc.y - 1);
 					drawCell(-1, 0, 0, cc.x + 1, cc.y - 1);
@@ -72,9 +108,11 @@ window.onload = function() {
 				}
 			}
 
-			//draw legend (green=0 cars, red=max cars)
+			//TODO: draw legend (green=0 cars, red=max cars)
 
 			paper.view.draw();
+			var renderTime = new Date().getTime() - renderStart;
+			console.log("draw(): drawing completed in " + renderTime + "msec");
 		}
 	}
 
