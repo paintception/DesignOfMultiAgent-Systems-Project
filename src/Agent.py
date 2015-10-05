@@ -64,9 +64,6 @@ class Agent:
         if len(self._route) == 0:
             self._route = None
 
-    def _update_map_position(self):
-        self._position = self._position.get_neighbour(self._route.pop())
-
     def __str__(self):
         return "<<agent %s @ %s; %s -> %s; d: %s>>" % \
             (self._name, self._position, self._start, self._end, self._direction)

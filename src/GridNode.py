@@ -70,13 +70,17 @@ class GridNode(Point):
 
     def _move_car_to_street(self):
         """
-        Moves the next car from the main stack to the streetstack it wants to go to next.
+        Moves the next car from the main stack to the street stack it wants to go to next.
         """
         if len(self._car_stack) > 0:
             car = self._car_stack[0]
             next_dir, next_stop = car.get_next_dir(), car.get_next_stop()
 
+            print("car %s" % car)
+            print("next stop: %s (%i), route: %s" % (next_stop, next_dir, car._route))
+
             if next_stop is None:
+                print("Route done.")
                 return False
 
             street_stack = self._streets[next_dir]
