@@ -40,10 +40,13 @@ class GridNode(Point):
 
         return temp
 
+    def has_room(self):
+        return len(self._car_stack) < self._max_car_stack
+
     def update(self):
         stuck_count = 0  # in case we want to check for deadlocks
-        for i in xrange(self.MAX_ROAD_PUSHES):
-            for k in self._streets:
+        for k in self._streets:
+            for i in xrange(self.MAX_ROAD_PUSHES):
                 if not self._transfer_car(k):
                     stuck_count += 1
 

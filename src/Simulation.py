@@ -14,13 +14,9 @@ class Simulation():
 
         for car in cars:
             if not car.is_travelling():
-                check = False
-                while not check:
-                    car.set_start_point(g.get_random_position())
-                    car.set_end_point(g.get_random_position())
-                    car.reset_pos()
-                    check = self.add_car(car)
-                    if check: print("new route set for: %s" % car)
+                new_route_found = False
+                while not new_route_found:
+                    new_route_found = car.set_route(g.get_random_position(), g.get_random_position())
 
         w.update_grid()
 
