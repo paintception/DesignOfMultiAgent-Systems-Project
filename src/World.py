@@ -5,21 +5,27 @@ from Singleton import Singleton
 
 @Singleton
 class World():
-    TIME_STEPS_PER_DAY = 24 * 60
-
+    # avoid ctor parameters since this is a singleton
     def __init__(self):
         pass
 
-    def setup(self, grid_size, num_agents):
-        self._grid = Grid(grid_size, grid_size)
-        self._time = 0
-        self._agents = [Agent(i, self) for i in xrange(num_agents)]
+    def setup(self, parameters):
+        self._parameters = parameters
+        print("** Simulation parameters: %s" % self._parameters)
+
+        self._time_step = 0
+        self._day = 0
+        self._grid = Grid(parameters.grid_width, parameters.grid_height)
+        self._agents = [Agent(i, self) for i in xrange(parameters.n_agents)]
 
     def get_time(self):
-        return self._time
+        return self._time_step
 
-    # def get_model_parameters(self):
-    #    return self._model_parameters
+    def get_day(self):
+        return self._day
+
+    def get_parameters(self):
+        return self._parameters
 
     def get_grid(self):
         return self._grid
@@ -34,4 +40,6 @@ class World():
         return self._agents
 
     def next_time_step(self):
-        self._time = (self._time + 1) % self.TIME_STEPS_PER_DAY
+        self._time_step = (self._time_step + 1) % self._parameters.steps_per_day
+        if self._time_step == 0:
+            self._day += 1

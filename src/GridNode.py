@@ -16,6 +16,7 @@ class GridNode(Point):
         self._car_stack = []
         self._neighbours = None
         self._streets = None
+
         self.model_params = {'cars_in_node': 3, 'street_length': 5}
         self._max_car_stack = self.model_params['cars_in_node']
         self._max_cars_on_street = self.model_params['street_length']

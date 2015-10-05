@@ -1,3 +1,5 @@
+# current
+- change max cars per junction+street and MAX_ROAD_PUSHES and MAX_MOVES to use simulation parameters
 # implementation
 
 - test avoid list in Grid.get_path()
