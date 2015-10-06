@@ -13,13 +13,13 @@ class GRID_EVENT():
 
 
 class MovementEvent():
-    def __init__(self, ev_type, timestamp, new_pos):
+    def __init__(self, ev_type, timestamp, old_pos):
         self.ev_type = ev_type
         self.timestamp = timestamp
-        self.new_pos = new_pos
+        self.old_pos = old_pos
 
     def __str__(self):
-        return "<MovEv %s; time: %i, pos: %s>" % (self.ev_type, self.timestamp, self.new_pos)
+        return "<MovEv %s; time: %i, old pos: %s>" % (self.ev_type, self.timestamp, self.old_pos)
 
     def __repr__(self):
         return self.__str__()

@@ -68,6 +68,12 @@ class GridNode(Point):
                 ci -= 1  # compensate for car popped from _car_stack
             ci += 1
 
+    def remove_car(self, car):
+        """
+        Removes car from main stack.
+        """
+        self._car_stack.remove(car)
+
     def add_car(self, car, call_update=True):
         """
         Inserts car into the main stack of a node.
@@ -122,7 +128,8 @@ class GridNode(Point):
         street_stack = self._streets[direction]
         if street_stack and len(street_stack) > 0:
             car = street_stack[0]
-            if self._neighbours[direction].add_car(car):
+            to_node = self._neighbours[direction]
+            if to_node.add_car(car):
                 street_stack.pop(0)
                 car.handle_movement_event(MovementEvent(GE.JUNCTION_ARRIVED, 0, self))
                 print('car_transfered')

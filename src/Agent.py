@@ -30,6 +30,8 @@ class Agent:
             self._end = ep
 
             print("  Agent %s: teleporting to start point %s (from %s)" % (self._name, sp, self._position))
+            if self._position:
+                self._position.remove_car(self)
             self._position = self._start
             self._start.add_car(self, False)
             self._determine_path()
@@ -78,9 +80,10 @@ class Agent:
         ev contains: type, timestamp, new_pos.
         """
         from Grid import GRID_EVENT as GE
+        print("agent %s event: %s" % (self._name, ev))
 
         if ev.ev_type == GE.JUNCTION_ARRIVED:
-            if self._position != ev.new_pos:  # check if we have actually moved
+            if self._position != ev.old_pos:  # check if we have actually moved
                 self._path.pop(0)
             else:
                 self._travel_start_time = ev.timestamp
