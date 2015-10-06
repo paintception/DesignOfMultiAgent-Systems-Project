@@ -191,6 +191,6 @@ class Grid():
         return '\n'.join(rows)
 
     def _print_jams(self):
-       for n in self._grid:
+        for n in self._grid:
             for m in n:
                 m._print_node_jams()

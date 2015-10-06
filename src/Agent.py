@@ -18,6 +18,9 @@ class Agent:
     def is_travelling(self):
         return self._position is not None and (self._position != self._end)
 
+    def get_name(self):
+        return self._name
+
     def set_route(self, sp, ep):
         """
         If sp has room for a new car, set given nodes as start and end points

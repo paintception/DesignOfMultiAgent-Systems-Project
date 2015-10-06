@@ -91,7 +91,7 @@ class GridNode(Point):
             self._car_stack.append(car)
             car.set_position(self)
             # if call_update: car.update()  # done in Agent's event handler now
-           # print('test_add_car')
+            # print('test_add_car')
             return True
         else:
             return False
@@ -113,6 +113,7 @@ class GridNode(Point):
             if next_stop is None:
                 print("Route done.")
                 return False
+
             street_stack = self._streets[next_dir]
             print(len(street_stack) < self._max_cars_on_street)
             if len(street_stack) < self._max_cars_on_street:
@@ -142,7 +143,7 @@ class GridNode(Point):
             if to_node.add_car(car):
                 street_stack.pop(0)
                 car.handle_movement_event(MovementEvent(GE.JUNCTION_ARRIVED, time, self))
-            #    print('car_transfered')
+                # print('car_transfered')
                 return True
             else:
                 car.handle_movement_event(MovementEvent(GE.JUNCTION_REJECTED, time, self))
@@ -169,6 +170,18 @@ class GridNode(Point):
         self._street_jams[drx].append(time)
         print (drx)
         print(self._street_jams[drx])
+
+    def jsonifiable(self):
+        result = {
+            'main': [c.get_name() for c in self._car_stack],
+            'streets': {}
+        }
+        for k in self._streets:
+            s = self._streets[k]
+            if s is not None: result['streets'][k] = [c.get_name() for c in s]
+            else: result['streets'][k] = None
+
+        return result
 
     def __str__(self):
         return self.__repr__()
