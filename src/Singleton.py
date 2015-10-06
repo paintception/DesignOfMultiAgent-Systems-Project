@@ -1,8 +1,8 @@
 def Singleton(cls):
-    instances = {}
+	instances = {}
 
-    def getInstance():
-        if cls not in instances:
-            instances[cls] = cls()
-            return instances[cls]
-    return getInstance
+	def getInstance():
+		if cls not in instances:
+			instances[cls] = cls()
+		return instances[cls]
+	return getInstance

@@ -1,4 +1,5 @@
 from utils import Point
+from TimeLord import TimeLord
 
 
 class GridNode(Point):
@@ -92,9 +93,9 @@ class GridNode(Point):
         """
         Moves the next car from the main stack to the street stack it wants to go to next.
         """
-        from Grid import MovementEvent, GRID_EVENT as GE
-        from World import World
-
+        from Grid import MovementEvent, GRID_EVENT as GE 
+        t = TimeLord()
+        time= t.get_timestamp()
         if len(self._car_stack) > 0:
             car = self._car_stack[0]
             next_dir, next_stop = car.get_next_dir(), car.get_next_stop()
@@ -111,10 +112,10 @@ class GridNode(Point):
                 street_stack.append(car)
                 self._car_stack.pop(0)
                 print('moving')
-                car.handle_movement_event(MovementEvent(GE.STREET_ARRIVED, 0, self))
+                car.handle_movement_event(MovementEvent(GE.STREET_ARRIVED, time, self))
                 return True
             else:
-                car.handle_movement_event(MovementEvent(GE.STREET_REJECTED, 0, self))
+                car.handle_movement_event(MovementEvent(GE.STREET_REJECTED, time, self))
                 return False
         else:
             return True
@@ -124,18 +125,19 @@ class GridNode(Point):
         Moves the next car from the street stack to the mainstack of node in the given direction.
         """
         from Grid import MovementEvent, GRID_EVENT as GE
-
+        t = TimeLord()
+        time= t.get_timestamp()
         street_stack = self._streets[direction]
         if street_stack and len(street_stack) > 0:
             car = street_stack[0]
             to_node = self._neighbours[direction]
             if to_node.add_car(car):
                 street_stack.pop(0)
-                car.handle_movement_event(MovementEvent(GE.JUNCTION_ARRIVED, 0, self))
+                car.handle_movement_event(MovementEvent(GE.JUNCTION_ARRIVED, time, self))
                 print('car_transfered')
                 return True
             else:
-                car.handle_movement_event(MovementEvent(GE.JUNCTION_REJECTED, 0, self))
+                car.handle_movement_event(MovementEvent(GE.JUNCTION_REJECTED, time, self))
                 return False
 
         return True

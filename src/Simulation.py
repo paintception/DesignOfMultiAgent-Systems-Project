@@ -1,6 +1,7 @@
 from __future__ import print_function, division
 from datetime import datetime as dt
 from World import World
+from TimeLord import TimeLord
 
 
 class SimulationParameters():
@@ -94,14 +95,14 @@ class Simulation():
     def do_step(self):
         w, g = self._world, self._world.get_grid()
         cars = w.get_agents()
-        start = dt.now()
-
+        t= TimeLord()
         w.update_grid()
 
-        if w.get_day_time() == 0:
+        start = dt.now()
+        if t.get_day_time() == 0:
             duration = dt.now() - start
             print("===== Day: %i (%.2f secs) =====" %
-                  (w.get_day(), duration.seconds + (duration.microseconds / 1000000)))
+                  (t.get_day(), duration.seconds + (duration.microseconds / 1000000)))
             #self.print_grid(self._world.print_grid())
 
             ct, cnt = 0, 0
@@ -115,7 +116,7 @@ class Simulation():
 
             start = dt.now()
 
-        w.next_time_step()
+        t.next_time_step()
 
     def print_grid(self, printing_grid):
         self._printing_grid = printing_grid
