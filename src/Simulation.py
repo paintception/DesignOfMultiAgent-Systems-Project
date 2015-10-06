@@ -2,6 +2,7 @@ from __future__ import print_function, division
 from datetime import datetime as dt
 from World import World
 from TimeLord import TimeLord
+from sys import exit
 
 
 class SimulationParameters():
@@ -116,6 +117,12 @@ class Simulation():
 
             start = dt.now()
 
+        if t.get_day() == 2:
+
+            self._print_jams()
+            print ("the end")
+            exit(0)
+
         t.next_time_step()
 
     def print_grid(self, printing_grid):
@@ -131,3 +138,6 @@ class Simulation():
         "Here we create JSON data. Into the js script file we need to add: type=""text/javascript"">"
         "data_from_django = {{ :_our_data }};"
         "widget.init(data_from_django);"
+
+    def _print_jams(self):
+        self._world.get_grid()._print_jams()

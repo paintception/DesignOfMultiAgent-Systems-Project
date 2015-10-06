@@ -189,3 +189,8 @@ class Grid():
         for y in xrange(self.height):
             rows.append(' '.join(map(lambda n: "%s" % n.get_grid_repr(), self._grid[y])))
         return '\n'.join(rows)
+
+    def _print_jams(self):
+       for n in self._grid:
+            for m in n:
+                m._print_node_jams()

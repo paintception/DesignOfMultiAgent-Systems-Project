@@ -9,7 +9,7 @@ class GridNode(Point):
     """
 
     MAX_ROAD_PUSHES = 1
-    MAX_MOVES = 4
+    MAX_MOVES = 2
 
     def __init__(self, x, y, grid):
         Point.__init__(self, x, y)
@@ -25,6 +25,9 @@ class GridNode(Point):
     def set_neighbours(self):
         grid = self._grid
         self._neighbours, self._streets = {}, {}
+        self._center_jams=[]
+        self._street_jams={}
+
         for drx in xrange(4):
             nb = grid.get_neighbour(self, drx)
             self._neighbours[drx] = nb
@@ -32,6 +35,10 @@ class GridNode(Point):
             # make sure all directions have a key but mark non-existent ones with a None
             if nb: self._streets[drx] = []
             else: self._streets[drx] = None
+
+
+            if nb: self._street_jams[drx] = []
+            else: self._street_jams[drx] = None
 
     def get_neighbour(self, direction):
         return self._neighbours[direction]
@@ -84,7 +91,7 @@ class GridNode(Point):
             self._car_stack.append(car)
             car.set_position(self)
             # if call_update: car.update()  # done in Agent's event handler now
-            print('test_add_car')
+           # print('test_add_car')
             return True
         else:
             return False
@@ -100,14 +107,14 @@ class GridNode(Point):
             car = self._car_stack[0]
             next_dir, next_stop = car.get_next_dir(), car.get_next_stop()
 
-            print("car %s" % car)
-            print("next stop: %s (%i), route: %s" % (next_stop, next_dir, car._path))
-
+            #print("car %s" % car)
+            #print("next stop: %s (%i), route: %s" % (next_stop, next_dir, car._path))
+            
             if next_stop is None:
                 print("Route done.")
                 return False
-
             street_stack = self._streets[next_dir]
+            print(len(street_stack) < self._max_cars_on_street)
             if len(street_stack) < self._max_cars_on_street:
                 street_stack.append(car)
                 self._car_stack.pop(0)
@@ -116,6 +123,7 @@ class GridNode(Point):
                 return True
             else:
                 car.handle_movement_event(MovementEvent(GE.STREET_REJECTED, time, self))
+                self._add_center_jam(time)
                 return False
         else:
             return True
@@ -134,10 +142,11 @@ class GridNode(Point):
             if to_node.add_car(car):
                 street_stack.pop(0)
                 car.handle_movement_event(MovementEvent(GE.JUNCTION_ARRIVED, time, self))
-                print('car_transfered')
+            #    print('car_transfered')
                 return True
             else:
                 car.handle_movement_event(MovementEvent(GE.JUNCTION_REJECTED, time, self))
+                self._add_street_jam(direction,time)
                 return False
 
         return True
@@ -149,8 +158,27 @@ class GridNode(Point):
         """
         return "%02i/%01i" % (0, 0)
 
+    def _add_center_jam(self, time):
+        print ("jam at: %s %s" %(self.x, self.y))
+        self._center_jams.append(time)
+        print(self._center_jams.append(time))
+
+    def _add_street_jam(self, drx, time):
+
+        print ("jam at street: %s, %s %s" %(drx, self.x, self.y))
+        self._street_jams[drx].append(time)
+        print (drx)
+        print(self._street_jams[drx])
+
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
         return 'GN(%i, %i)' % (self.x, self.y)
+
+    def _print_node_jams(self):
+        if self._center_jams:
+            print("Node %s %s had %s jams at crossing," %(self.x, self.y, self._center_jams))
+        for s in self._street_jams:
+            if self._street_jams[s]:
+                print("Node %s %s had %s jams at street: %s," %(self.x, self.y, self._street_jams[s], s))
