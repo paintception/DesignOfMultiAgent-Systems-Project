@@ -46,6 +46,13 @@ class GridNode(Point):
         return len(self._car_stack) < self._max_car_stack
 
     def update(self):
+        """
+        First move cars on streets to their new nodes (max MAX_ROAD_PUSHES per
+        street), send event to cars to inform them about (not) being moved -
+        JUNCTION_ARRIVED | JUNCTION_REJECTED.
+        Then move cars from junction to streets (max MAX_MOVES), send events
+        here as well - STREET_ARRIVED | STREET_REJECTED.
+        """
         stuck_count = 0  # in case we want to check for deadlocks
         for k in self._streets:
             for i in xrange(self.MAX_ROAD_PUSHES):
@@ -69,7 +76,7 @@ class GridNode(Point):
         if len(self._car_stack) < self._max_car_stack:
             self._car_stack.append(car)
             car.set_position(self)
-            if call_update: car.update()
+            # if call_update: car.update()  # done in Agent's event handler now
             print('test_add_car')
             return True
         else:
@@ -79,6 +86,9 @@ class GridNode(Point):
         """
         Moves the next car from the main stack to the street stack it wants to go to next.
         """
+        from Grid import MovementEvent, GRID_EVENT as GE
+        from World import World
+
         if len(self._car_stack) > 0:
             car = self._car_stack[0]
             next_dir, next_stop = car.get_next_dir(), car.get_next_stop()
@@ -95,8 +105,10 @@ class GridNode(Point):
                 street_stack.append(car)
                 self._car_stack.pop(0)
                 print('moving')
+                car.handle_movement_event(MovementEvent(GE.STREET_ARRIVED, 0, self))
                 return True
             else:
+                car.handle_movement_event(MovementEvent(GE.STREET_REJECTED, 0, self))
                 return False
         else:
             return True
@@ -105,15 +117,20 @@ class GridNode(Point):
         """
         Moves the next car from the street stack to the mainstack of node in the given direction.
         """
+        from Grid import MovementEvent, GRID_EVENT as GE
+
         street_stack = self._streets[direction]
         if street_stack and len(street_stack) > 0:
             car = street_stack[0]
             if self._neighbours[direction].add_car(car):
                 street_stack.pop(0)
+                car.handle_movement_event(MovementEvent(GE.JUNCTION_ARRIVED, 0, self))
                 print('car_transfered')
                 return True
             else:
+                car.handle_movement_event(MovementEvent(GE.JUNCTION_REJECTED, 0, self))
                 return False
+
         return True
 
     def get_grid_repr(self):

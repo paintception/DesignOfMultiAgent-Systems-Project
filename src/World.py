@@ -18,11 +18,14 @@ class World():
         self._grid = Grid(parameters.grid_width, parameters.grid_height)
         self._agents = [Agent(i, self) for i in xrange(parameters.n_agents)]
 
-    def get_time(self):
+    def get_day_time(self):
         return self._time_step
 
     def get_day(self):
         return self._day
+
+    def get_timestamp(self):
+        return self._day * self._parameters.steps_per_day + self._time_step
 
     def get_parameters(self):
         return self._parameters

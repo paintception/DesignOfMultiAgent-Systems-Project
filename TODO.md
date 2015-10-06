@@ -1,5 +1,6 @@
 # current
 - add simple event system
+- also create event somehow to notify cars that street/junction movement capacity is reached (so 6 events in total)
 - change max cars per junction+street and MAX_ROAD_PUSHES and MAX_MOVES to use simulation parameters
 - if n_route_endpoints makes sense, move it to sim parameters (currently in Simulation._setup())
 - implement Simulation._get_random_points() properly (or decide

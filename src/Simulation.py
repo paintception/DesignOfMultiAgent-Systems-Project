@@ -98,7 +98,7 @@ class Simulation():
 
         w.update_grid()
 
-        if w.get_time() == 0:
+        if w.get_day_time() == 0:
             duration = dt.now() - start
             print("===== Day: %i (%.2f secs) =====" %
                   (w.get_day(), duration.seconds + (duration.microseconds / 1000000)))

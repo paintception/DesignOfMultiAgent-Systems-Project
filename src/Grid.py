@@ -5,6 +5,26 @@ from utils import Point
 import AStar
 
 
+class GRID_EVENT():
+    JUNCTION_ARRIVED = 10
+    JUNCTION_REJECTED = 11
+    STREET_ARRIVED = 12
+    STREET_REJECTED = 13
+
+
+class MovementEvent():
+    def __init__(self, ev_type, timestamp, new_pos):
+        self.ev_type = ev_type
+        self.timestamp = timestamp
+        self.new_pos = new_pos
+
+    def __str__(self):
+        return "<MovEv %s; time: %i, pos: %s>" % (self.ev_type, self.timestamp, self.new_pos)
+
+    def __repr__(self):
+        return self.__str__()
+
+
 class Grid():
     """
     A grid class with a list as content of each cell. This list can be used to
