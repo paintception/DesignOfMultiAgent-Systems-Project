@@ -66,6 +66,11 @@ class Simulation():
         # agents travel to their workplace, of which only n_route_endpoints exist...lower for higher jam probability?
         ep_list = self._get_random_points(p.grid_width, p.grid_height, p.n_agents, n_route_endpoints, -1)
 
+        for j in xrange(p.n_agents):
+            if sp_list[j] == ep_list[j]:
+                temp = sp_list.pop(j)
+                sp_list.append(temp)
+
         cars = self._world.get_agents()
         assert len(cars) == p.n_agents, "number of agents not equal to simulation parameter value"
         for i in xrange(p.n_agents):

@@ -108,6 +108,10 @@ class Agent:
     def _determine_path(self):
         self._path = self._world.get_grid().get_path(self._position, self._end)
         # self._path = self._world.get_grid().get_path(self._position, self._end, None, True)
+        if not self._path:
+            print (self._start) 
+            print (self._position)
+            print (self._end)
         self._total_path_distance = len(self._path)
 
         if self._path is None:
