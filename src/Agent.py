@@ -7,7 +7,7 @@ class Agent:
         self._position = None
         self._start = None
         self._end = None
-        self._route = None
+        self._path = None
         self._world = world
 
     def is_travelling(self):
@@ -18,18 +18,32 @@ class Agent:
         If sp has room for a new car, set given nodes as start and end points
         and teleport to start.
         """
+        assert sp is not None and ep is not None, "route start and/or end point not set"
+
         if sp.has_room():
             self._start = sp
             self._end = ep
 
             print("  Agent %s: teleporting to start point %s (from %s)" % (self._name, sp, self._position))
             self._position = self._start
-            self._start.add_car(self)
-            self._route = None
+            self._start.add_car(self, False)
+            self._determine_path()
 
             return True
 
         return False
+
+    def restart_route(self):
+        """
+        Call set_route() with current start and end points.
+        """
+        return self.set_route(self._start, self._end)
+
+    def reverse_route(self):
+        """
+        Call set_route() with current start and end points reversed.
+        """
+        return self.set_route(self._end, self._start)
 
     def get_pos_node(self):
         return self._position
@@ -38,30 +52,27 @@ class Agent:
         self._position = new_pos
 
     def get_next_dir(self):
-        if self._route:
-            return self._route[0]
+        if self._path:
+            return self._path[0]
         else:
             return -1
 
     def get_next_stop(self):
-        if self._route:
-            return self._position.get_neighbour(self._route[0])
+        if self._path:
+            return self._position.get_neighbour(self._path[0])
         else:
             return None
 
     def update(self):
-        if not self._route:
-            self._route = self._world.get_grid().get_path(self._position, self._end)
-            # self._route = self._world.get_grid().get_path(self._position, self._end, None, True)
+        self._path.pop(0)  # update path to destination
 
-            if self._route is None:
-                raise Exception("could not find route for agent %s from %s to %s" % (self._name, self._start, self._end))
-        else:
-            self._route.pop(0)
+    def _determine_path(self):
+        self._path = self._world.get_grid().get_path(self._position, self._end)
+        # self._path = self._world.get_grid().get_path(self._position, self._end, None, True)
 
-        if len(self._route) == 0:
-            self._route = None
+        if self._path is None:
+            raise Exception("could not find route for agent %s from %s to %s" % (self._name, self._position, self._end))
 
     def __str__(self):
         return "<Agent %s @ %s; %s -> %s -- %s>" % \
-            (self._name, self._position, self._start, self._end, self._route)
+            (self._name, self._position, self._start, self._end, self._path)

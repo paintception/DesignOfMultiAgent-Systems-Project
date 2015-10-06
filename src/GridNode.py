@@ -27,6 +27,7 @@ class GridNode(Point):
         for drx in xrange(4):
             nb = grid.get_neighbour(self, drx)
             self._neighbours[drx] = nb
+
             # make sure all directions have a key but mark non-existent ones with a None
             if nb: self._streets[drx] = []
             else: self._streets[drx] = None
@@ -60,14 +61,15 @@ class GridNode(Point):
                 ci -= 1  # compensate for car popped from _car_stack
             ci += 1
 
-    def add_car(self, car):
+    def add_car(self, car, call_update=True):
         """
         Inserts car into the main stack of a node.
+        Agents adding themselves to their initial position should call with call_update=False
         """
         if len(self._car_stack) < self._max_car_stack:
             self._car_stack.append(car)
             car.set_position(self)
-            car.update()
+            if call_update: car.update()
             print('test_add_car')
             return True
         else:
@@ -82,7 +84,7 @@ class GridNode(Point):
             next_dir, next_stop = car.get_next_dir(), car.get_next_stop()
 
             print("car %s" % car)
-            print("next stop: %s (%i), route: %s" % (next_stop, next_dir, car._route))
+            print("next stop: %s (%i), route: %s" % (next_stop, next_dir, car._path))
 
             if next_stop is None:
                 print("Route done.")
