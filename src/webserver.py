@@ -45,7 +45,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             print("** Attempting to open %s" % filename)
             f = open(filename, 'r')
 
-            extension = path.splitext(self.path)[1][1:]
+            extension = path.splitext(rq_path)[1][1:]
             # mime_type = mime_types.get(extension, 'application/octet-stream')
             mime_type = self.mime_types.get(extension, 'unknown/unknown')
 

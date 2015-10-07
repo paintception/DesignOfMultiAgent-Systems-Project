@@ -1,8 +1,8 @@
 /*
  * TODO in order of listing:
- * - play/pause + set speed
  * - view parameters (in fields so editing them later on is easier)
  * - legend on canvas
+ * - play/pause + set speed
  * - api: GET agents + view them
  * - api: POST sim/new with parameters object to be able to restart
  * - make drawing more efficient? (don't recreate objects?)
