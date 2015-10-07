@@ -34,6 +34,9 @@ class SimulationParameters():
 
         self.steps_per_day = 24 * 60
 
+    def jsonifiable(self):
+        return {k: v for (k, v) in self.__dict__.items()}
+
     def __str__(self):
         return ', '.join(map(lambda (k,v): "%s: %s" % (k, v), self.__dict__.items()))
 

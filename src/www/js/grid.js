@@ -1,10 +1,10 @@
 $(document).ready(function() {
 	Node = function() {
-		this.atQueue = 0;
-		this.outQueues = [0, 0, 0, 0];
+		this.main = 0;
+		this.streets = [0, 0, 0, 0];
 	}
 	Node.prototype.toString = function() {
-		return "{ Node - @NESW:" + this.atQueue + "/" + this.outQueues[0] + "/" + this.outQueues[1] + "/" + this.outQueues[2] + "/" + this.outQueues[3] + " }";
+		return "{ Node - @NESW:" + this.main + "/" + this.streets[0] + "/" + this.streets[1] + "/" + this.streets[2] + "/" + this.streets[3] + " }";
 	}
 
 
@@ -24,11 +24,11 @@ $(document).ready(function() {
 				for (x = 0; x < w; ++x) {
 					n = new Node();
 
-					n.atQueue = this.settings.maxAtJunction;
-					// n.atQueue = getRandomInt(0, this.settings.maxAtJunction);
-					for (i = 0; i < 4; ++i) n.outQueues[i] = getRandomInt(0, this.settings.maxInStreet);
-					// n.atQueue = 0;
-					// for (i = 0; i < 4; ++i) n.outQueues[i] = 0;
+					n.main = this.parameters.junction_capacity;
+					// n.main = getRandomInt(0, this.parameters.junction_capacity);
+					for (i = 0; i < 4; ++i) n.streets[i] = getRandomInt(0, this.parameters.street_capacity);
+					// n.main = 0;
+					// for (i = 0; i < 4; ++i) n.streets[i] = 0;
 
 					row.push(n);
 				}
@@ -51,9 +51,12 @@ $(document).ready(function() {
 		this.draw = function(cellSize) {
 			var renderStart = new Date().getTime();
 			var cs = cellSize;
-			console.log("draw(): grid size: " + this.width + "x" + this.height + ", cell size: " + cs);
+			console.log("grid.draw(): grid size: " + this.width + "x" + this.height + ", cell size: " + cs);
 
 			drawCell = function(v, minV, maxV, x, y, cellType) {
+				if (v == null) v = []; //TEMP: convert nulls (border streets) to empty streets
+				if (v != -1) v = v.length; //take the length of the array (which is filled with agent IDs)
+
 				var cellType = cellType || 'none';
 				var cx = x * cs, cy = y * cs;
 
@@ -107,11 +110,11 @@ $(document).ready(function() {
 					cell = this.grid[y][x];
 					// console.log("[" + x + ", " + y + "]: " + cell);
 
-					drawCell(cell.atQueue, 0, p.junction_capacity, cc.x, cc.y, 'junction');
-					drawCell(cell.outQueues[0], 0, p.street_capacity, cc.x, cc.y - 1, 'vstreet');
-					drawCell(cell.outQueues[1], 0, p.street_capacity, cc.x + 1, cc.y, 'hstreet');
-					drawCell(cell.outQueues[2], 0, p.street_capacity, cc.x, cc.y + 1, 'vstreet');
-					drawCell(cell.outQueues[3], 0, p.street_capacity, cc.x - 1, cc.y, 'hstreet');
+					drawCell(cell.main, 0, p.junction_capacity, cc.x, cc.y, 'junction');
+					drawCell(cell.streets[0], 0, p.street_capacity, cc.x, cc.y - 1, 'vstreet');
+					drawCell(cell.streets[1], 0, p.street_capacity, cc.x + 1, cc.y, 'hstreet');
+					drawCell(cell.streets[2], 0, p.street_capacity, cc.x, cc.y + 1, 'vstreet');
+					drawCell(cell.streets[3], 0, p.street_capacity, cc.x - 1, cc.y, 'hstreet');
 
 					drawCell(-1, 0, 0, cc.x - 1, cc.y - 1);
 					drawCell(-1, 0, 0, cc.x + 1, cc.y - 1);
@@ -124,7 +127,7 @@ $(document).ready(function() {
 
 			paper.view.draw();
 			var renderTime = new Date().getTime() - renderStart;
-			console.log("draw(): drawing completed in " + renderTime + "msec");
+			console.log("grid.draw(): drawing completed in " + renderTime + "msec");
 		}
 	}
 
@@ -133,15 +136,31 @@ $(document).ready(function() {
 		return Math.floor(Math.random() * (max - min)) + min;
 	}
 
-	main = function(settings) {
-		grid = new Grid();
+	updateParamsAndGrid = function(grid) {
 		$.getJSON('http://localhost:8001/sim/parameters', function (data) {
 			grid.setParameters(data);
+			$.getJSON('http://localhost:8001/sim/grid', function (data) {
+				grid.setGridData(data.width, data.height, data.grid);
+				grid.draw(settings.cellSize);
+			});
 		});
-		$.getJSON('http://localhost:8001/sim/grid', function (data) {
-			grid.setGridData(data.width, data.height, data.grid);
-		});
-		// grid.draw(settings.cellSize);
+	}
+
+	main = function(settings) {
+		grid = new Grid();
+		setInterval(function() {
+			console.log("grid: updating...");
+			renderStart = new Date().getTime();
+
+			$.getJSON('http://localhost:8001/sim/step', function (data) {
+				console.log("grid: step done", data);
+			});
+
+			updateParamsAndGrid(grid);
+
+			renderTime = new Date().getTime() - renderStart;
+			console.log("grid: update took " + renderTime + "msec");
+		}, 1000 / settings.fps);
 	}
 
 
@@ -151,11 +170,13 @@ $(document).ready(function() {
 	var canvas = document.getElementById('grid-canvas');
 	paper.setup(canvas);
 	settings = {
-		'gridSize': 15,
-		'maxAtJunction': 5,
-		'maxInStreet': 10,
+		'grid_width': 15,
+		'grid_height': 15,
+		'junction_capacity': 5,
+		'street_capacity': 10,
 
-		'cellSize': 15
+		'cellSize': 15,
+		'fps': 5
 	}
 
 	main(settings);
