@@ -3,6 +3,7 @@
  * - view parameters (in fields so editing them later on is easier)
  * - legend on canvas
  * - play/pause + set speed
+ * - grayscale toggle
  * - api: GET agents + view them
  * - api: POST sim/new with parameters object to be able to restart
  * - make drawing more efficient? (don't recreate objects?)
@@ -156,6 +157,10 @@ $(document).ready(function() {
 	updateParamsAndGrid = function(grid) {
 		$.getJSON('http://localhost:8001/sim/parameters', function (data) {
 			grid.setParameters(data);
+			repr = "<table>" + Object.keys(data).map(function(x){
+				return "<tr><td>" + x + ":</td><td>" + data[x] + "</td></tr>";
+			}).join('') + "</table>";
+			$('#param-info').html("<br><b>Simulation parameters</b>: " + repr);
 			$.getJSON('http://localhost:8001/sim/grid', function (data) {
 				grid.setGridData(data.width, data.height, data.grid);
 				grid.draw(settings.maxCellSize);
@@ -171,6 +176,7 @@ $(document).ready(function() {
 
 			$.getJSON('http://localhost:8001/sim/step', function (data) {
 				console.log("grid: step done", data);
+				$('#time-info').html("<b>Simulation time</b>: " + data.day + ":" + data.step + " (timestamp: " + data.ts + ")");
 			});
 
 			updateParamsAndGrid(grid);
@@ -192,8 +198,8 @@ $(document).ready(function() {
 		// 'junction_capacity': 5,
 		// 'street_capacity': 10,
 
-		'maxCellSize': 25,
-		'fps': 1
+		'maxCellSize': 1000,
+		'fps': 0.2
 	}
 
 	main(settings);
