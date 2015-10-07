@@ -1,3 +1,12 @@
+/*
+ * TODO in order of listing:
+ * - play/pause + set speed
+ * - view parameters (in fields so editing them later on is easier)
+ * - legend on canvas
+ * - api: GET agents + view them
+ * - api: POST sim/new with parameters object to be able to restart
+ * - make drawing more efficient? (don't recreate objects?)
+ */
 $(document).ready(function() {
 	Node = function() {
 		this.main = 0;
@@ -48,9 +57,17 @@ $(document).ready(function() {
 			console.log("grid: set grid of " + w + "*" + h, gridData);
 		};
 
-		this.draw = function(cellSize) {
+		this.draw = function(maxCellSize) {
 			var renderStart = new Date().getTime();
-			var cs = cellSize;
+
+			var cs;
+			{
+				csz = paper.view.viewSize;
+				//grid sizes * 3 because we need 3*3 room per junction
+				canvasXMax = csz.width / (this.width * 3);
+				canvasYMax = csz.height / (this.height * 3);
+				cs = Math.min(canvasXMax, canvasYMax, maxCellSize);
+			}
 			console.log("grid.draw(): grid size: " + this.width + "x" + this.height + ", cell size: " + cs);
 
 			drawCell = function(v, minV, maxV, x, y, cellType) {
@@ -141,7 +158,7 @@ $(document).ready(function() {
 			grid.setParameters(data);
 			$.getJSON('http://localhost:8001/sim/grid', function (data) {
 				grid.setGridData(data.width, data.height, data.grid);
-				grid.draw(settings.cellSize);
+				grid.draw(settings.maxCellSize);
 			});
 		});
 	}
@@ -170,13 +187,13 @@ $(document).ready(function() {
 	var canvas = document.getElementById('grid-canvas');
 	paper.setup(canvas);
 	settings = {
-		'grid_width': 15,
-		'grid_height': 15,
-		'junction_capacity': 5,
-		'street_capacity': 10,
+		// 'grid_width': 15,
+		// 'grid_height': 15,
+		// 'junction_capacity': 5,
+		// 'street_capacity': 10,
 
-		'cellSize': 15,
-		'fps': 5
+		'maxCellSize': 25,
+		'fps': 1
 	}
 
 	main(settings);

@@ -25,14 +25,14 @@ class SimulationParameters():
     def __init__(self):
         self.grid_width = 5
         self.grid_height = 5
-        self.n_agents = 3
+        self.n_agents = 10
 
         self.junction_capacity = 3
         self.street_capacity = 5
         self.junction_throughput = 1
         self.street_throughput = 4
 
-        self.steps_per_day = 24 * 60
+        self.steps_per_day = 50
 
     def jsonifiable(self):
         return {k: v for (k, v) in self.__dict__.items()}
