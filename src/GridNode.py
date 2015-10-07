@@ -3,24 +3,23 @@ from TimeLord import TimeLord
 
 
 class GridNode(Point):
-    """
-    MAX_ROAD_PUSHES defines the number car transfers to other nodes per timestep.
-    MAX_MOVES defines the number of moves from the main stack to street stacks per timestep.
-    """
-
-    MAX_ROAD_PUSHES = 1
-    MAX_MOVES = 2
-
     def __init__(self, x, y, grid):
+        from World import World
+        p = World().get_parameters()
+
         Point.__init__(self, x, y)
         self._grid = grid
         self._car_stack = []
         self._neighbours = None
         self._streets = None
 
-        self.model_params = {'cars_in_node': 3, 'street_length': 5}
-        self._max_car_stack = self.model_params['cars_in_node']
-        self._max_cars_on_street = self.model_params['street_length']
+        # self.model_params = {'cars_in_node': 2, 'street_length': 1}
+        # self._max_car_stack = self.model_params['cars_in_node']
+        # self._max_cars_on_street = self.model_params['street_length']
+        self._max_car_stack = p.junction_capacity
+        self._max_cars_on_street = p.street_capacity
+        self._junction_throughput = p.junction_throughput  # was MAX_ROAD_PUSHES before
+        self._street_throughput = p.street_throughput  # was MAX_MOVES before
 
     def set_neighbours(self):
         grid = self._grid
@@ -55,19 +54,19 @@ class GridNode(Point):
 
     def update(self):
         """
-        First move cars on streets to their new nodes (max MAX_ROAD_PUSHES per
+        First move cars on streets to their new nodes (max: _junction_throughput per
         street), send event to cars to inform them about (not) being moved -
         JUNCTION_ARRIVED | JUNCTION_REJECTED.
-        Then move cars from junction to streets (max MAX_MOVES), send events
+        Then move cars from junction to streets (max: _street_throughput), send events
         here as well - STREET_ARRIVED | STREET_REJECTED.
         """
         stuck_count = 0  # in case we want to check for deadlocks
         for k in self._streets:
-            for i in xrange(self.MAX_ROAD_PUSHES):
+            for i in xrange(self._junction_throughput):
                 if not self._transfer_car(k):
                     stuck_count += 1
 
-        ci, cars_to_move = 0, self.MAX_MOVES
+        ci, cars_to_move = 0, self._street_throughput
         while cars_to_move > 0:
             if ci >= len(self._car_stack):
                 break
@@ -100,7 +99,7 @@ class GridNode(Point):
         """
         Moves the next car from the main stack to the street stack it wants to go to next.
         """
-        from Grid import MovementEvent, GRID_EVENT as GE 
+        from Grid import MovementEvent, GRID_EVENT as GE
         t = TimeLord()
         time= t.get_timestamp()
         if len(self._car_stack) > 0:
@@ -115,7 +114,7 @@ class GridNode(Point):
                 return False
 
             street_stack = self._streets[next_dir]
-            print(len(street_stack) < self._max_cars_on_street)
+            # print("room for car on street? %s" % (len(street_stack) < self._max_cars_on_street))
             if len(street_stack) < self._max_cars_on_street:
                 street_stack.append(car)
                 self._car_stack.pop(0)
@@ -135,7 +134,7 @@ class GridNode(Point):
         """
         from Grid import MovementEvent, GRID_EVENT as GE
         t = TimeLord()
-        time= t.get_timestamp()
+        time = t.get_timestamp()
         street_stack = self._streets[direction]
         if street_stack and len(street_stack) > 0:
             car = street_stack[0]
@@ -165,7 +164,6 @@ class GridNode(Point):
         print(self._center_jams.append(time))
 
     def _add_street_jam(self, drx, time):
-
         print ("jam at street: %s, %s %s" %(drx, self.x, self.y))
         self._street_jams[drx].append(time)
         print (drx)
