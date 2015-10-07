@@ -1,66 +1,53 @@
 /*
  * TODO in order of listing:
- * - view parameters (in fields so editing them later on is easier)
- * - legend on canvas
- * - play/pause + set speed
+ * - initial load speed
+ * - split Grid into new file, create Simulation object (also separate) with settings
+ * - prepare for graphs
  * - grayscale toggle
+ * - add text to legend
+ * - editable parameters (create fields for them)
+ * - play/pause + set speed
+ * - draw grid without the non-existing streets at the edges
  * - api: GET agents + view them
  * - api: POST sim/new with parameters object to be able to restart
  * - make drawing more efficient? (don't recreate objects?)
+ * - add explosions
  */
 $(document).ready(function() {
-	Node = function() {
-		this.main = 0;
-		this.streets = [0, 0, 0, 0];
-	}
-	Node.prototype.toString = function() {
-		return "{ Node - @NESW:" + this.main + "/" + this.streets[0] + "/" + this.streets[1] + "/" + this.streets[2] + "/" + this.streets[3] + " }";
+	getRandomInt = function(min, max) {
+		return Math.floor(Math.random() * (max - min)) + min;
 	}
 
+	timeIt = function(f, logTitle) {
+		var renderStart = new Date().getTime();
+		f();
+		var renderTime = new Date().getTime() - renderStart;
+		if (logTitle != undefined) console.log("* execution time of " + logTitle + ": " + renderTime + " msec");
+		return renderTime;
+	}
 
 	Grid = function() {
+		// //enforce proper instantiation, we don't want 'window' as this...
+		// if (!(this instanceof Grid)) return new Grid();
+
 		this.parameters = {}
 		this.grid = [];
 		this.width = 0;
 		this.height = 0;
 
-		this.createDummy = function(w, h) {
-			this.width = w;
-			this.height = h;
-
-			this.grid = [];
-			for (y = 0; y < h; ++y) {
-				row = [];
-				for (x = 0; x < w; ++x) {
-					n = new Node();
-
-					n.main = this.parameters.junction_capacity;
-					// n.main = getRandomInt(0, this.parameters.junction_capacity);
-					for (i = 0; i < 4; ++i) n.streets[i] = getRandomInt(0, this.parameters.street_capacity);
-					// n.main = 0;
-					// for (i = 0; i < 4; ++i) n.streets[i] = 0;
-
-					row.push(n);
-				}
-				this.grid.push(row);
-			}
-		};
-
 		this.setParameters = function(parameters) {
 			this.parameters = parameters;
-			console.log("grid: set parameters", parameters);
+			// console.log("grid: set parameters", parameters);
 		};
 
 		this.setGridData = function(w, h, gridData) {
 			this.width = w;
 			this.height = h;
 			this.grid = gridData;
-			console.log("grid: set grid of " + w + "*" + h, gridData);
+			// console.log("grid: set grid of " + w + "*" + h, gridData);
 		};
 
 		this.draw = function(maxCellSize) {
-			var renderStart = new Date().getTime();
-
 			var cs;
 			{
 				csz = paper.view.viewSize;
@@ -71,7 +58,19 @@ $(document).ready(function() {
 			}
 			console.log("grid.draw(): grid size: " + this.width + "x" + this.height + ", cell size: " + cs);
 
-			drawCell = function(v, minV, maxV, x, y, cellType) {
+			var mapToColor = function(v, minV, maxV, lowOffset, grayscale) {
+				colorScale = v * (1.0 / (maxV - minV));
+				colorScale = colorScale * (1.0 - lowOffset) + lowOffset;
+				if (!grayscale) {
+					rectColor = new paper.Color(colorScale, 1.0 - colorScale, 0.0); //map v to green-red range
+				} else {
+					rectColor = new paper.Color(colorScale, colorScale, colorScale); //map v to black-white range
+				}
+
+				return rectColor;
+			}
+
+			var drawCell = function(v, minV, maxV, x, y, cellType) {
 				if (v == null) v = []; //TEMP: convert nulls (border streets) to empty streets
 				if (v != -1) v = v.length; //take the length of the array (which is filled with agent IDs)
 
@@ -81,8 +80,7 @@ $(document).ready(function() {
 				/* cell background */
 				var rectColor = 'black'; //non-road color
 				if (v >= 0) {
-					colorScale = v * (1.0 / (maxV - minV));
-					rectColor = new paper.Color(colorScale, 1.0 - colorScale, 0.0); //map v to green-red range
+					rectColor = mapToColor(v, minV, maxV, 0.2, false);
 				}
 				var rectParams = {
 					topLeft: [cx, cy],
@@ -119,39 +117,52 @@ $(document).ready(function() {
 					// 	stripe = new paper.Shape.Circle(dp);
 					// }
 				}
-			}
+			};
+
+			var drawLegend = function() {
+				var edgeDist = 7, barWidth = 150, barHeight = 20;
+				var x = edgeDist, y = paper.view.viewSize.height - edgeDist - barHeight;
+
+				var bar = paper.Shape.Rectangle({
+					topLeft: [x, y],
+					size: [barWidth, barHeight],
+					strokeWidth: 1,
+					strokeColor: 'black'
+				});
+				bar.fillColor = {
+					gradient: { //Note: the gradient behaves strangely, adding a third stop somehow fixes that
+						stops: [mapToColor(0, 0, 10, 0.2, false), mapToColor(10, 0, 10, 0.2, false), 'blue']
+					},
+					origin: [0, 0], destination: [barWidth, 0]
+				};
+				return bar;
+			};
 
 			p = this.parameters;
-			for (y = 0; y < this.height; ++y) {
-				for (x = 0; x < this.width; ++x) {
-					cc = new paper.Point(x * 3 + 1, y * 3 + 1);
-					cell = this.grid[y][x];
-					// console.log("[" + x + ", " + y + "]: " + cell);
+			jc = p.junction_capacity, sc = p.street_capacity;
+			w = this.width, h = this.height;
+			for (y = 0; y < h; ++y) {
+				for (x = 0; x < w; ++x) {
+					var cx = x * 3 + 1, cy = y * 3 + 1;
+					var cell = this.grid[y][x];
 
-					drawCell(cell.main, 0, p.junction_capacity, cc.x, cc.y, 'junction');
-					drawCell(cell.streets[0], 0, p.street_capacity, cc.x, cc.y - 1, 'vstreet');
-					drawCell(cell.streets[1], 0, p.street_capacity, cc.x + 1, cc.y, 'hstreet');
-					drawCell(cell.streets[2], 0, p.street_capacity, cc.x, cc.y + 1, 'vstreet');
-					drawCell(cell.streets[3], 0, p.street_capacity, cc.x - 1, cc.y, 'hstreet');
+					drawCell(cell.main, 0, jc, cx, cy, 'junction');
+					drawCell(cell.streets[0], 0, sc, cx, cy - 1, 'vstreet');
+					drawCell(cell.streets[1], 0, sc, cx + 1, cy, 'hstreet');
+					drawCell(cell.streets[2], 0, sc, cx, cy + 1, 'vstreet');
+					drawCell(cell.streets[3], 0, sc, cx - 1, cy, 'hstreet');
 
-					drawCell(-1, 0, 0, cc.x - 1, cc.y - 1);
-					drawCell(-1, 0, 0, cc.x + 1, cc.y - 1);
-					drawCell(-1, 0, 0, cc.x - 1, cc.y + 1);
-					drawCell(-1, 0, 0, cc.x + 1, cc.y + 1);
+					drawCell(-1, 0, 0, cx - 1, cy - 1);
+					drawCell(-1, 0, 0, cx + 1, cy - 1);
+					drawCell(-1, 0, 0, cx - 1, cy + 1);
+					drawCell(-1, 0, 0, cx + 1, cy + 1);
 				}
 			}
 
-			//TODO: draw legend (green=0 cars, red=max cars)
+			var legend = drawLegend();
 
 			paper.view.draw();
-			var renderTime = new Date().getTime() - renderStart;
-			console.log("grid.draw(): drawing completed in " + renderTime + "msec");
 		}
-	}
-
-
-	getRandomInt = function(min, max) {
-		return Math.floor(Math.random() * (max - min)) + min;
 	}
 
 	updateParamsAndGrid = function(grid) {
@@ -160,29 +171,37 @@ $(document).ready(function() {
 			repr = "<table>" + Object.keys(data).map(function(x){
 				return "<tr><td>" + x + ":</td><td>" + data[x] + "</td></tr>";
 			}).join('') + "</table>";
-			$('#param-info').html("<br><b>Simulation parameters</b>: " + repr);
+			$('#param-info').html("<b>Simulation parameters</b>: " + repr);
+
 			$.getJSON('http://localhost:8001/sim/grid', function (data) {
 				grid.setGridData(data.width, data.height, data.grid);
-				grid.draw(settings.maxCellSize);
+				duration = timeIt(function() {
+					grid.draw(settings.maxCellSize);
+				}, "grid.draw");
+				$('#render-info').html("<b>Grid render time</b>: " + duration + " msec");
 			});
+		}).error(function(err) {
+			console.log("getJSON error, server down? -- ", err); //TODO: use this for a connectivity indicator?
 		});
 	}
 
 	main = function(settings) {
 		grid = new Grid();
 		setInterval(function() {
-			console.log("grid: updating...");
+			// console.log("grid: updating...");
 			renderStart = new Date().getTime();
 
+			var stepStart = new Date().getTime();
 			$.getJSON('http://localhost:8001/sim/step', function (data) {
-				console.log("grid: step done", data);
+				var stepTime = new Date().getTime() - stepStart;
+				console.log("grid: step done in " + stepTime + " msec", data);
 				$('#time-info').html("<b>Simulation time</b>: " + data.day + ":" + data.step + " (timestamp: " + data.ts + ")");
 			});
 
 			updateParamsAndGrid(grid);
 
 			renderTime = new Date().getTime() - renderStart;
-			console.log("grid: update took " + renderTime + "msec");
+			// console.log("grid: update took " + renderTime + "msec"); //TODO: fix this timer by wrapping it up inside inner callback
 		}, 1000 / settings.fps);
 	}
 
@@ -199,6 +218,8 @@ $(document).ready(function() {
 		// 'street_capacity': 10,
 
 		'maxCellSize': 1000,
+		'grayscale': true,
+		'colorizeLowOffset': 0.2,
 		'fps': 0.2
 	}
 

@@ -116,11 +116,11 @@ class Simulation():
 
             start = dt.now()
 
-        if t.get_day() == 2:
+        # if t.get_day() == 2:
 
-            self._print_jams()
-            print ("the end")
-            exit(0)
+        #     self._print_jams()
+        #     print ("the end")
+        #     exit(0)
 
         t.next_time_step()
 
