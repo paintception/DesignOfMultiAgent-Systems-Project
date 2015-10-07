@@ -24,6 +24,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 
     base_path = 'www'
     api_prefix = '/sim'
+    index_file = 'index.html'
 
     def do_GET(self):
         if self.path.startswith(self.api_prefix):
@@ -38,6 +39,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         try:
             rq_path = self.path
             if rq_path[0] == '/': rq_path = rq_path[1:]
+            if len(rq_path) == 0: rq_path = self.index_file
             filename = path.join(self.base_path, rq_path)
 
             print("** Attempting to open %s" % filename)
@@ -58,7 +60,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 
     def _handle_api_request(self):
         rq_path = self.path[(len(self.api_prefix)+1):]  # strip api prefix + '/'
-        print("rqp",rq_path)
+        print("API endpoint requested:", rq_path)
 
         func_name = '_api_' + rq_path
         try:
@@ -98,9 +100,11 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             for x in xrange(g.width):
                 row.append(g.get_item_at(x, y).jsonifiable())
             gdata.append(row)
-        print('gdata', gdata)
 
         return json.dumps({ 'width': g.width, 'height': g.height, 'grid': gdata })
+
+    def _api_parameters(self):
+        return json.dumps(w.get_parameters().jsonifiable());
 
 
 def main(args):

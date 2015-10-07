@@ -1,4 +1,5 @@
-window.onload = function() {
+//window.onload = function() {
+$(document).ready(function() {
 	Node = function() {
 		this.atQueue = 0;
 		this.outQueues = [0, 0, 0, 0];
@@ -8,8 +9,8 @@ window.onload = function() {
 	}
 
 
-	Grid = function(settings) {
-		this.settings = settings
+	Grid = function() {
+		this.parameters = {}
 		this.grid = [];
 		this.width = 0;
 		this.height = 0;
@@ -36,9 +37,21 @@ window.onload = function() {
 			}
 		};
 
-		this.draw = function() {
+		this.setParameters = function(parameters) {
+			this.parameters = parameters;
+			console.log("grid: set parameters", parameters);
+		};
+
+		this.setGridData = function(w, h, gridData) {
+			this.width = w;
+			this.height = h;
+			this.grid = gridData;
+			console.log("grid: set grid of " + w + "*" + h, gridData);
+		};
+
+		this.draw = function(cellSize) {
 			var renderStart = new Date().getTime();
-			var cs = this.settings.cellSize;
+			var cs = cellSize;
 			console.log("draw(): grid size: " + this.width + "x" + this.height + ", cell size: " + cs);
 
 			drawCell = function(v, minV, maxV, x, y, cellType) {
@@ -88,18 +101,18 @@ window.onload = function() {
 				}
 			}
 
-			s = this.settings;
+			p = this.parameters;
 			for (y = 0; y < this.height; ++y) {
 				for (x = 0; x < this.width; ++x) {
 					cc = new paper.Point(x * 3 + 1, y * 3 + 1);
 					cell = this.grid[y][x];
 					// console.log("[" + x + ", " + y + "]: " + cell);
 
-					drawCell(cell.atQueue, 0, s.maxAtJunction, cc.x, cc.y, 'junction');
-					drawCell(cell.outQueues[0], 0, s.maxInStreet, cc.x, cc.y - 1, 'vstreet');
-					drawCell(cell.outQueues[1], 0, s.maxInStreet, cc.x + 1, cc.y, 'hstreet');
-					drawCell(cell.outQueues[2], 0, s.maxInStreet, cc.x, cc.y + 1, 'vstreet');
-					drawCell(cell.outQueues[3], 0, s.maxInStreet, cc.x - 1, cc.y, 'hstreet');
+					drawCell(cell.atQueue, 0, p.junction_capacity, cc.x, cc.y, 'junction');
+					drawCell(cell.outQueues[0], 0, p.street_capacity, cc.x, cc.y - 1, 'vstreet');
+					drawCell(cell.outQueues[1], 0, p.street_capacity, cc.x + 1, cc.y, 'hstreet');
+					drawCell(cell.outQueues[2], 0, p.street_capacity, cc.x, cc.y + 1, 'vstreet');
+					drawCell(cell.outQueues[3], 0, p.street_capacity, cc.x - 1, cc.y, 'hstreet');
 
 					drawCell(-1, 0, 0, cc.x - 1, cc.y - 1);
 					drawCell(-1, 0, 0, cc.x + 1, cc.y - 1);
@@ -122,10 +135,14 @@ window.onload = function() {
 	}
 
 	main = function(settings) {
-		grid = new Grid(settings);
-		grid.createDummy(settings.gridSize, settings.gridSize);
-		// console.log('grid: ' + grid);
-		grid.draw();
+		grid = new Grid();
+		$.getJSON('http://localhost:8001/sim/parameters', function (data) {
+			grid.setParameters(data);
+		});
+		$.getJSON('http://localhost:8001/sim/grid', function (data) {
+			grid.setGridData(data.width, data.height, data.grid);
+		});
+		// grid.draw(settings.cellSize);
 	}
 
 
@@ -143,4 +160,5 @@ window.onload = function() {
 	}
 
 	main(settings);
-};
+});
+//};
