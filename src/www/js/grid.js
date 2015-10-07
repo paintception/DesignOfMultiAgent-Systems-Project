@@ -1,4 +1,3 @@
-//window.onload = function() {
 $(document).ready(function() {
 	Node = function() {
 		this.atQueue = 0;
@@ -161,4 +160,3 @@ $(document).ready(function() {
 
 	main(settings);
 });
-//};
