@@ -49,9 +49,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             # mime_type = mime_types.get(extension, 'application/octet-stream')
             mime_type = self.mime_types.get(extension, 'unknown/unknown')
 
-            self.send_response(200)
-            self.send_header("Content-type", mime_type)
-            self.end_headers()
+            self._send_ok_headers(mime_type)
 
             self.wfile.write(f.read())
             f.close()
@@ -69,14 +67,18 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             func = None
 
         if func:  # and type(func) == 'instancemethod':
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
+            self._send_ok_headers('application/json')
 
             response_text = func()
             self.wfile.write(response_text)
         else:
             self.send_error(404, 'no such API endpoint')
+
+    def _send_ok_headers(self, mime_type):
+        self.send_response(200)
+        self.send_header('Content-type', mime_type)
+        self.send_header('Content-Language', 'en')
+        self.end_headers()
 
 
     #################
@@ -84,7 +86,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
     #################
 
     def _api_test(self):
-        test_data = [{ 'key1-str': 'xyzzy', 'key2-int': 42 }, 'elem3', 4]
+        test_data = [{'key1-str': 'xyzzy', 'key2-int': 42}, 'elem3', 4]
         return json.dumps(test_data)
 
     def _api_step(self):

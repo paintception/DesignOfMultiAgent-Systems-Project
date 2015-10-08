@@ -1,3 +1,6 @@
+/*
+ * Inherits from EventEmitter.
+ */
 Simulation = function(settings) {
 	/* INITIALIZATION */
 
@@ -8,6 +11,8 @@ Simulation = function(settings) {
 	console.log('simulation: creating grid');
 	this.grid = new Grid(this);
 
+	EventEmitter.call(this);
+	
 	var self = this;
 
 
@@ -32,6 +37,7 @@ Simulation = function(settings) {
 			this.isPaused_ = true;
 			clearTimeout(this.renderTimeoutId);
 		}
+		if (this.isPaused_ != prevPaused) this.emit('sim:pauseState', {paused: this.isPaused_});
 	};
 
 	this.isPaused = function() {
@@ -93,3 +99,6 @@ Simulation = function(settings) {
 
 	updateParamsAndGrid(this.grid);
 };
+
+Simulation.prototype = Object.create(EventEmitter.prototype);
+Simulation.prototype.constructor = Simulation;

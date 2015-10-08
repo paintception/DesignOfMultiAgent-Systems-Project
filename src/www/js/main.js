@@ -36,8 +36,11 @@ $(document).ready(function() {
 		var sim = simulation;
 		$('#ctl-playpause').on('click', function(ev) {
 			sim.setPaused(!sim.isPaused());
-			$('#ctl-playpause').html(sim.isPaused() ? "Play" : "Pause");
 		});
+		sim.on('sim:pauseState', function(data) {
+			$('#ctl-playpause').html(data.paused ? "Play" : "Pause");
+		});
+
 		$('#ctl-step').on('click', function(ev) {
 			sim.singleStep();
 		});

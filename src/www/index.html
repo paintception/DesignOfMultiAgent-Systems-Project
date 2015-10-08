@@ -4,6 +4,7 @@
 	<link rel="stylesheet" href="style.css">
 	<script src="js/jquery-2.1.4.min.js"></script>
 	<script src="js/paper-core-0.9.24.js"></script>
+	<script type="text/javascript" src="js/EventEmitter/EventEmitter.min.js"></script>
 	<!-- <script type="text/paperscript" src="js/grid.js" canvas="grid-canvas"></script> -->
 	<script type="text/javascript" src="js/grid.js"></script>
 	<script type="text/javascript" src="js/simulation.js"></script>
@@ -13,14 +14,14 @@
 	<div id="content">
 		<canvas id="grid-canvas" resize="true"></canvas>
 		<div id="information">
-			<span id="time-info"></span>
-			<span id="sim-info"></span>
-			<span id="render-info"></span>
-			<span id="param-info"></span>
+			<span class="info" id="time-info"></span>
+			<span class="info" id="sim-info"></span>
+			<span class="info" id="render-info"></span>
+			<span class="info" id="param-info"></span>
 		</div>
 		<div id="control">
-			<span id="ctl-playpause">Play/pause</span>
-			<span id="ctl-step">Single step</span>
+			<span class="ctl" id="ctl-playpause">Play/pause</span>
+			<span class="ctl" id="ctl-step">Single step</span>
 		</div>
 	</div>
 </body>

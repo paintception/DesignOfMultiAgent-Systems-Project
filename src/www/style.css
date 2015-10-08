@@ -33,15 +33,17 @@ div#information {
 	border: 1px solid black;
 }
 
-span#time-info, span#sim-info, span#render-info, span#param-info {
+.info {
 	margin-left: 2em;
 }
 
-span#param-info {
+#param-info {
 	display: block;
 	margin-top: 1em;
 }
 
-#ctl-playpause, #ctl-step {
+.ctl {
+	border: 1px solid black;
+	padding: 0 0.5em;
 	cursor: pointer;
 }
