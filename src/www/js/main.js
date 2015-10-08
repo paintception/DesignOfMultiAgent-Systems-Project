@@ -19,7 +19,7 @@ $(document).ready(function() {
 
 	getRandomInt = function(min, max) {
 		return Math.floor(Math.random() * (max - min)) + min;
-	}
+	};
 
 	timeIt = function(f, logTitle) {
 		var renderStart = new Date().getTime();
@@ -27,7 +27,7 @@ $(document).ready(function() {
 		var renderTime = new Date().getTime() - renderStart;
 		if (logTitle != undefined) console.log("* execution time of " + logTitle + ": " + renderTime + " msec");
 		return renderTime;
-	}
+	};
 
 
 	/* LOCAL FUNCTIONS */
@@ -48,7 +48,7 @@ $(document).ready(function() {
 		$('#ctl-grayscale').on('click', function(ev) {
 			sim.setSetting('grayscale', !sim.getSetting('grayscale'));
 		});
-		
+
 		sim.on('sim:settingChanged', function(data) {
 			switch (data.name) {
 			case 'grayscale':
@@ -63,11 +63,11 @@ $(document).ready(function() {
 		paper.setup(canvas);
 
 		console.log('main: creating simulation');
-		sim = new Simulation(settings);
+		var sim = new Simulation(settings);
 
 		setupListeners(sim);
 
-		if (settings.autoplay) sim.setPaused(false);
+		sim.setPaused(!settings.autoplay);
 	};
 
 

@@ -13,3 +13,4 @@
 doc/report/*.bib
 doc/report/*.log
 doc/report/*.out
+*.swp

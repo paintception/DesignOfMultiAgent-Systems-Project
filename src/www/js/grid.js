@@ -8,7 +8,7 @@ Grid = function(simulation) {
 	// if (!(this instanceof Grid)) return new Grid();
 
 	this.simulation = simulation;
-	this.parameters = {}
+	this.parameters = {};
 	this.grid = [];
 	this.width = 0;
 	this.height = 0;
@@ -26,10 +26,10 @@ Grid = function(simulation) {
 	this.draw = function(maxCellSize) {
 		var cs;
 		{
-			csz = paper.view.viewSize;
+			var csz = paper.view.viewSize;
 			//grid sizes * 3 because we need 3*3 room per junction
-			canvasXMax = csz.width / (this.width * 3);
-			canvasYMax = csz.height / (this.height * 3);
+			var canvasXMax = csz.width / (this.width * 3);
+			var canvasYMax = csz.height / (this.height * 3);
 			cs = Math.min(canvasXMax, canvasYMax, maxCellSize);
 		}
 		console.log("grid.draw(): grid size: " + this.width + "x" + this.height + ", cell size: " + cs);
@@ -37,11 +37,11 @@ Grid = function(simulation) {
 		//Remove everything from last draw, reusing objects or creating multiple layers or canvases would really be better
 		paper.project.activeLayer.removeChildren();
 
-		p = this.parameters;
-		jc = p.junction_capacity, sc = p.street_capacity;
-		w = this.width, h = this.height;
-		for (y = 0; y < h; ++y) {
-			for (x = 0; x < w; ++x) {
+		var p = this.parameters;
+		var jc = p.junction_capacity, sc = p.street_capacity;
+		var w = this.width, h = this.height;
+		for (var y = 0; y < h; ++y) {
+			for (var x = 0; x < w; ++x) {
 				var cx = x * 3 + 1, cy = y * 3 + 1;
 				var cell = this.grid[y][x];
 
@@ -61,7 +61,7 @@ Grid = function(simulation) {
 		drawLegend.call(this);
 
 		paper.view.draw();
-	}
+	};
 
 
 	/* PRIVATE FUNCTIONS */
@@ -71,7 +71,7 @@ Grid = function(simulation) {
 		if (v == null) v = []; //TEMP: convert nulls (border streets) to empty streets
 		if (v != -1) v = v.length; //take the length of the array (which is filled with agent IDs)
 
-		var cellType = cellType || 'none';
+		cellType = cellType || 'none';
 		var cx = x * cellSize, cy = y * cellSize;
 
 		var settings = this.simulation.getSettings();
@@ -86,7 +86,7 @@ Grid = function(simulation) {
 			topLeft: [cx, cy],
 			size: [cellSize, cellSize],
 			fillColor: rectColor
-		}
+		};
 		var rect = new paper.Shape.Rectangle(rectParams);
 
 		/* white stripes */
@@ -94,13 +94,13 @@ Grid = function(simulation) {
 			strokeWidth: 1,
 			strokeColor: 'white',
 			dashArray: [3, 1]
-		}
+		};
 		var stripe; //not sure how paper.js does drawing or keeps its references, but without this 'predeclaration' here, drawing breaks.
 		if (cellType == 'junction') {
 			stripeParams.topLeft = [cx, cy];
 			stripeParams.size = [cellSize, cellSize];
 			stripeParams.strokeWidth = 2;
-			stripe = paper.Shape.Rectangle(stripeParams);
+			stripe = new paper.Shape.Rectangle(stripeParams);
 		} else if (cellType == 'hstreet') {
 			stripeParams.from = [cx, cy + cellSize / 2];
 			stripeParams.to = [cx + cellSize, cy + cellSize / 2];
@@ -125,7 +125,7 @@ Grid = function(simulation) {
 		var settings = this.simulation.getSettings();
 		var lowOffset = settings.colorizeLowOffset, grayscale = settings.grayscale;
 
-		var bar = paper.Shape.Rectangle({
+		var bar = new paper.Shape.Rectangle({
 			topLeft: [x, y],
 			size: [barWidth, barHeight],
 			strokeWidth: 1,
@@ -141,8 +141,9 @@ Grid = function(simulation) {
 	};
 
 	var mapToColor = function(v, minV, maxV, lowOffset, grayscale) {
-		colorScale = v * (1.0 / (maxV - minV));
+		var colorScale = v * (1.0 / (maxV - minV));
 		colorScale = colorScale * (1.0 - lowOffset) + lowOffset;
+		var rectColor;
 		if (!grayscale) {
 			rectColor = new paper.Color(colorScale, 1.0 - colorScale, 0.0); //map v to green-red range
 		} else {
@@ -150,5 +151,5 @@ Grid = function(simulation) {
 		}
 
 		return rectColor;
-	}
+	};
 };

@@ -12,7 +12,7 @@ Simulation = function(settings) {
 	this.grid = new Grid(this);
 
 	EventEmitter.call(this);
-	
+
 	var self = this;
 
 
@@ -47,7 +47,6 @@ Simulation = function(settings) {
 	this.singleStep = function() {
 		console.log("simulation: single step");
 		this.setPaused(true);
-		renderStep();
 	};
 
 	this.setSetting = function(name, value) {
@@ -90,7 +89,7 @@ Simulation = function(settings) {
 	var updateParamsAndGrid = function(grid) {
 		$.getJSON('http://localhost:8001/sim/parameters', function (data) {
 			grid.setParameters(data);
-			repr = "<table>" + Object.keys(data).map(function(x){
+			var repr = "<table>" + Object.keys(data).map(function(x){
 				return "<tr><td>" + x + ":</td><td>" + data[x] + "</td></tr>";
 			}).join('') + "</table>";
 			$('#param-info').html("<b>Simulation parameters</b>: " + repr);
@@ -98,7 +97,7 @@ Simulation = function(settings) {
 			$.getJSON('http://localhost:8001/sim/grid', function (data) {
 				grid.setGridData(data.width, data.height, data.grid);
 
-				duration = timeIt(function() {
+				var duration = timeIt(function() {
 					grid.draw(settings.maxCellSize);
 				}, "grid.draw");
 
