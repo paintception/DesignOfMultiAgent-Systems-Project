@@ -1,10 +1,12 @@
 /*
  * TODO in order of listing:
- * - TABS: for graphs and possibly agents (https://jqueryui.com/tabs/)
+ * - play/pause
+ * - api: GET time + sim.updateTime() with given or rq
  * - grayscale toggle
+ * - set speed
+ * - TABS: for graphs and possibly agents (https://jqueryui.com/tabs/)
  * - add text to legend
  * - editable parameters (create fields for them)
- * - play/pause + set speed
  * - draw grid without the non-existing streets at the edges
  * - api: GET agents + view them
  * - api: POST sim/new with parameters object to be able to restart
@@ -13,6 +15,7 @@
  * - add explosions
  */
 $(document).ready(function() {
+	/* 'PUBLIC' UTILITY FUNCTIONS (poluting global namespace...) */
 
 	getRandomInt = function(min, max) {
 		return Math.floor(Math.random() * (max - min)) + min;
@@ -26,14 +29,31 @@ $(document).ready(function() {
 		return renderTime;
 	}
 
-	main = function(settings) {
+
+	/* LOCAL FUNCTIONS */
+
+	var setupListeners = function(simulation) {
+		var sim = simulation;
+		$('#ctl-playpause').on('click', function(ev) {
+			sim.setPaused(!sim.isPaused());
+			$('#ctl-playpause').html(sim.isPaused() ? "Play" : "Pause");
+		});
+		$('#ctl-step').on('click', function(ev) {
+			sim.singleStep();
+		});
+	};
+
+	var main = function(settings) {
 		var canvas = document.getElementById('grid-canvas');
 		paper.setup(canvas);
 
 		console.log('main: creating simulation');
 		sim = new Simulation(settings);
-		sim.run();
-	}
+
+		setupListeners(sim);
+
+		if (settings.autoplay) sim.setPaused(false);
+	};
 
 
 	/* ENTRY POINT */
@@ -41,6 +61,7 @@ $(document).ready(function() {
 		'maxCellSize': 1000,
 		'grayscale': true,
 		'colorizeLowOffset': 0.2,
-		'fps': 2
+		'autoplay': false,
+		'fps': 1
 	});
 });

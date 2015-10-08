@@ -2,21 +2,47 @@ Simulation = function(settings) {
 	/* INITIALIZATION */
 
 	this.settings = settings;
+	this.isPaused_ = true;
+	this.renderTimeoutId = null;
 
 	console.log('simulation: creating grid');
-	grid = new Grid(this);
+	this.grid = new Grid(this);
+
+	var self = this;
 
 
 	/* PUBLIC METHODS */
 
-	this.run = function() {
-		renderStep(); //first render without delay
-		setInterval(renderStep, 1000 / this.settings.fps);
+	this.setPaused = function(setPaused) {
+		var prevPaused = this.isPaused_;
+		if (!setPaused && this.isPaused_) {
+			console.log("simulation: unpausing");
+			this.isPaused_ = false;
+
+			var self = this;
+			var cb = function() {
+				renderStep();
+				if (!self.isPaused)
+					console.log("setting timeout for " + self.settings.fps);
+					self.renderTimeoutId = setTimeout(cb, 1000 / self.settings.fps);
+			};
+			cb();
+		} else if (setPaused && !this.isPaused_) {
+			console.log("simulation: pausing");
+			this.isPaused_ = true;
+			clearTimeout(this.renderTimeoutId);
+		}
 	};
 
-	this.setPaused = function(paused) {
-		//TODO: implement
+	this.isPaused = function() {
+		return this.isPaused_;
 	};
+
+	this.singleStep = function() {
+		console.log("simulation: single step");
+		this.setPaused(true);
+		renderStep();
+	}
 
 	this.getSettings = function() {
 		return this.settings;
@@ -37,7 +63,7 @@ Simulation = function(settings) {
 			$('#time-info').html("<b>Simulation time</b>: " + data.day + ":" + data.step + " (timestamp: " + data.ts + ")");
 		});
 
-		updateParamsAndGrid(grid);
+		updateParamsAndGrid(self.grid);
 
 		// renderTime = new Date().getTime() - renderStart;
 		// console.log("grid: update took " + renderTime + "msec"); //TODO: fix this timer by wrapping it up inside inner callback
@@ -64,4 +90,6 @@ Simulation = function(settings) {
 			console.log("getJSON error, server down? -- ", err); //TODO: use this for a connectivity indicator?
 		});
 	};
+
+	updateParamsAndGrid(this.grid);
 };

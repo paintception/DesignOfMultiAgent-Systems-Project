@@ -34,9 +34,14 @@ div#information {
 }
 
 span#time-info, span#sim-info, span#render-info, span#param-info {
-	margin-left: 5em;
+	margin-left: 2em;
 }
 
 span#param-info {
 	display: block;
+	margin-top: 1em;
+}
+
+#ctl-playpause, #ctl-step {
+	cursor: pointer;
 }
