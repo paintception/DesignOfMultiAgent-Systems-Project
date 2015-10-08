@@ -27,9 +27,9 @@ Simulation = function(settings) {
 			var self = this;
 			var cb = function() {
 				renderStep();
-				if (!self.isPaused)
-					console.log("setting timeout for " + self.settings.fps);
+				if (!self.isPaused_) {
 					self.renderTimeoutId = setTimeout(cb, 1000 / self.settings.fps);
+				}
 			};
 			cb();
 		} else if (setPaused && !this.isPaused_) {
@@ -48,7 +48,19 @@ Simulation = function(settings) {
 		console.log("simulation: single step");
 		this.setPaused(true);
 		renderStep();
-	}
+	};
+
+	this.setSetting = function(name, value) {
+		if (name in this.settings) {
+			var ov = this.settings[name];
+			this.settings[name] = value;
+			this.emit('sim:settingChanged', {name: name, oldValue: ov, newValue: this.settings[name]});
+		}
+	};
+
+	this.getSetting = function(name) {
+		return this.settings[name];
+	};
 
 	this.getSettings = function() {
 		return this.settings;

@@ -44,6 +44,18 @@ $(document).ready(function() {
 		$('#ctl-step').on('click', function(ev) {
 			sim.singleStep();
 		});
+
+		$('#ctl-grayscale').on('click', function(ev) {
+			sim.setSetting('grayscale', !sim.getSetting('grayscale'));
+		});
+		
+		sim.on('sim:settingChanged', function(data) {
+			switch (data.name) {
+			case 'grayscale':
+				$('#ctl-grayscale').html(data.newValue ? "Color mode" : "Grayscale mode");
+				break;
+			}
+		});
 	};
 
 	var main = function(settings) {
