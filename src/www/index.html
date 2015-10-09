@@ -3,28 +3,53 @@
 <head>
 	<meta charset="utf-8">
 	<title>Traffic simulation - DMAS</title>
+	<link rel="stylesheet" href="jquery-ui.min.css">
+	<link rel="stylesheet" href="jquery-ui.structure.min.css">
+	<link rel="stylesheet" href="jquery-ui.theme.min.css">
 	<link rel="stylesheet" href="style.css">
 	<script src="js/jquery-2.1.4.min.js"></script>
+	<script src="js/jquery-ui-1.11.4.min.js"></script>
 	<script src="js/paper-core-0.9.24.js"></script>
 	<script type="text/javascript" src="js/EventEmitter/EventEmitter.min.js"></script>
 	<!-- <script type="text/paperscript" src="js/grid.js" canvas="grid-canvas"></script> -->
 	<script type="text/javascript" src="js/grid.js"></script>
 	<script type="text/javascript" src="js/simulation.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
+	<script>
+		$(function() {
+			$('#tabs').tabs();
+		});
+	</script>
 </head>
 <body>
 	<div id="content">
-		<canvas id="grid-canvas" resize="true"></canvas>
-		<div id="information">
-			<span class="info" id="time-info"></span>
-			<span class="info" id="sim-info"></span>
-			<span class="info" id="render-info"></span>
-			<span class="info" id="param-info"></span>
-		</div>
-		<div id="control">
-			<span class="ctl" id="ctl-playpause">Play/pause</span>
-			<span class="ctl" id="ctl-step">Single step</span>
-			<span class="ctl" id="ctl-grayscale">Color/grayscale mode</span>
+		<div id="tabs">
+			<ul>
+				<li><a href="#tab-1">Grid view</a></li>
+				<li><a href="#tab-2">Agents</a></li>
+				<li><a href="#tab-3">Graphs</a></li>
+			</ul>
+  			<div id="tab-1">
+				<canvas id="grid-canvas" resize="true"></canvas>
+				<div id="control">
+					<span class="ctl" id="ctl-playpause">Play/pause</span>
+					<span class="ctl" id="ctl-step">Single step</span>
+					<span class="ctl" id="ctl-grayscale">Color/grayscale mode</span>
+				</div>
+				<div id="information">
+					<span class="info" id="time-info"></span>
+					<span class="info" id="sim-info"></span>
+					<span class="info" id="render-info"></span>
+					<span class="info" id="param-info"></span>
+				</div>
+				<div class="clear-floats"></div>
+			</div>
+			<div id="tab-2">
+				TODO: agents view
+			</div>
+			<div id="tab-3">
+				TODO: graphs view
+			</div>
 		</div>
 	</div>
 </body>

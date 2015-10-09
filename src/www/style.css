@@ -1,33 +1,41 @@
 body {
-	background-color: #ffd;
+	/*background-color: #ffd;*/
 	width: 100%;
+	margin: 0;
+	font-size: x-small;
+}
+
+/*
+ * Note: fix for tab with float within - see: http://www.quirksmode.org/css/clearing.html.
+ * Alternatively, without extra elements, see: http://stackoverflow.com/a/5871844.
+ */
+div.clear-floats {
+	clear: both;
 }
 
 #content {
 	margin: auto;
+	width: 95%;
 }
 
 canvas#grid-canvas {
-	/* FIXME: shouldn't this be 450 (15 * 3 * 10)? ... wiht cellSize=15, the difference is still 2 */
-	width: 500px;
-	height: 500px;
-	max-width: 50%;
+	width: 60%;
+	height: 600px;
+/*	max-width: 40%;
+	max-height: 50%; */
+	float: right;
 
+	margin-top: 2em;
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
     margin-right: auto;
-    display: block;
 
 	border: solid black 1px;
 }
 
 div#information, div#control {
-	/*float: left;*/
-	/*max-width: 23%;*/
-	margin-left: auto;
-	margin-right: auto;
-	width: 80%;
+	width: 35%;
 	margin-top: 2em;
 	background-color: white;
 	border: 1px solid black;
@@ -35,10 +43,11 @@ div#information, div#control {
 }
 
 .info {
-	margin-left: 2em;
+	margin-left: 1em;
+	display: block;
 }
 
-#param-info {
+.info#param-info {
 	display: block;
 	margin-top: 1em;
 }
