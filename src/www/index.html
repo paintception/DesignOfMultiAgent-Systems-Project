@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="us">
- <body bgcolor="#ffffcc" 
 <head>
 	<meta charset="utf-8">
 	<title>Traffic simulation - DMAS</title>
@@ -8,10 +7,11 @@
 	<link rel="stylesheet" href="jquery-ui.structure.min.css">
 	<link rel="stylesheet" href="jquery-ui.theme.min.css">
 	<link rel="stylesheet" href="style.css">
-	<script src="js/jquery-2.1.4.min.js"></script>
-	<script src="js/jquery-ui-1.11.4.min.js"></script>
-	<script src="js/paper-core-0.9.24.js"></script>
-	<script type="text/javascript" src="js/EventEmitter/EventEmitter.min.js"></script>
+	<script src="js-external/jquery-2.1.4.min.js"></script>
+	<script src="js-external/jquery-ui-1.11.4.min.js"></script>
+	<script src="js-external/paper-core-0.9.24.js"></script>
+	<script src='js-external/Chart.min.js'></script>
+	<script src="js-external/EventEmitter/EventEmitter.min.js"></script>
 	<!-- <script type="text/paperscript" src="js/grid.js" canvas="grid-canvas"></script> -->
 	<script type="text/javascript" src="js/grid.js"></script>
 	<script type="text/javascript" src="js/simulation.js"></script>
@@ -55,18 +55,16 @@
 
 			</div>
 			<div id="tab-3">
-
 				<canvas id="speed_average" width="500" height="200"></canvas>
-				<script src='js/Chart.min.js'></script>
+				<script src='js-external/Chart.min.js'></script>
 				<canvas id="speed_average" width="500" height="200"></canvas>
-				<script src='js/Chart.min.js'></script>
+				<script src='js-external/Chart.min.js'></script>
 				<canvas id="fuel_average" width="500" height="350"></canvas>
         		<div id="legend_speed"></div>
         		<script type="text/javascript" src="js/display_results.js"></script>
         		<canvas id="pie" width="800" height="200"></canvas>
         		<canvas id="pie2" width="800" height="200"></canvas>
         		<script type="text/javascript" src="js/display_results.js"></script>
-				
 			</div>
 		</div>
 	</div>
