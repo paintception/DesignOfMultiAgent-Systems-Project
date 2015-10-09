@@ -7,6 +7,7 @@ env:
 
 globals:
   paper: false
+  Chart: false
   EventEmitter: true
   Grid: true
   Simulation: true
