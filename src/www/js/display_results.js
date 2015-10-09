@@ -23,12 +23,6 @@ var simulationData = {
     ]
 };
 
-// get line chart canvas
-var simCanvas = document.getElementById('speed_average').getContext('2d');
-// draw line chart
-new Chart(simCanvas).Line(simulationData);
-
-
 var fuelData = {
     labels : ["Day 1", "Day 2", "Day 3", "Day.."],
     datasets: [
@@ -51,11 +45,6 @@ var fuelData = {
     ]
 };
 
-var fuelCanvas = document.getElementById('fuel_average').getContext('2d');
-// draw bar chart
-new Chart(fuelCanvas).Bar(fuelData);
-
-
 var pieDataBefore = [
     {
         value: 65,
@@ -66,7 +55,6 @@ var pieDataBefore = [
         color : "rgba(0,255,0,0.9)"
     }
 ];
-
 var pieDataAfter = [
     {
         value: 5,
@@ -78,14 +66,26 @@ var pieDataAfter = [
     }
 ];
 
-// pie chart options
-var pieOptions = {
-     segmentShowStroke : false,
-     animateScale : true
-};
-// get pie chart canvas
-var pieGraph1 = document.getElementById("pie").getContext("2d");
-var pieGraph2 = document.getElementById("pie2").getContext("2d");
-// draw pie chart
-new Chart(pieGraph1).Pie(pieDataBefore, pieOptions);
-new Chart(pieGraph2).Pie(pieDataAfter, pieOptions);
+
+$(document).ready(function() {
+    // get line chart canvas
+    var simCanvas = document.getElementById('speed_average').getContext('2d');
+    // draw line chart
+    new Chart(simCanvas).Line(simulationData);
+
+    var fuelCanvas = document.getElementById('fuel_average').getContext('2d');
+    // draw bar chart
+    new Chart(fuelCanvas).Bar(fuelData);
+
+    // pie chart options
+    var pieOptions = {
+         segmentShowStroke : false,
+         animateScale : true
+    };
+    // get pie chart canvas
+    var pieGraph1 = document.getElementById("pie").getContext("2d");
+    var pieGraph2 = document.getElementById("pie2").getContext("2d");
+    // draw pie chart
+    new Chart(pieGraph1).Pie(pieDataBefore, pieOptions);
+    new Chart(pieGraph2).Pie(pieDataAfter, pieOptions);
+});
