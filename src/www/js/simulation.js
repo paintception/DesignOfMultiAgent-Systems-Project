@@ -47,6 +47,7 @@ Simulation = function(settings) {
 	this.singleStep = function() {
 		console.log("simulation: single step");
 		this.setPaused(true);
+		renderStep();
 	};
 
 	this.setSetting = function(name, value) {

@@ -22,7 +22,7 @@ canvas#grid-canvas {
 	border: solid black 1px;
 }
 
-div#information {
+div#information, div#control {
 	/*float: left;*/
 	/*max-width: 23%;*/
 	margin-left: auto;
@@ -31,6 +31,7 @@ div#information {
 	margin-top: 2em;
 	background-color: white;
 	border: 1px solid black;
+	padding: 5px;
 }
 
 .info {
@@ -46,5 +47,8 @@ div#information {
 	border: 1px solid black;
 	padding: 0 0.5em;
 	text-align: center;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	background-color: #eee;
 	cursor: pointer;
 }
