@@ -110,7 +110,7 @@ class GridNode(Point):
             #print("next stop: %s (%i), route: %s" % (next_stop, next_dir, car._path))
             
             if next_stop is None:
-                print("Route done.")
+                #print("Route done.")
                 return False
 
             street_stack = self._streets[next_dir]
@@ -118,7 +118,7 @@ class GridNode(Point):
             if len(street_stack) < self._max_cars_on_street:
                 street_stack.append(car)
                 self._car_stack.pop(0)
-                print('moving')
+                #print('moving')
                 car.handle_movement_event(MovementEvent(GE.STREET_ARRIVED, time, self))
                 return True
             else:
@@ -134,7 +134,7 @@ class GridNode(Point):
         """
         from Grid import MovementEvent, GRID_EVENT as GE
         t = TimeLord()
-        time = t.get_timestamp()
+        time = t.get_day_time()
         street_stack = self._streets[direction]
         if street_stack and len(street_stack) > 0:
             car = street_stack[0]
@@ -188,8 +188,31 @@ class GridNode(Point):
         return 'GN(%i, %i)' % (self.x, self.y)
 
     def _print_node_jams(self):
+        import collections
         if self._center_jams:
-            print("Node %s %s had %s jams at crossing," %(self.x, self.y, self._center_jams))
+            test= [item for item, count in collections.Counter(self._center_jams).items() if count > 1]
+            print("Node %s %s had %s jams at crossing," %(self.x, self.y, test))
         for s in self._street_jams:
             if self._street_jams[s]:
-                print("Node %s %s had %s jams at street: %s," %(self.x, self.y, self._street_jams[s], s))
+                test= [item for item, count in collections.Counter(self._street_jams[s]).items() if count > 1]
+                print("Node %s %s had %s jams at street: %s," %(self.x, self.y, test, s))
+
+    def make_weights(self):
+        s=0
+        for x in self._street_jams:
+            s += len(x)
+        s=s/len(self._street_jams)
+        w= len(self._center_jams)+s
+        return w
+
+    def has_Jam(self):
+        s=False
+        for x in self._street_jams:
+            if len(x) > 0:
+                s=True 
+
+        if len(self._center_jams) > 0 or s:
+            return True
+
+        else:
+            return False

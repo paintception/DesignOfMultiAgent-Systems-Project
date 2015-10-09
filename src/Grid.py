@@ -96,6 +96,7 @@ class Grid():
         """
         temp_grid = np.copy(self._astar_grid)
         if type(weights) is list:
+            weights=self.update_weights(weights)
             for p in weights:
                 x, y, w = p
                 temp_grid[y][x] = w
@@ -194,3 +195,11 @@ class Grid():
         for n in self._grid:
             for m in n:
                 m._print_node_jams()
+
+    def update_weights(self, w):
+        for y in xrange(self.height):
+            for x in xrange(self.width):
+
+                print(w)
+                print(self._gird[y][x])
+                w[y][x]+=self._gird[y][x].make_weights() #Check x and y !!!!!!!!!!!!!!!

@@ -56,6 +56,7 @@ class Simulation():
         self._world = World()
         self._parameters = parameters
         self._setup()
+        self._jam_progression=[]
 
     def _setup(self):
         import random
@@ -116,17 +117,19 @@ class Simulation():
 
             start = dt.now()
 
-        # if t.get_day() == 2:
-
-        #     self._print_jams()
-        #     print ("the end")
-        #     exit(0)
+        if t.get_day() == 5:
+            self._print_jams()
+            print ("the end")
+            exit(0)
 
         t.next_time_step()
 
     def print_grid(self, printing_grid):
         self._printing_grid = printing_grid
-        #print (self._printing_grid)
+        print (self._printing_grid)
 
     def _print_jams(self):
         self._world.get_grid()._print_jams()
+
+    def _print_jam_progression(self):
+        print (self._jam_progression)
