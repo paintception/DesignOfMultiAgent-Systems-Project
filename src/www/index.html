@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="us">
+ <body bgcolor="#ffffcc" 
 <head>
 	<meta charset="utf-8">
 	<title>Traffic simulation - DMAS</title>
@@ -15,6 +16,7 @@
 	<script type="text/javascript" src="js/grid.js"></script>
 	<script type="text/javascript" src="js/simulation.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/display_results.js"></script>
 	<script>
 		$(function() {
 			$('#tabs').tabs();
@@ -45,10 +47,26 @@
 				<div class="clear-floats"></div>
 			</div>
 			<div id="tab-2">
+		
+        		
+        	
+
 				TODO: agents view
+
 			</div>
 			<div id="tab-3">
-				TODO: graphs view
+
+				<canvas id="speed_average" width="500" height="200"></canvas>
+				<script src='js/Chart.min.js'></script>
+				<canvas id="speed_average" width="500" height="200"></canvas>
+				<script src='js/Chart.min.js'></script>
+				<canvas id="fuel_average" width="500" height="350"></canvas>
+        		<div id="legend_speed"></div>
+        		<script type="text/javascript" src="js/display_results.js"></script>
+        		<canvas id="pie" width="800" height="200"></canvas>
+        		<canvas id="pie2" width="800" height="200"></canvas>
+        		<script type="text/javascript" src="js/display_results.js"></script>
+				
 			</div>
 		</div>
 	</div>
