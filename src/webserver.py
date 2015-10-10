@@ -8,6 +8,7 @@
 from __future__ import print_function
 from os import path
 import json
+from urlparse import urlparse
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from Simulation import Simulation, SimulationParameters
 from TimeLord import TimeLord
@@ -37,7 +38,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 
     def _handle_file_request(self):
         try:
-            rq_path = self.path
+            rq_path = urlparse(self.path).path  # get just the path, not the query/fragment_id etc.
             if rq_path[0] == '/': rq_path = rq_path[1:]
             if len(rq_path) == 0: rq_path = self.index_file
             filename = path.join(self.base_path, rq_path)
@@ -57,7 +58,8 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_error(404, 'file not found')
 
     def _handle_api_request(self):
-        rq_path = self.path[(len(self.api_prefix)+1):]  # strip api prefix + '/'
+        rq_path = urlparse(self.path).path  # get just the path, not the query/fragment_id etc.
+        rq_path = rq_path[(len(self.api_prefix)+1):]  # strip api prefix + '/'
         print("API endpoint requested:", rq_path)
 
         func_name = '_api_' + rq_path
