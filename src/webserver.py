@@ -92,8 +92,13 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         return json.dumps(test_data)
 
     def _api_step(self):
-        simulation.do_step()
-        return json.dumps({ 'ts': t.get_timestamp(), 'step': t.get_day_time(), 'day': t.get_day() })
+        running = simulation.do_step()
+        return json.dumps({
+            'ts': t.get_timestamp(),
+            'step': t.get_day_time(),
+            'day': t.get_day(),
+            'finished': not running
+        })
 
     def _api_grid(self):
         g = w.get_grid()

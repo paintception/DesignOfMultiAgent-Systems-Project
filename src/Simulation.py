@@ -2,7 +2,6 @@ from __future__ import print_function, division
 from datetime import datetime as dt
 from World import World
 from TimeLord import TimeLord
-from sys import exit
 
 
 class SimulationParameters():
@@ -17,6 +16,7 @@ class SimulationParameters():
     junction_throughput - (int) maximum number of moves from junction streets to other junctions (per timestep)
     street_throughput   - (int) maximum number of moves from a junction to connecting streets (per direction, per timestep)
     steps_per_day       - (int)
+    max_days            - (int) number of days after which to stop the simulation
 
     Some numbers:
     system_capacity = grid_width * grid_height * (junction_capacity + 4 * street_capacity)
@@ -33,6 +33,7 @@ class SimulationParameters():
         self.street_throughput = 4
 
         self.steps_per_day = 50
+        self.max_days = 10
 
     def jsonifiable(self):
         return {k: v for (k, v) in self.__dict__.items()}
@@ -94,6 +95,10 @@ class Simulation():
             cars[i].set_route(spn, epn)
 
     def do_step(self):
+        """
+        Runs one simulation step and returns True, unless the simulation is
+        finished (params.max_days has been reached).
+        """
         w, g = self._world, self._world.get_grid()
         cars = w.get_agents()
         t = TimeLord()
@@ -117,12 +122,12 @@ class Simulation():
 
             start = dt.now()
 
-        if t.get_day() == 5:
-            self._print_jams()
-            print ("the end")
-            exit(0)
-
         t.next_time_step()
+
+        if self._parameters.max_days > -1 and t.get_day() >= self._parameters.max_days:
+            return False
+        else:
+            return True
 
     def print_grid(self, printing_grid):
         self._printing_grid = printing_grid
