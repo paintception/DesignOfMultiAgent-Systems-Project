@@ -108,6 +108,10 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
     def _api_parameters(self):
         return json.dumps(w.get_parameters().jsonifiable());
 
+    def _api_number_of_jams(self):
+        from World import World
+        return json.dumps(World().get_counter())
+
 
 def main(args):
     import signal

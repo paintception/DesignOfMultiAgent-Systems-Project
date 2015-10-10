@@ -1,5 +1,7 @@
 from utils import Point
 from TimeLord import TimeLord
+from World import World
+
 
 
 class GridNode(Point):
@@ -114,6 +116,7 @@ class GridNode(Point):
                 return False
 
             street_stack = self._streets[next_dir]
+
             # print("room for car on street? %s" % (len(street_stack) < self._max_cars_on_street))
             if len(street_stack) < self._max_cars_on_street:
                 street_stack.append(car)
@@ -165,9 +168,13 @@ class GridNode(Point):
 
     def _add_street_jam(self, drx, time):
         print ("jam at street: %s, %s %s" %(drx, self.x, self.y))
+        
+        World().update_counter()
         self._street_jams[drx].append(time)
         print (drx)
         print(self._street_jams[drx])
+        print('Number of jams '+str(World().get_counter()))
+
 
     def jsonifiable(self):
         result = {
@@ -209,7 +216,7 @@ class GridNode(Point):
         s=False
         for x in self._street_jams:
             if len(x) > 0:
-                s=True 
+                s=True
 
         if len(self._center_jams) > 0 or s:
             return True

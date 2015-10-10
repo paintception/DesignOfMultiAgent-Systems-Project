@@ -8,7 +8,17 @@ from TimeLord import TimeLord
 class World():
     # avoid ctor parameters since this is a singleton
     def __init__(self):
-        pass
+        self.jam_counter=0
+        #pass
+
+    def update_counter(self):
+        self.jam_counter+=1
+
+    def get_counter(self):
+        return self.jam_counter
+
+    def reset_counter(self):
+        self.jam_counter = 0
 
     def setup(self, parameters):
         self._parameters = parameters
