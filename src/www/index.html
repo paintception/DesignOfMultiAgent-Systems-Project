@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="us">
+<font face="Times New Roman" size="2.5" color="#000000">
 <head>
 	<meta charset="utf-8">
 	<title>Traffic simulation - DMAS</title>
@@ -27,11 +28,50 @@
 	<div id="content">
 		<div id="tabs">
 			<ul>
-				<li><a href="#tab-1">Grid view</a></li>
-				<li><a href="#tab-2">Agents</a></li>
-				<li><a href="#tab-3">Results of your simulation!</a></li>
+				<li><a href="#tab-1">Presentation of the Project</a></li>
+				<li><a href="#tab-2">Grid view</a></li>
+				<li><a href="#tab-3">Agents</a></li>
+				<li><a href="#tab-4">Results of your simulation!</a></li>
 			</ul>
-  			<div id="tab-1">
+			<div id="tab-1">
+
+				<canvas id="video_example" width="500" height="200"></canvas>
+
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/O3kL6nMap2s" frameborder="0" allowfullscreen>
+					</iframe>
+
+
+				<canvas id="project_presentation" width="500" height="200"></canvas>
+					<div>
+		  					<h1>Introduction and Inpirational Work</h1>
+								<p align="justify"> This webpage has been created in order to present the group project of 3 students attending the masters of Artificial Intelligence and Human-Machine Communication at the department of Mathematics and Natural Sciences of the Rijksuniversiteit Groningen. The students are namely:  
+									
+										
+										<li>Wouter Reckman:s2231166 Msc H.M.C. </li>
+										<li>Matthia Sabatelli: s2847485 Msc A.I. </li>
+										<li>Gereon Vienken: s2738805 Msc A.I. </li>
+									<p>
+
+								<p align="justify">
+
+								The project has been made for the master course Design of MultiAgent Systems and regards the simulation and the possible improvement of traffic thorugh the reduction of traffic jams.
+								It has been inspired by the artcle proposed by Gabel and Riedmiller in 2012  in which the authors propose two microscopic traffic simulations models thar simulate two types of possible drivers: one selfish driver model and one selfless driver model. The results they have obtained show that the selfish driver simply tried to maximize his own speed without caring about the rest of the drivers and the general situation of the roads, doing so the probability that traffic jams occurred was very high since there wasn’t any cooperation by the various agents on the streets. On the other side the selfless drivers used a Markov decision model in order to maximize the speed over all the cars, doing so it’s true that every agent tried to minimize his personal costs but at the same time he does this bearing in mind that there are other agents as well on the streets and they are able to find a compromise in order to don’t get stacked in the whole traffic. This work is very inspirational since it shows that adjustments in driver behaviour towards cooperation, even with no communication between them, improves the flow of traffic. This could can be used to avoid traffic jams and decrease the environmental impact of traffic.
+
+								<p>
+
+
+						<h1> Implementation and Simulation Model</h1>
+							<p align="justify"> In our simulation model we try to figure out which possible impact a memory system can have on the agents that are stucked in traffic. Will the agents be able to avoid unconfortable traffic simulations if they have to deal with those over time? and as a consequence will the traffic get smoother and will less traffic jams occur?
+
+							To make our traffic simulation we have implemented a set of autonomous agents (cars) that have to travel from a fix randomly assigned starting position to a final destination, they travel though a grid of nodes where each grid representes a traffic junction. Each street and junction are allowed to hold a specific number of cars passing through them with a first-in-first-out schema, in this situation a traffic jam would occur if the cars would first try to enter a junction from more directions and then will try to leave it, turning that junction into a kind of bottleneck.
+
+							The agents try to get from their starting point to their destination as quicklier as possible, this has been done implementing our own version of the A* pathfinding algorithm, our version of the algorithm differs from the original one since it is weighted, in fact since we wanted to simulate memory not every step of the path finding has the same importance, if one of these steps is highly crowded by other cars the algorithm avoids it by choosing a longer but traffic-avoiding path.
+
+							<p>
+
+					</div>
+
+  			<div id="tab-2">
 				<canvas id="grid-canvas" resize="true"></canvas>
 				<div id="control">
 					<span class="ctl" id="ctl-new">New</span>
@@ -48,7 +88,7 @@
 				</div>
 				<div class="clear-floats"></div>
 			</div>
-			<div id="tab-2">
+			<div id="tab-3">
 		
         		
         	
@@ -56,7 +96,7 @@
 				TODO: agents view
 
 			</div>
-			<div id="tab-3">
+			<div id="tab-4">
 				<canvas id="speed_average" width="500" height="200"></canvas>
 				<canvas id="fuel_average" width="500" height="350"></canvas>
         		<div id="legend_speed"></div>
