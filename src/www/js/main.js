@@ -34,7 +34,11 @@ $(document).ready(function() {
 
 	//TODO: implement
 	var getSimParamsFromDOM = function() {
+		// var params = currentParameters;
+		// params.value1 = $('param-cfg param1').value();
 		return {'var1': 23, 'var2': true};
+	};
+
 	var setupListeners = function(simulation) {
 		var sim = simulation;
 		$('#ctl-new').on('click', function(ev) {
