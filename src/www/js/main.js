@@ -1,8 +1,8 @@
 /*
  * TODO in order of listing:
- * - play/pause
+ * - api: POST max simulation days
+ * - start webserver from main (to have cmdline options+output+webUI) -- https://docs.python.org/2/howto/curses.html
  * - api: GET time + sim.updateTime() with given or rq
- * - grayscale toggle
  * - set speed
  * - TABS: for graphs and possibly agents (https://jqueryui.com/tabs/)
  * - add text to legend
@@ -32,8 +32,19 @@ $(document).ready(function() {
 
 	/* LOCAL FUNCTIONS */
 
+	//TODO: implement
+	var getSimParamsFromDOM = function() {
+		return {'var1': 23, 'var2': true};
 	var setupListeners = function(simulation) {
 		var sim = simulation;
+		$('#ctl-new').on('click', function(ev) {
+			sim.startNew(getSimParamsFromDOM());
+		});
+
+		$('#ctl-restart').on('click', function(ev) {
+			sim.restart(false);
+		});
+
 		$('#ctl-playpause').on('click', function(ev) {
 			sim.setPaused(!sim.isPaused());
 		});
