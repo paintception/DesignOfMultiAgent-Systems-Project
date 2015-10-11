@@ -18,6 +18,33 @@ Simulation = function(settings) {
 
 	/* PUBLIC METHODS */
 
+	//TODO: test
+	this.startNew = function(parameters) {
+		//var data = JSON.stringify({'parameters': parameters});
+		// $.post('http://localhost:8001/sim/new', data, function(response) {
+		// 	console.log('POST sim/new response:', response);
+		// }, 'json');
+
+		var query = Object.keys(parameters).map(function(x){
+			return x + "=" + parameters[x];
+		}).join('&');
+		$.getJSON('http://localhost:8001/sim/new?' + query, function(data) {
+			console.log('GET sim/new response:', data);
+		}, 'json');
+	};
+
+	//TODO: test
+	this.restart = function(randomizeRoutes) {
+		// var data = JSON.stringify({'randomize_routes': randomizeRoutes});
+		// console.log("sending restart with data:", data);
+		// $.post('http://localhost:8001/sim/restart', data, function(response) {
+		// 	console.log('POST sim/restart response:', response);
+		// }, 'json');
+		$.getJSON('http://localhost:8001/sim/restart?randomize_routes=' + randomizeRoutes, function(data) {
+			console.log('GET sim/new response:', data);
+		}, 'json');
+	};
+
 	this.setPaused = function(setPaused) {
 		var prevPaused = this.isPaused_;
 		if (!setPaused && this.isPaused_) {

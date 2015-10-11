@@ -32,8 +32,19 @@ $(document).ready(function() {
 
 	/* LOCAL FUNCTIONS */
 
+	//TODO: implement
+	var getSimParamsFromDOM = function() {
+		return {'var1': 23, 'var2': true};
 	var setupListeners = function(simulation) {
 		var sim = simulation;
+		$('#ctl-new').on('click', function(ev) {
+			sim.startNew(getSimParamsFromDOM());
+		});
+
+		$('#ctl-restart').on('click', function(ev) {
+			sim.restart(false);
+		});
+
 		$('#ctl-playpause').on('click', function(ev) {
 			sim.setPaused(!sim.isPaused());
 		});

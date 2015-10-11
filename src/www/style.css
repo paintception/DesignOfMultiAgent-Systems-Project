@@ -31,7 +31,7 @@ canvas#grid-canvas {
     margin-left: auto;
     margin-right: auto;
 
-	border: solid black 1px;
+	border: dashed #ccc 1px;
 }
 
 div#information, div#control {
