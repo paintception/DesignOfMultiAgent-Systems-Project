@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-
 def signal_handler(signal, frame):
     import sys
     print('** Byebye.')
