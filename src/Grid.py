@@ -96,6 +96,7 @@ class Grid():
         """
         temp_grid = np.copy(self._astar_grid)
         if type(weights) is list:
+            #NOTE: comment this to disable memory
             weights=self.update_weights(weights)
             for p in weights:
                 x, y, w = p

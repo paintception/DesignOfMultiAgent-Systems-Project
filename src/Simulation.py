@@ -23,16 +23,16 @@ class SimulationParameters():
     max_travel_distance = grid_width + grid_height (unweighted)
     """
     def __init__(self):
-        self.grid_width = 5
-        self.grid_height = 5
-        self.n_agents = 10
+        self.grid_width = 7
+        self.grid_height = 7
+        self.n_agents = 50
 
         self.junction_capacity = 3
         self.street_capacity = 5
         self.junction_throughput = 1
         self.street_throughput = 4
 
-        self.steps_per_day = 50
+        self.steps_per_day = 30
         self.max_days = 10
 
     def jsonifiable(self):

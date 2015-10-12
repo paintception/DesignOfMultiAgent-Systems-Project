@@ -15,6 +15,7 @@ from TimeLord import TimeLord
 from World import World
 
 simulation, t, w = None, None, None
+verbose_mode = False
 
 class HTTPRequestHandler(BaseHTTPRequestHandler):
     mime_types = {
@@ -26,6 +27,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
     base_path = 'www'
     api_prefix = '/sim'
     index_file = 'index.html'
+
 
     def do_GET(self):
         if self.path.startswith(self.api_prefix):
@@ -39,6 +41,9 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         else:
             self.send_error(404, 'POST requests only supported for API calls')
 
+    def log_message(self, format, *args):
+        if verbose_mode: print("msg", format % args)
+
     def _handle_file_request(self):
         try:
             rq_path = urlparse(self.path).path  # get just the path, not the query/fragment_id etc.
@@ -46,7 +51,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             if len(rq_path) == 0: rq_path = self.index_file
             filename = path.join(self.base_path, rq_path)
 
-            print("** Attempting to open %s" % filename)
+            if verbose_mode: print("** Attempting to open %s" % filename)
             f = open(filename, 'r')
 
             extension = path.splitext(rq_path)[1][1:]
@@ -63,7 +68,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
     def _handle_api_request(self):
         rq_path = urlparse(self.path).path  # get just the path, not the query/fragment_id etc.
         rq_path = rq_path[(len(self.api_prefix)+1):]  # strip api prefix + '/'
-        print("API endpoint requested:", rq_path)
+        if verbose_mode: print("API endpoint requested:", rq_path)
 
         func_name = '_api_' + rq_path
 
@@ -131,6 +136,8 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 def main(args):
     import signal
     global simulation, t, w
+    global verbose_mode
+    verbose_mode = args.verbose
 
     signal.signal(signal.SIGINT, signal_handler)
 
@@ -156,6 +163,7 @@ def get_args():
 
     parser.add_argument('--host', type=str, help="Server host/interface to listen on", default='0.0.0.0')
     parser.add_argument('-p', '--port', type=int, help="Server port to listen on", default=8001)
+    parser.add_argument('-v', '--verbose', action='store_true', help="Log HTTP requests")
 
     args = parser.parse_args()
 
