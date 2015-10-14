@@ -45,10 +45,4 @@ class World():
 
     def get_agents(self):
         return self._agents
-<<<<<<< HEAD
 
-
-        
-
-=======
->>>>>>> ccac2a43baa2868868ba7f79284051a07d9669c3
