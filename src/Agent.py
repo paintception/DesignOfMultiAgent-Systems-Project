@@ -9,6 +9,9 @@ class Agent:
         self._end = None
         self._path = None
         self._world = world
+        self._traveltimes = []
+        self._startTime = None
+
 
         self._total_path_distance = -1
         self._travel_start_time = -1
@@ -22,6 +25,10 @@ class Agent:
         return self._name
 
     def set_route(self, sp, ep):
+
+        from TimeLord import TimeLord
+        t = TimeLord()
+
         """
         If sp has room for a new car, set given nodes as start and end points
         and teleport to start.
@@ -38,6 +45,12 @@ class Agent:
             self._position = self._start
             self._start.add_car(self, False)
             self._determine_path()
+
+            if  self.get_startingTime() == None:
+                self.set_startingTime(t.get_timestamp())
+            else:
+                self.add_travel_times(((self.get_startingTime, t.get_timestamp), self.get_route))
+                self.set_startingTime(t.get_timestamp)
 
             return True
 
@@ -123,3 +136,21 @@ class Agent:
     def __str__(self):
         return "<Agent %s @ %s; %s -> %s -- %s>" % \
             (self._name, self._position, self._start, self._end, self._path)
+
+
+    def get_route(self):
+        return(self._start, self._end)
+
+    def get_travel_times(self):
+        return self._traveltimes
+
+    def add_travel_times(self, traveltime):
+        self._traveltimes.append(traveltime)
+
+    def set_startingTime(self, time):
+        self._startTime = time
+
+    def get_startingTime(self):
+        return self._startTime
+
+  

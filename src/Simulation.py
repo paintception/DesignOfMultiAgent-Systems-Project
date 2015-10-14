@@ -114,6 +114,7 @@ class Simulation():
             ct, cnt = 0, 0
             for car in cars:
                 if not car.is_travelling():
+
                     car.restart_route()  # or car.reverse_route() to have them travel home
                     ct += 1
                 else:

@@ -88,6 +88,10 @@ class Grid():
         return self._grid[x][y]
 
     def get_path(self, src, tgt, weights=None, show_route=False):
+
+        from World import World
+        world = World
+
         """
         Find a path from src to tgt. Roads have a default weight of 1, blocked
         cells are indicated by a value < 0. Road weights can be set to higher

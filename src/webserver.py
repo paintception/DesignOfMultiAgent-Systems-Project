@@ -132,6 +132,16 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         from World import World
         return json.dumps(World().get_counter())
 
+    def _api_Agent_Data(self):
+        from World import World
+        w = World()
+        a = w.get_agents()
+        data = []
+
+        for i in a:
+            data.append(i.get_travel_times)
+        return json.dumps(data)
+
 
 def main(args):
     import signal
