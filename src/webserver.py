@@ -142,8 +142,7 @@ def main(args):
     signal.signal(signal.SIGINT, signal_handler)
 
     simulation = Simulation(SimulationParameters())
-    t = TimeLord()
-    w = World()
+    t, w = TimeLord(), World()  # globals for request handler
 
     httpd = HTTPServer((args.host, args.port), HTTPRequestHandler)
     print('** starting http server on port %s:%i...' % (args.host, args.port))

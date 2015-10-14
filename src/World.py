@@ -8,8 +8,7 @@ from TimeLord import TimeLord
 class World():
     # avoid ctor parameters since this is a singleton
     def __init__(self):
-        self.jam_counter=0
-        #pass
+        pass
 
     def update_counter(self):
         self.jam_counter+=1
@@ -23,6 +22,8 @@ class World():
     def setup(self, parameters):
         self._parameters = parameters
         print("** Simulation parameters: %s" % self._parameters)
+
+        self.jam_counter = 0
 
         self._grid = Grid(parameters.grid_width, parameters.grid_height)
         self._agents = [Agent(i, self) for i in xrange(parameters.n_agents)]
@@ -44,4 +45,3 @@ class World():
 
     def get_agents(self):
         return self._agents
-
