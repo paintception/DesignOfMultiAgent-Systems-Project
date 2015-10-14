@@ -117,6 +117,8 @@ Simulation = function(settings) {
 	var updateParamsAndGrid = function(grid) {
 		$.getJSON('http://localhost:8001/sim/parameters', function (data) {
 			grid.setParameters(data);
+			var displayParams = data;
+			delete displayParams.routes;
 			var repr = "<table>" + Object.keys(data).map(function(x){
 				return "<tr><td>" + x + ":</td><td>" + data[x] + "</td></tr>";
 			}).join('') + "</table>";

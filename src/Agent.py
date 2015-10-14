@@ -1,4 +1,5 @@
 from __future__ import print_function, division
+from utils import Point
 
 
 class Agent:
@@ -54,6 +55,9 @@ class Agent:
         Call set_route() with current start and end points reversed.
         """
         return self.set_route(self._end, self._start)
+
+    def get_route(self):
+        return (Point(self._start.x, self._start.y), Point(self._end.x, self._end.y))
 
     def get_pos_node(self):
         return self._position
