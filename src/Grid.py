@@ -94,13 +94,16 @@ class Grid():
         values by specifying them in the weights parameter in the form of a
         tuple (x, y, weight).
         """
+        from World import World
+
         temp_grid = np.copy(self._astar_grid)
-        if type(weights) is list:
-            #NOTE: comment this to disable memory
-            weights=self.update_weights(weights)
-            for p in weights:
-                x, y, w = p
-                temp_grid[y][x] = w
+
+        if World().get_parameters().memory_enabled:
+            if type(weights) is list:
+                for p in weights:
+                    x, y, w = p
+                    temp_grid[y][x] = w
+            self.update_weights(temp_grid)
 
         r = self._astar.path_find(temp_grid, self.width, self.height,
                                   src.get_pos(), tgt.get_pos())
@@ -197,10 +200,9 @@ class Grid():
             for m in n:
                 m._print_node_jams()
 
-    def update_weights(self, w):
+    def update_weights(self, scribble_grid):
         for y in xrange(self.height):
             for x in xrange(self.width):
-
-                print(w)
-                print(self._gird[y][x])
-                w[y][x]+=self._gird[y][x].make_weights() #Check x and y !!!!!!!!!!!!!!!
+                # print(result)
+                # print(self._grid[y][x])
+                scribble_grid[y][x] += self._grid[y][x].make_weights()

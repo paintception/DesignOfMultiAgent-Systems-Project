@@ -17,6 +17,8 @@ class SimulationParameters():
     street_throughput   - (int) maximum number of moves from a junction to connecting streets (per direction, per timestep)
     steps_per_day       - (int)
     max_days            - (int) number of days after which to stop the simulation
+    routes              - (int) n_agents start and destination points (None by default)
+    memory_enabled     - (bool) True by default
 
     Some numbers:
     system_capacity = grid_width * grid_height * (junction_capacity + 4 * street_capacity)
@@ -36,6 +38,7 @@ class SimulationParameters():
         self.max_days = 10
 
         self.routes = None  # used to predefine agent routes
+        self.memory_enabled = True
 
     @staticmethod
     def load(filename):
