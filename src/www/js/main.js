@@ -92,6 +92,6 @@ $(document).ready(function() {
 		'grayscale': true,
 		'colorizeLowOffset': 0.2,
 		'autoplay': false,
-		'fps': 1
+		'fps': 2
 	});
 });

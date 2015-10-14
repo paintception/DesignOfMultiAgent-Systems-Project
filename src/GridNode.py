@@ -201,12 +201,9 @@ class GridNode(Point):
                 print("Node %s %s had %s jams at street: %s," %(self.x, self.y, test, s))
 
     def make_weights(self):
-        s=0
-        for x in self._street_jams:
-            s += len(x)
-        s=s/len(self._street_jams)
-        w= len(self._center_jams)+s
-        return w
+        jam_lenghts = [len(s) for s in self._street_jams.values() if s is not None]
+        sj = sum(jam_lenghts) / len(jam_lenghts)
+        return len(self._center_jams) + sj
 
     def has_Jam(self):
         s=False
