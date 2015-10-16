@@ -41,19 +41,24 @@ class SimulationParameters():
         self.memory_enabled = True
 
     @staticmethod
-    def load(filename):
+    def loads(s):
         import json
         from utils import Point
 
+        p = SimulationParameters()
+        o = json.loads(s)
+        if 'sim_parameters' in o: o = o['sim_parameters']
+
+        for (k,v) in o.items():
+            p.__dict__[k] = v
+        if p.routes:
+            p.routes = [(Point(r[0][0], r[0][1]), Point(r[1][0], r[1][1])) for r in p.routes]
+        return p
+
+    @staticmethod
+    def load(filename):
         with open(filename, 'r') as f:
-            p = SimulationParameters()
-            o = json.loads(f.read())['sim_parameters']
-            print("o:", o)
-            for (k,v) in o.items():
-                p.__dict__[k] = v
-            if p.routes:
-                p.routes = [(Point(r[0][0], r[0][1]), Point(r[1][0], r[1][1])) for r in p.routes]
-            return p
+            return SimulationParameters.loads(f.read())
 
     def save(self, filename):
         import json
@@ -89,7 +94,7 @@ class Simulation():
         self._world = World()
         self._parameters = parameters
         self._setup()
-        self._jam_progression=[]
+        self._jam_progression = []
 
     def _setup(self):
         import random
@@ -97,6 +102,7 @@ class Simulation():
 
         p = self._parameters
         self._world.setup(p)
+        self._jam_progression = []
 
         assert p.n_agents <= p.grid_width * p.grid_height * p.junction_capacity, \
             "not enough room for agent start points with given grid size and junction capacity"
@@ -138,6 +144,10 @@ class Simulation():
         if not self._parameters.routes:  # store routes in parameters if not already there
             route_points = [a.get_route() for a in self._world.get_agents()]
             self._parameters.routes = [(s, e) for (s, e) in route_points]
+
+    def restart(self, randomizeRoutes=False):
+        if randomizeRoutes: self._parameters.routes = None
+        self._setup()
 
     def get_parameters(self):
         return self._parameters

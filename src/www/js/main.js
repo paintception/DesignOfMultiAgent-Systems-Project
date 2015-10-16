@@ -33,16 +33,17 @@ $(document).ready(function() {
 	/* LOCAL FUNCTIONS */
 
 	//TODO: implement
-	var getSimParamsFromDOM = function() {
-		// var params = currentParameters;
+	var getSimParamsFromDOM = function(baseParams) {
+		var params = baseParams;
+		// TODO
 		// params.value1 = $('param-cfg param1').value();
-		return {'var1': 23, 'var2': true};
+		return params;
 	};
 
 	var setupListeners = function(simulation) {
 		var sim = simulation;
 		$('#ctl-new').on('click', function(ev) {
-			sim.startNew(getSimParamsFromDOM());
+			sim.startNew(getSimParamsFromDOM(sim.getParameters()));
 		});
 
 		$('#ctl-restart').on('click', function(ev) {

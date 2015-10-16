@@ -18,6 +18,8 @@ simulation, t, w = None, None, None
 verbose_mode = False
 
 class HTTPRequestHandler(BaseHTTPRequestHandler):
+    global simulation
+
     mime_types = {
         'js': 'application/javascript',
         'html': 'text/html',
@@ -132,7 +134,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         from World import World
         return json.dumps(World().get_counter())
 
-    def _api_Agent_Data(self):
+    def _api_agents(self):
         from World import World
         w = World()
         a = w.get_agents()
@@ -141,6 +143,31 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         for i in a:
             data.append(i.get_travel_times)
         return json.dumps(data)
+
+    # start new simulation with given parameters, if any
+    def _api_new_POST(self):
+        length = int(self.headers.getheader('Content-Length'))
+        data = self.rfile.read(length)
+
+        try:
+            p = SimulationParameters.loads(data)
+            simulation = Simulation(p)  # creating a new simulation resets everything
+            return json.dumps({'status': 'ok'})
+        except ValueError, e:
+            print("error processing json POST data '%s' (len=%i): %s" % (data, length, e) )
+            return json.dumps({'status': 'err', 'msg': 'could not parse input'})
+
+    def _api_restart_POST(self):
+        length = int(self.headers.getheader('content-length'))
+        data = self.rfile.read(length)
+
+        try:
+            data = json.loads(data) if length > 0 else {}
+            simulation.restart(data.get('randomize_routes', False))
+            return json.dumps({'status': 'ok'})
+        except ValueError, e:
+            print("error processing json POST data '%s' (len=%i): %s" % (data, length, e) )
+            return json.dumps({'status': 'err', 'msg': 'could not parse input'})
 
 
 def main(args):

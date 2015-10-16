@@ -17,6 +17,10 @@ Grid = function(simulation) {
 		this.parameters = parameters;
 	};
 
+	this.getParameters = function() {
+		return this.parameters;
+	};
+
 	this.setGridData = function(w, h, gridData) {
 		this.width = w;
 		this.height = h;
