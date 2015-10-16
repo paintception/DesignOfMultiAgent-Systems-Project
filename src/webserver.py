@@ -136,13 +136,12 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 
     def _api_agents(self):
         from World import World
-        w = World()
-        a = w.get_agents()
-        data = []
+        tmp = World().get_agents()
+        travel_data = []
 
         for i in a:
             data.append(i.get_travel_times)
-        return json.dumps(data)
+        return json.dumps(travel_data)
 
     # start new simulation with given parameters, if any
     def _api_new_POST(self):
