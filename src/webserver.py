@@ -136,8 +136,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 
     def _api_agents(self):
         from World import World
-        data = {a.get_name():a.jsonifiable() for a in World().get_agents()}
-        for v in data.values(): del v['name']
+        data = [a.jsonifiable() for a in World().get_agents()]
         return json.dumps(data)
 
     # start new simulation with given parameters, if any

@@ -15,7 +15,7 @@
  * - add explosions
  */
 $(document).ready(function() {
-	/* 'PUBLIC' UTILITY FUNCTIONS (poluting global namespace...) */
+	/* 'PUBLIC' UTILITY FUNCTIONS (polluting global namespace...) */
 
 	getRandomInt = function(min, max) {
 		return Math.floor(Math.random() * (max - min)) + min;
@@ -29,8 +29,35 @@ $(document).ready(function() {
 		return renderTime;
 	};
 
+	var agentsTable = null;
+
 
 	/* LOCAL FUNCTIONS */
+
+	var setupInterface = function() {
+		$('#tabs').tabs({'active': 2});
+
+		var parens = function(data, type, full, meta) {
+			return "(" + data + ")";
+		};
+
+		agentsTable = $('#agents').DataTable({
+			paging: false,
+			ajax: {
+				url: '/sim/agents',
+				dataSrc: ''
+			}, columns: [
+				{data: 'name'},
+				{ data: 'position', 'render': parens},
+				{data: 'start', 'render': parens},
+				{data: 'destination', 'render': parens},
+				{data: 'path'},
+				{data: 'start_time'},
+				{data: 'stuck_time'},
+				{data: 'total_path_distance'}
+			]
+		});
+	};
 
 	//TODO: implement
 	var getSimParamsFromDOM = function(baseParams) {
@@ -78,8 +105,10 @@ $(document).ready(function() {
 		var canvas = document.getElementById('grid-canvas');
 		paper.setup(canvas);
 
+		setupInterface();
+
 		console.log('main: creating simulation');
-		var sim = new Simulation(settings);
+		var sim = new Simulation(settings, agentsTable);
 
 		setupListeners(sim);
 

@@ -7,11 +7,13 @@
 	<link rel="stylesheet" href="css/jquery-ui.min.css">
 	<link rel="stylesheet" href="css/jquery-ui.structure.min.css">
 	<link rel="stylesheet" href="css/jquery-ui.theme.min.css">
+	<link rel="stylesheet" href="css/datatables.min.css"/>
 	<link rel="stylesheet" href="css/style.css">
 	<script src="js-external/jquery-2.1.4.min.js"></script>
 	<script src="js-external/jquery-ui-1.11.4.min.js"></script>
 	<script src="js-external/paper-core-0.9.24.js"></script>
 	<script src='js-external/Chart.min.js'></script>
+	<script src="js-external/datatables.min.js"></script>
 	<script src="js-external/EventEmitter/EventEmitter.min.js"></script>
 	<!-- <script type="text/paperscript" src="js/grid.js" canvas="grid-canvas"></script> -->
 	<script type="text/javascript" src="js/grid.js"></script>
@@ -19,9 +21,6 @@
 	<script type="text/javascript" src="js/display_results.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 	<script>
-		$(function() {
-			$('#tabs').tabs({'active': 1});
-		});
 	</script>
 </head>
 <body>
@@ -78,12 +77,18 @@
 				<div class="clear-floats"></div>
 			</div>
 			<div id="tab-3">
-		
-        		
-        	
-
-				TODO: agents view
-
+				<div id="agents-container"><table id="agents" class="compact stripe">
+					<thead><tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Start</th>
+						<th>Dest</th>
+						<th>Path left</th>
+						<th>Start TS</th>
+						<th>Stuck TS</th>
+						<th>Total dist.</th>
+					</tr></thead>
+				</table></div>
 			</div>
 			<div id="tab-4">
 				<!-- <canvas id="jams" width="500" height="200"></canvas> -->
