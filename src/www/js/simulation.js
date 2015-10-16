@@ -90,6 +90,8 @@ Simulation = function(settings) {
 
 	/* PRIVATE METHODS */
 
+
+
 	var renderStep = function() {
 		// console.log("grid: updating...");
 		// renderStart = new Date().getTime();

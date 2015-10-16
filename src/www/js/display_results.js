@@ -1,5 +1,17 @@
 /*eslint new-cap:0 */
 
+"""
+var number_jams = function()
+{
+        $.getJSON('http://localhost:8001/sim/jam_counter', function (data) {
+            var jams = data.jam_counter
+            console.log(data);
+        });
+
+}
+
+"""
+
 var simulationData = {
     labels : ["Day 1", "Day 2", "Day 3", "Day.."],  // Days of the simulation
     datasets : [
@@ -69,6 +81,12 @@ var pieDataAfter = [
 
 $(document).ready(function() {
     // get line chart canvas
+    """
+    var jamCanvas = document.getElementById('jams').getContext('2d');
+    new Chart(jamCanvas).bar(jams);
+
+    """
+
     var simCanvas = document.getElementById('speed_average').getContext('2d');
     // draw line chart
     new Chart(simCanvas).Line(simulationData);
