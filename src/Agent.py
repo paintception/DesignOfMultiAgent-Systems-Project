@@ -13,7 +13,6 @@ class Agent:
 
         self._travel_start_time = -1
         self._total_path_distance = -1
-        self._travel_velocity_ratio = 0
         self._waiting_times = {}
         self._stuck_time = 0
 
@@ -138,6 +137,22 @@ class Agent:
         # assert(distance_travelled == len(wt_list))
 
         return travel_time / distance_travelled
+
+    def jsonifiable(self):
+        xy = lambda p: (p.x, p.y)
+        r = {
+            'name': self._name,
+            'position': xy(self._position),
+            'start': xy(self._start),
+            'destination': xy(self._end),
+            'path': self._path,
+            # 'weights': self._weights,
+            'start_time': self._travel_start_time,
+            'total_path_distance': self._total_path_distance,
+            'waiting_times': self._waiting_times,
+            'stuck_time': self._stuck_time
+        }
+        return r
 
     def __str__(self):
         return "<Agent %s @ %s; %s -> %s -- %s>" % \
