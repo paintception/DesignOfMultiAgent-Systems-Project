@@ -48,7 +48,11 @@ The new idea our project proposal is to see if memory can actually have an impac
 
 \section{Method}
 \subsection{Simulation model}
-To make our traffic simulation we have programmed a grid of nodes. Each node represents a junction of streets, the streets are represented by simple lists. Each junction and street are allowed to hold a specific number of cars passing through them with a first-in-first-out schema. A traffic jam in this situation would occur if cars would first try to enter a junction from more directions and then will try to leave it, turning that junction into a kind of bottleneck. This aspect of the traffic is on what our whole simulation goes about. The cars on the road a re-controlled by separate agents, which give them a spawn location and a destination, these agents can then determine the fastest route with an weighted a* implementation algorithm. The weights of a* can be influenced by the memory of previous traffic jams the agents have encountered. This memory consists of a global array that holds the roads where traffic jams have occurred in previous situations. For now we have decided to go with a global memory model since on side it's easier to implement and on the other side it reflects the fact that these information are available for every driver that deals with a navigation system. 
+To make our traffic simulation we have defined and implemented the following parameters. A 7x7 grid in which a total of 50 independent agents travel from a random chosen starting point to a random chosen destination. They do this for 10 days without interruption and try to get to their destination as quickly as possible using the A* path finding algorithm.
+
+
+
+ we have programmed a grid of nodes where each node represents a junction of streets, in the code these streets are represented by simple lists. Each junction and street are allowed to hold a specific number of cars passing through them with a first-in-first-out schema defined by the parameter . A traffic jam in this situation would occur if cars would first try to enter a junction from more directions and then will try to leave it, turning that junction into a kind of bottleneck. This aspect of the traffic is on what our whole simulation goes about. The cars on the road a re-controlled by separate agents, which give them a spawn location and a destination, these agents can then determine the fastest route with an weighted a* implementation algorithm. The weights of a* can be influenced by the memory of previous traffic jams the agents have encountered. This memory consists of a global array that holds the roads where traffic jams have occurred in previous situations. For now we have decided to go with a global memory model since on side it's easier to implement and on the other side it reflects the fact that these information are available for every driver that deals with a navigation system. 
 
 \subsection{Experiment design}
 metrics: 1) fuel consumption <- article with usable modelling function (vel+accel?)
@@ -63,10 +67,7 @@ What's the story? Why is happening what is happening? verwacht: sluiproutegedrag
 \section{Conclusion}
 \subsection{Discussion}
 \subsection{Relevance}
-The intention of this paper was to show, that the use of memory in a repeated traffic situation can improve trafic flow and prevent traffic jams. This information could be used to improve traffic guidance systems like gps. If memory improves the traffic flow even though its just agent independent knowledge, that would mean, that a selfish change in behaviour can still improve the traffic situation as a whole without the need of direct interagent communication. If this is not possible it would be necessary for the agents to communicate with one another in order to distribute the traffic intentionaly which would require a large amount of work and intercooperation-cooperation. 
-The benefit of an easy solution could guarantee, that improved guiding systems could be produced that by their useage would optimize traffic for everyone. 
-The benefits of optemised traffic are wildly known \cite{french2003multiagnet}. Not just that it's bad for your personal health when you come to work with high bloodpreasure and the intend to murder people, but its also unproductive for thousends of people to spend hours a day doing nothing. On a global scale, optemising traffic also has the benefitial trade to reduce the carbon emmision of the cars, that no longer stand on the streets with running motors. 
-All in all, optemising traffic is is a worthwile attempt to promote peoples health productivaty and quality of life. 
+
 
 \bibliographystyle{plain}
 \bibliography{dmas-gereon_matthia_wouter-traffic_memory-report.bib}
