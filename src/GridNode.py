@@ -205,7 +205,6 @@ class GridNode(Point):
         sj = sum(jam_lenghts) / len(jam_lenghts)
         return len(self._center_jams) + sj
 
-    def make_weights():
 
     def has_Jam(self):
         s=False
