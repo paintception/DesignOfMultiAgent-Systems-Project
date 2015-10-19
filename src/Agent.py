@@ -138,6 +138,9 @@ class Agent:
 
         return travel_time / distance_travelled
 
+    def get_end(self):
+        return self._end
+        
     def jsonifiable(self):
         xy = lambda p: (p.x, p.y)
         r = {

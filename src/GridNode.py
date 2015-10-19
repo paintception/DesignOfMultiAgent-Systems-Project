@@ -81,7 +81,8 @@ class GridNode(Point):
         """
         Removes car from main stack.
         """
-        self._car_stack.remove(car)
+        if car in self._car_stack:
+            self._car_stack.remove(car)
 
     def add_car(self, car, call_update=True):
         """
@@ -89,6 +90,9 @@ class GridNode(Point):
         Agents adding themselves to their initial position should call with call_update=False
         """
         if len(self._car_stack) < self._max_car_stack:
+            if car.get_end() == self:
+                car.set_position(self)
+                return True
             self._car_stack.append(car)
             car.set_position(self)
             # if call_update: car.update()  # done in Agent's event handler now
@@ -204,7 +208,6 @@ class GridNode(Point):
         jam_lenghts = [len(s) for s in self._street_jams.values() if s is not None]
         sj = sum(jam_lenghts) / len(jam_lenghts)
         return len(self._center_jams) + sj
-
 
     def has_Jam(self):
         s=False
