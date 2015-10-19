@@ -23,7 +23,7 @@ Simulation = function(settings, agentsTable) {
 	this.startNew = function(parameters) {
 		var data = JSON.stringify({'parameters': parameters});
 		console.log("sending new sim with data:", data);
-		$.post('http://localhost:8001/sim/new', data, function(response) {
+		$.post('/sim/new', data, function(response) {
 			console.log('POST sim/new response:', response);
 		}, 'json');
 	};
@@ -31,7 +31,7 @@ Simulation = function(settings, agentsTable) {
 	this.restart = function(randomizeRoutes) {
 		randomizeRoutes = randomizeRoutes || false;
 		var data = JSON.stringify({'randomize_routes': randomizeRoutes});
-		$.post('http://localhost:8001/sim/restart', data, function(response) {
+		$.post('/sim/restart', data, function(response) {
 			console.log('POST sim/restart response:', response);
 		}, 'json');
 	};
@@ -98,7 +98,7 @@ Simulation = function(settings, agentsTable) {
 		// renderStart = new Date().getTime();
 
 		var stepStart = new Date().getTime();
-		$.getJSON('http://localhost:8001/sim/step', function (data) {
+		$.getJSON('/sim/step', function (data) {
 			var stepTime = new Date().getTime() - stepStart;
 			$('#sim-info').html("<b>Sim calc time</b>: " + stepTime + " msec");
 
@@ -112,7 +112,7 @@ Simulation = function(settings, agentsTable) {
 	};
 
 	var updateParamsAndGrid = function(grid) {
-		$.getJSON('http://localhost:8001/sim/parameters', function (data) {
+		$.getJSON('/sim/parameters', function (data) {
 			grid.setParameters(data);
 			var displayParams = data;
 			delete displayParams.routes;
@@ -121,7 +121,7 @@ Simulation = function(settings, agentsTable) {
 			}).join('') + "</table>";
 			$('#param-info').html("<b>Simulation parameters</b>: " + repr);
 
-			$.getJSON('http://localhost:8001/sim/grid', function (data) {
+			$.getJSON('/sim/grid', function (data) {
 				grid.setGridData(data.width, data.height, data.grid);
 
 				var duration = timeIt(function() {

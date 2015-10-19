@@ -51,14 +51,14 @@ The new idea our project proposal is to see if memory can actually have an impac
 To make our traffic simulation we have programmed a grid of nodes. Each node represents a junction of streets, the streets are represented by simple lists. Each junction and street are allowed to hold a specific number of cars passing through them with a first-in-first-out schema. A traffic jam in this situation would occur if cars would first try to enter a junction from more directions and then will try to leave it, turning that junction into a kind of bottleneck. This aspect of the traffic is on what our whole simulation goes about. The cars on the road a re-controlled by separate agents, which give them a spawn location and a destination, these agents can then determine the fastest route with an weighted a* implementation algorithm. The weights of a* can be influenced by the memory of previous traffic jams the agents have encountered. This memory consists of a global array that holds the roads where traffic jams have occurred in previous situations. For now we have decided to go with a global memory model since on side it's easier to implement and on the other side it reflects the fact that these information are available for every driver that deals with a navigation system. 
 
 \subsection{Experiment design}
-
+metrics: 1) fuel consumption <- article with usable modelling function (vel+accel?)
 
 \section{Results}
 \subsection{Experiment findings}
 TODO: how do we want to present results? (graphs, avg. flow/speed/fuel/jams)
 
 \subsection{Interpretation of findings}
-
+What's the story? Why is happening what is happening? verwacht: sluiproutegedrag, en ToM nodig om dat te vermijden
 
 \section{Conclusion}
 \subsection{Discussion}

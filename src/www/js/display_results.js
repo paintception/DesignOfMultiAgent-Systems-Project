@@ -3,7 +3,7 @@
 /*
 var number_jams = function()
 {
-        $.getJSON('http://localhost:8001/sim/jam_counter', function (data) {
+        $.getJSON('/sim/jam_counter', function (data) {
             var jams = data.jam_counter
             console.log(data);
         });
