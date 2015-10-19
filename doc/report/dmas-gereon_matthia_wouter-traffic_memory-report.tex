@@ -9,9 +9,10 @@
 \usepackage{graphicx}
 
 
-\title{\textbf{\huge DMAS Project report\\ <We still don't have a good title :P>}%
+\title{\textbf{\huge Traffic Memory: A Multi Agent System Approach to Traffic Flow Optimization}%
 }
-\author{Gereon Vienken (s2738805) \and
+\author{
+	Gereon Vienken (s2738805) \and
     Matthia Sabatelli (s2847485) \and
     Wouter Reckman (s2231166)
 }
@@ -48,13 +49,20 @@ The new idea our project proposal is to see if memory can actually have an impac
 
 \section{Method}
 \subsection{Simulation model}
-To make our traffic simulation we have defined and implemented the following parameters. A 7x7 grid in which a total of 50 independent agents travel from a random chosen starting point to a random chosen destination. They do this for 10 days without interruption and try to get to their destination as quickly as possible using the A* path finding algorithm.
+To make our traffic simulation we have defined and implemented the following parameters. A 7x7 grid in which a total of 50 independent agents travel from a random chosen starting point to a random chosen destination. They do this for 10 days without interruption and try to get to their destination as quickly as possible using the A* path finding algorithm. In this grid there are 49 junctions they can travel through which have a certain agent capacity that we have setted to 3, once this limit is reached the traffic gets blocked and traffic jams occur. This scenario is explained in the figure hereafter where the more red the junction gets the more blocked the traffic turns out to be:
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width = 0.7\linewidth]{/home/matthia/Scrivania/grid.png}
+\caption{Traffic Scenario \label{overflow}}
+\end{figure} 
 
 
-
- we have programmed a grid of nodes where each node represents a junction of streets, in the code these streets are represented by simple lists. Each junction and street are allowed to hold a specific number of cars passing through them with a first-in-first-out schema defined by the parameter . A traffic jam in this situation would occur if cars would first try to enter a junction from more directions and then will try to leave it, turning that junction into a kind of bottleneck. This aspect of the traffic is on what our whole simulation goes about. The cars on the road a re-controlled by separate agents, which give them a spawn location and a destination, these agents can then determine the fastest route with an weighted a* implementation algorithm. The weights of a* can be influenced by the memory of previous traffic jams the agents have encountered. This memory consists of a global array that holds the roads where traffic jams have occurred in previous situations. For now we have decided to go with a global memory model since on side it's easier to implement and on the other side it reflects the fact that these information are available for every driver that deals with a navigation system. 
+These traffic jams can occur if cars first try to enter a junction from more directions and then will try to leave it simultaneously, this turns the junction into a kind of bottleneck. This aspect of the traffic is on what our whole simulation goes about. At the end of the first 10 days simulation our agents remember the junctions in which the more traffic occurred and in the second part of it they use this information to re-plan their routes in our version of the A* algorithm. This means that the path finding algorithm gives different weights to the various steps it has computed to make an agent get to his destination, in fact if one of these steps corresponds to a high congested junction the algorithm plans a new route in which he tries to avoid it. We have decided to go with a global memory model since on one side it's easier to implement and on the other side it is more human likely since it reflects the fact that these information is actually available for every driver that deals with a very common navigation system. 
 
 \subsection{Experiment design}
+
+
 metrics: 1) fuel consumption <- article with usable modelling function (vel+accel?)
 
 \section{Results}
@@ -67,6 +75,8 @@ What's the story? Why is happening what is happening? verwacht: sluiproutegedrag
 \section{Conclusion}
 \subsection{Discussion}
 \subsection{Relevance}
+The intention of this paper was to show, that the use of memory in a repeated traffic situation can improve traffic flow and prevent traffic jams. This information could be used to improve traffic guidance systems like gps. If memory improves the traffic flow even though its just agent independent knowledge, that would mean, that a selfish change in behaviour can still improve the traffic situation as a whole without the need of direct inter-agent communication. If this is not possible it would be necessary for the agents to communicate with one another in order to distribute the traffic intentionally which would require a large amount of work and inter cooperation-cooperation. 
+The benefit of an easy solution could guarantee, that improved guiding systems could be produced that by their usage would optimize traffic for everyone. The benefits of optimised traffic are wildly known \cite{france2003multiagent}. Not just that it's bad for your personal health when you come to work with high bloodstream and the intend to murder people, but it's also unproductive for thousands of people to spend hours a day doing nothing. On a global scale, optimising traffic also has the beneficial trade to reduce the carbon emission of the cars, that no longer stand on the streets with running motors. All in all, optimising traffic is a worthwhile attempt to promote peoples health productivity and quality of life. 
 
 
 \bibliographystyle{plain}
