@@ -10,13 +10,10 @@ class Agent:
         self._end = None
         self._path = None
         self._world = world
-        self._traveltimes = []
-        self._startTime = None
 
-
-        self._total_path_distance = -1
         self._travel_start_time = -1
-        self._travel_velocity_ratio = 0
+        self._total_path_distance = -1
+        self._waiting_times = {}
         self._stuck_time = 0
 
     def is_travelling(self):
@@ -46,12 +43,8 @@ class Agent:
             self._position = self._start
             self._start.add_car(self, False)
             self._determine_path()
-
-            if  self.get_startingTime() == None:
-                self.set_startingTime(t.get_timestamp())
-            else:
-                self.add_travel_times(((self.get_startingTime, t.get_timestamp), self.get_route))
-                self.set_startingTime(t.get_timestamp)
+            self._travel_start_time = t.get_timestamp()
+            self._waiting_times[self._travel_start_time] = []
 
             return True
 
@@ -90,32 +83,24 @@ class Agent:
         else:
             return None
 
-    # NOTE/TODO: this can be removed as the event handler does the updating now
-    # def update(self):
-    #     self._path.pop(0)  # update path to destination
-
     def handle_movement_event(self, ev):
         """
         Called when a movement occurs (or could not occur).
         ev contains: type, timestamp, new_pos.
         """
         from Grid import GRID_EVENT as GE
-      #  print("agent %s event: %s" % (self._name, ev))
+        print("agent %s event: %s" % (self._name, ev))
 
         if ev.ev_type == GE.JUNCTION_ARRIVED:
             if self._position != ev.old_pos:  # check if we have actually moved
                 self._path.pop(0)
-            else:
-                self._travel_start_time = ev.timestamp
 
-            travel_time = ev.timestamp - self._travel_start_time
-            distance_to_travel = len(self._path)
-            distance_travelled = self._total_path_distance - distance_to_travel
-            # divide travel_time by 2 since moving to street and arriving at next junction takes two time steps
-            if travel_time > 0:
-                self._travel_velocity_ratio = distance_travelled / (travel_time / 2)
-            else:
-                self._travel_velocity_ratio = 0
+                # record waiting time
+                entry = (ev.old_pos.x, ev.old_pos.y, self._stuck_time)
+                self._waiting_times[self._travel_start_time].append(entry)
+                print("wt list:", self._waiting_times)
+                print("ratio:", self.get_velocity_ratio())
+
             self._stuck_time = 0
 
         elif ev.ev_type == GE.JUNCTION_REJECTED:
@@ -128,33 +113,47 @@ class Agent:
     def _determine_path(self):
         self._path = self._world.get_grid().get_path(self._position, self._end)
         # self._path = self._world.get_grid().get_path(self._position, self._end, None, True)
-        if not self._path:
-            print (self._start) 
-            print (self._position)
-            print (self._end)
-        self._total_path_distance = len(self._path)
 
-        if self._path is None:
+        if self._path is not None:
+            self._total_path_distance = len(self._path)
+        else:
+            self._total_path_distance = -1
             raise Exception("could not find route for agent %s from %s to %s" % (self._name, self._position, self._end))
-
-    def __str__(self):
-        return "<Agent %s @ %s; %s -> %s -- %s>" % \
-            (self._name, self._position, self._start, self._end, self._path)
-
 
     def get_route(self):
         return(self._start, self._end)
 
-    def get_travel_times(self):
-        return self._traveltimes
+    def get_waiting_times(self):
+        return self._waiting_times
 
-    def add_travel_times(self, traveltime):
-        self._traveltimes.append(traveltime)
+    # TODO: take self._stuck_time into account, otherwise this will only be accurate if cars can actually move
+    def get_velocity_ratio(self):
+        distance_to_travel = len(self._path)
+        distance_travelled = self._total_path_distance - distance_to_travel
 
-    def set_startingTime(self, time):
-        self._startTime = time
+        # compute travel_time from wait list: using current timestamp will be incorrect once the agent has reached its destination
+        wt_list = self._waiting_times[self._travel_start_time]
+        travel_time = len(wt_list) + sum(map(lambda e: e[2], wt_list))  # number of visited junctions + waiting time at each of them
+        # assert(distance_travelled == len(wt_list))
 
-    def get_startingTime(self):
-        return self._startTime
+        return travel_time / distance_travelled
 
-  
+    def jsonifiable(self):
+        xy = lambda p: (p.x, p.y)
+        r = {
+            'name': self._name,
+            'position': xy(self._position),
+            'start': xy(self._start),
+            'destination': xy(self._end),
+            'path': self._path,
+            # 'weights': self._weights,
+            'start_time': self._travel_start_time,
+            'total_path_distance': self._total_path_distance,
+            'waiting_times': self._waiting_times,
+            'stuck_time': self._stuck_time
+        }
+        return r
+
+    def __str__(self):
+        return "<Agent %s @ %s; %s -> %s -- %s>" % \
+            (self._name, self._position, self._start, self._end, self._path)

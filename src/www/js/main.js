@@ -15,7 +15,7 @@
  * - add explosions
  */
 $(document).ready(function() {
-	/* 'PUBLIC' UTILITY FUNCTIONS (poluting global namespace...) */
+	/* 'PUBLIC' UTILITY FUNCTIONS (polluting global namespace...) */
 
 	getRandomInt = function(min, max) {
 		return Math.floor(Math.random() * (max - min)) + min;
@@ -29,8 +29,57 @@ $(document).ready(function() {
 		return renderTime;
 	};
 
+	var agentsTable = null;
+
 
 	/* LOCAL FUNCTIONS */
+
+	var setupInterface = function() {
+		$('#tabs').tabs({'active': 2});
+
+		var parens = function(data, type, full, meta) {
+			return "(" + data + ")";
+		};
+
+		agentsTable = $('#agents').DataTable({
+			// paging: false,
+			'iDisplayLength': 25,
+			select: 'single',
+			ajax: {
+				url: '/sim/agents',
+				dataSrc: ''
+			}, columns: [
+				{data: 'name'},
+				{ data: 'position', 'render': parens},
+				{data: 'start', 'render': parens},
+				{data: 'destination', 'render': parens},
+				{data: 'path'},
+				{data: 'start_time'},
+				{data: 'stuck_time'},
+				{data: 'total_path_distance'}
+			]
+		});
+		agentsTable.on('select', function(e, dt, type, indexes) {
+			if (type === 'row') {
+				var name = dt.rows(indexes).data().pluck('name')[0];
+				var wt = dt.rows(indexes).data().pluck('waiting_times')[0]; //waiting_times list
+				var wtDump = ["<i>Waiting times for agent " + name + ":</i>"];
+				for (var tl_time in wt) { //loop over travel logs (start_time => [(x,y,w), (x,y,w), ...])
+					var tl_log = wt[tl_time];
+					var dayLog = "Travel started at " + tl_time + ": ";
+
+					var dayLogItems = [];
+					for (var wp in tl_log) { //(x,y,w) waypoints + waiting times during travel
+						var item = tl_log[wp];
+						dayLogItems.push("(" + item[0] + "," + item[1] + ")[<b>" + item[2] + "</b>]");
+					}
+					wtDump.push(dayLog + dayLogItems.join(" -> "));
+				}
+				console.log(wtDump.join("<br>\n"));
+				$('#agent-details').html(wtDump.join("<br>\n"));
+			}
+		});
+	};
 
 	//TODO: implement
 	var getSimParamsFromDOM = function(baseParams) {
@@ -78,8 +127,10 @@ $(document).ready(function() {
 		var canvas = document.getElementById('grid-canvas');
 		paper.setup(canvas);
 
+		setupInterface();
+
 		console.log('main: creating simulation');
-		var sim = new Simulation(settings);
+		var sim = new Simulation(settings, agentsTable);
 
 		setupListeners(sim);
 

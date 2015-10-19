@@ -1,10 +1,11 @@
 /*
  * Inherits from EventEmitter.
  */
-Simulation = function(settings) {
+Simulation = function(settings, agentsTable) {
 	/* INITIALIZATION */
 
 	this.settings = settings;
+	this.agentsTable = agentsTable;
 	this.isPaused_ = true;
 	this.renderTimeoutId = null;
 
@@ -90,6 +91,8 @@ Simulation = function(settings) {
 
 	/* PRIVATE METHODS */
 
+
+
 	var renderStep = function() {
 		// console.log("grid: updating...");
 		// renderStart = new Date().getTime();
@@ -126,6 +129,7 @@ Simulation = function(settings) {
 				}, "grid.draw");
 
 				$('#render-info').html("<b>Grid render time</b>: " + duration + " msec");
+				agentsTable.ajax.reload();
 			});
 		}).error(function(err) {
 			console.log("getJSON error, server down? -- ", err); //TODO: use this for a connectivity indicator?

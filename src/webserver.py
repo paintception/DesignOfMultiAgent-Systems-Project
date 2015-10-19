@@ -136,12 +136,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 
     def _api_agents(self):
         from World import World
-        w = World()
-        a = w.get_agents()
-        data = []
-
-        for i in a:
-            data.append(i.get_travel_times)
+        data = [a.jsonifiable() for a in World().get_agents()]
         return json.dumps(data)
 
     # start new simulation with given parameters, if any

@@ -162,15 +162,15 @@ class GridNode(Point):
         return "%02i/%01i" % (0, 0)
 
     def _add_center_jam(self, time):
-        print ("jam at: (%i, %i)" % (self.x, self.y))
+        # print ("jam at: (%i, %i)" % (self.x, self.y))
         self._center_jams.append(time)
-        print("jams:", self._center_jams)
+        # print("jams:", self._center_jams)
 
     def _add_street_jam(self, drx, time):
         World().update_counter()
         self._street_jams[drx].append(time)
-        print ("jam at street: %i (%i, %i), total: %i" % (drx, self.x, self.y, World().get_counter()))
-        print("jams:", self._street_jams[drx])
+        # print ("jam at street: %i (%i, %i), total: %i" % (drx, self.x, self.y, World().get_counter()))
+        # print("jams:", self._street_jams[drx])
 
     def jsonifiable(self):
         result = {
@@ -215,6 +215,5 @@ class GridNode(Point):
 
         if len(self._center_jams) > 0 or s:
             return True
-
         else:
             return False

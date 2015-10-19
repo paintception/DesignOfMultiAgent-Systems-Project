@@ -37,6 +37,9 @@ class Point():
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def jsonifiable(self):
+        return (self.x, self.y)
+
     def __str__(self):
         return "(%.2f, %.2f)" % (self.x, self.y)
 
