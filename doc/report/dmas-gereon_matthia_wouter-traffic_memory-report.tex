@@ -62,10 +62,14 @@ These traffic jams can occur if cars first try to enter a junction from more dir
 
 \subsection{Experiment design}
 
+As already explained we have divided our whole simulation into 2 parts, the first one is preparatory for the second one since it is where the agents acquire the memory knowledge they will need in the second one in order to improve the traffic flow. During the 10 days of the 2 simulations we have measured and tracked the following parameters for every agent. First of all the starting point and the destination point that have been randomly assigned in order to get an idea where the agents needed to go. We also have measured the relocation process in order to see if and how they are moving, but the most important data comes from the Stuck TS parameter that measures how much each agent that is blocked in traffic is waiting before being able to reach its destination. We also have kept track of the overall distance that each agent has covered during its travelling period, the highest this parameter is, the more likely it is that the agent has bumped into a traffic jam. These parameters are all shown in the following figure:
 
+\begin{figure}[ht!]
+\centering
+\includegraphics[width = 1.0\linewidth]{/home/matthia/Scrivania/data.png}
+\caption{Measurements Table \label{overflow}}
+\end{figure} 
 
-
-metrics: 1) fuel consumption <- article with usable modelling function (vel+accel?)
 
 \section{Results}
 \subsection{Experiment findings}
