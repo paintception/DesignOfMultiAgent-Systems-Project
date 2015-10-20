@@ -12,7 +12,7 @@ var number_jams = function()
 */
 
 var simulationData = {
-    labels : ["Day 1", "Day 2", "Day 3", "Day.."],  // Days of the simulation
+    labels : ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7", "Day 8", "Day 9", "Day 10" ],  // Days of the simulation
     datasets : [
         {
             //PYTHON RESULTS
@@ -35,7 +35,7 @@ var simulationData = {
 };
 
 var fuelData = {
-    labels : ["Day 1", "Day 2", "Day 3", "Day.."],
+    labels : ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7", "Day 8", "Day 9", "Day 10" ],
     datasets: [
         {
             label: "My First dataset",
