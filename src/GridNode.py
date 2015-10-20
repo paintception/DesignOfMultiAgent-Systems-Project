@@ -219,3 +219,9 @@ class GridNode(Point):
             return True
         else:
             return False
+
+    def get_jam_average(self):
+        import numpy as np
+        j = [len(jam_times) for jam_times in self._street_jams.values() if jam_times is not None]
+        j.append(len(self._center_jams))
+        return np.average(j)

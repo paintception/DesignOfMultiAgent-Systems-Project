@@ -14,7 +14,7 @@ class TimeLord():
 
     def next_time_step(self):
         self._time_step = (self._time_step + 1) % self._timesteps_per_day
-        print ("** Timestep: %s" % self._time_step)
+        # print ("** Timestep: %s" % self._time_step)
         if self._time_step == 0:
             self._day += 1
 

@@ -14,3 +14,7 @@ doc/report/*.bib
 doc/report/*.log
 doc/report/*.out
 *.swp
+
+# result data
+src/results/results.json
+src/results/parameters.json

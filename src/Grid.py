@@ -204,6 +204,13 @@ class Grid():
             for m in n:
                 m._print_node_jams()
 
+    def get_jam_amount(self):
+        jam_avgs = []
+        for row in self._grid:
+            for c in row:
+                jam_avgs.append(c.get_jam_average())
+        return np.average(jam_avgs)
+
     def update_weights(self, scribble_grid):
         for y in xrange(self.height):
             for x in xrange(self.width):

@@ -27,7 +27,7 @@ class SimulationParameters():
     def __init__(self):
         self.grid_width = 7
         self.grid_height = 7
-        self.n_agents = 50
+        self.n_agents = 147
 
         self.junction_capacity = 3
         self.street_capacity = 5
@@ -38,7 +38,7 @@ class SimulationParameters():
         self.max_days = 10
 
         self.routes = None  # used to predefine agent routes
-        self.memory_enabled = True
+        self.memory_enabled = False
 
     @staticmethod
     def loads(s):
@@ -94,7 +94,6 @@ class Simulation():
         self._world = World()
         self._parameters = parameters
         self._setup()
-        self._jam_progression = []
 
     def _setup(self):
         import random
@@ -182,6 +181,7 @@ class Simulation():
             start = dt.now()
 
         t.next_time_step()
+        self._jam_progression.append(g.get_jam_amount())
 
         if self._parameters.max_days > -1 and t.get_day() >= self._parameters.max_days:
             return False
@@ -195,5 +195,5 @@ class Simulation():
     def _print_jams(self):
         self._world.get_grid()._print_jams()
 
-    def _print_jam_progression(self):
-        print (self._jam_progression)
+    def get_jam_progression(self):
+        return self._jam_progression

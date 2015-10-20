@@ -89,7 +89,7 @@ class Agent:
         ev contains: type, timestamp, new_pos.
         """
         from Grid import GRID_EVENT as GE
-        print("agent %s event: %s" % (self._name, ev))
+        # print("agent %s event: %s" % (self._name, ev))
 
         if ev.ev_type == GE.JUNCTION_ARRIVED:
             if self._position != ev.old_pos:  # check if we have actually moved
@@ -98,8 +98,8 @@ class Agent:
                 # record waiting time
                 entry = (ev.old_pos.x, ev.old_pos.y, self._stuck_time)
                 self._waiting_times[self._travel_start_time].append(entry)
-                print("wt list:", self._waiting_times)
-                print("ratio:", self.get_velocity_ratio())
+                # print("wt list:", self._waiting_times)
+                # print("ratio:", self.get_velocity_ratio())
 
             self._stuck_time = 0
 
