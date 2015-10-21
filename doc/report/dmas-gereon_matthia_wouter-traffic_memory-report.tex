@@ -29,12 +29,18 @@
 
 \begin{abstract}
 \noindent
-In this paper we present a Multi-Agent System simulation of traffic in which 147 agents travel for 10 days in a 7x7 grid where they move from a random starting position to a random assigned destination. In the grid we have created junctions where the agents have to pass through during the travel process in order to make traffic jams occur. This regards the first part of the experiment, in the second one we provide the agents with a memory system in which they are able to remember the most congested roads with a weighted A* path finding algorithm and compare the traffic situation to the previous one in order to see if the general traffic flow improves. 
+In this paper we present a Multi-Agent System simulation of traffic in which 147 agents travel for 10 days in a 7x7 grid, moving from a randomized starting position to a randomly assigned destination. The grid symbolizes a Manhattan-like city consisting of junctions. The number of agents able to move through these junctions during each (discrete) time step is limited, thus creating bottlenecks which in turn may cause traffic jams. This regards the first part of the experiment, in the second part we provide the agents with a memory system enabling them to remember the most congested junctions. Using a weighted A* path finding algorithm they can avoid these and potentially the amount of traffic jams occurring could be reduced. Our results however, showed the opposite effect, which we attribute to a form of cut-through driving arising.
 \end{abstract}
 
 
 \section{Introduction}
-During the last decades it has been shown that travelling by car is still one of the most comfortable and appreciated ways to move through countries. The reasons of this constant growth are several, they go in fact from the always more affordable prices of cars that make every family able to own one car or more to the creation of the European Community that has lead to the elimination of boundaries between countries and has facilitated the trade and exchange of resources between different nations. As a result millions of people suffer everyday from congestion and traffic jams in urban road networks while trying to travel to their daily destinations. This may happen because the existing road networks and the way these are controlled are old and inappropriate and as a consequence unable to regulate the quantity of car traffic of the 21st century but also because the drivers that occupy these road networks are unable to cooperate between each other in order to make the traffic flow more liveable. What is sure about traffic jams is that it has several negative impacts, first of all it makes people's life more difficult then it already actually is, leading to frustration and selfishness in order to avoid them. But there is more, and it regards the ecological impact that traffic jams have on every day's life, the air pollution has in fact reached such high levels in some countries that it has been identified as one of the main reasons of the exacerbation of asthma, allergy and many other respiratory diseases. Part of the air contamination is given by the auto mobile exhausts that combined with certain industrial pollutants produce photochemical reactions that are damaging for humans health \cite{ghose2005assessment}. Even though many people do not think about all these issues traffic has a very important role in our society and this has lead us to the work that is presented in the next sessions.             
+During the past decades, travel by car has always been one of the most comfortable and appreciated ways to move through countries and the amount of traffic is ever increasing. Several reasons of this constant growth can be indicated, ranging from the constant increase of affordability of cars, enabling almost every family to own one or several cars, to the creation of the European Community which has led to the elimination of boundaries between countries and has facilitated the trade and exchange of resources between different nations.
+
+As a result, millions of people suffer everyday from congestion and traffic jams in urban road networks while travelling to their daily destinations. Possibly, this happens due to existing road networks and the traffic light systems being outdated and not up to the task of regulating the vastly increased quantity of car traffic of the 21st century. Another possible cause is the tendency of drivers occupying these road networks to exhibit selfish behaviour instead of cooperating to make traffic flow more liveable.
+
+It is desirable to minimize the amount of traffic congestions, because it has several negative impacts. Firstly, it leads to frustration and selfish or even aggressive behaviour of traffic participants in an attempt to move through the traffic faster. \\
+Secondly, exhaust gases have a severe negative ecological impact on the environment. Air pollution has in fact reached such high levels that in some countries it has been identified as one of the main reasons of the exacerbation of asthma, allergy and many other respiratory diseases. Part of the air pollution is caused by the auto mobile exhausts that, combined with certain industrial pollutants, produce photochemical reactions which in turn damage human health \cite{ghose2005assessment}. \\
+Even though most people do not think about all these issues, traffic has a very important role in society and this has led to the work that is presented in the next sections.
 
 
 \subsection{Problem}
@@ -53,7 +59,7 @@ To make our traffic simulation we have defined and implemented the following par
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width = 0.7\linewidth]{/home/matthia/Scrivania/grid.png}
+\includegraphics[width = 0.7\linewidth]{grid}
 \caption{Traffic Scenario \label{overflow}}
 \end{figure} 
 
@@ -66,7 +72,7 @@ As already explained we have divided our whole simulation into 2 parts, the firs
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width = 1.0\linewidth]{/home/matthia/Scrivania/data.png}
+\includegraphics[width = 1.0\linewidth]{data}
 \caption{Measurements Table \label{overflow}}
 \end{figure} 
 
@@ -74,6 +80,12 @@ As already explained we have divided our whole simulation into 2 parts, the firs
 \section{Results}
 \subsection{Experiment findings}
 The main data we were interested in is the percentage of jams occurring during the two parts of the simulation, that namely refer to the agents travelling with the normal A* algorithm and with the weighted version of it that simulates the memory. During our computational simulation we have saved the amount of jams that have occurred for every time step for a period of 10 days and this has been done for 100 times. So we have calculated the amount of jams, for each time step (30) for 10 days. This has been repeated for 100 times. This has been done in order to be able to compute an average representing the occurrence of the traffic jams over a decent amount of data. In the next section the graphs that represent this simulation are discussed in order to show how the amount of jams has decreased over time when the agents were provided with memory.  
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width = 0.7\linewidth]{100sims-mem-vs-nomem}
+\caption{Progression of traffic jams over time\label{overflow}}
+\end{figure} 
 
 \subsection{Interpretation of findings}
 What's the story? Why is happening what is happening? verwacht: sluiproutegedrag, en ToM nodig om dat te vermijden
