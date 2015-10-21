@@ -18,7 +18,7 @@
 	<!-- <script type="text/paperscript" src="js/grid.js" canvas="grid-canvas"></script> -->
 	<script type="text/javascript" src="js/grid.js"></script>
 	<script type="text/javascript" src="js/simulation.js"></script>
-	<script type="text/javascript" src="js/display_results.js"></script>
+	<!-- <script type="text/javascript" src="js/display_results.js"></script> -->
 	<script type="text/javascript" src="js/main.js"></script>
 	<script>
 	</script>
@@ -27,12 +27,45 @@
 	<div id="content">
 		<div id="tabs">
 			<ul>
-				<li><a href="#tab-1">Presentation of the Project</a></li>
-				<li><a href="#tab-2">Grid view</a></li>
-				<li><a href="#tab-3">Agents</a></li>
-				<li><a href="#tab-4">Results of your simulation!</a></li>
+				<li><a href="#tab-1">Grid view</a></li>
+				<li><a href="#tab-2">Agents</a></li>
+				<!-- <li><a href="#tab-3">Presentation of the Project</a></li> -->
+				<!-- <li><a href="#tab-4">Results of your simulation!</a></li> -->
 			</ul>
-			<div id="tab-1">
+  			<div id="tab-1">
+				<canvas id="grid-canvas" resize="true"></canvas>
+				<div id="control">
+					<span class="ctl" id="ctl-new">New</span>
+					<span class="ctl" id="ctl-restart">Restart</span>
+					<span class="ctl" id="ctl-playpause">Play/pause</span>
+					<span class="ctl" id="ctl-step">Single step</span>
+					<span class="ctl" id="ctl-grayscale">Color/grayscale mode</span>
+				</div>
+				<div id="information">
+					<span class="info" id="time-info"></span>
+					<span class="info" id="sim-info"></span>
+					<span class="info" id="render-info"></span>
+					<span class="info" id="param-info"></span>
+				</div>
+				<div class="clear-floats"></div>
+			</div>
+			<div id="tab-2">
+				<div id="agents-container"><table id="agents" class="compact stripe">
+					<thead><tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Start</th>
+						<th>Dest</th>
+						<th>Path left</th>
+						<th>Start TS</th>
+						<th>Stuck TS</th>
+						<th>Total dist.</th>
+					</tr></thead>
+				</table></div>
+				<span id="agent-details"></span>
+			</div>
+<!--
+			<div id="tab-3">
 				<h1> "It's easy to blame traffic jams if you're late and in a hurry!!!"</h1>
 				<h2> Toba Beta</h2>
 				<canvas id="video_example" width="500" height="200"></canvas>
@@ -58,41 +91,8 @@
 					</p>
 				</div>
 			</div>
-
-  			<div id="tab-2">
-				<canvas id="grid-canvas" resize="true"></canvas>
-				<div id="control">
-					<span class="ctl" id="ctl-new">New</span>
-					<span class="ctl" id="ctl-restart">Restart</span>
-					<span class="ctl" id="ctl-playpause">Play/pause</span>
-					<span class="ctl" id="ctl-step">Single step</span>
-					<span class="ctl" id="ctl-grayscale">Color/grayscale mode</span>
-				</div>
-				<div id="information">
-					<span class="info" id="time-info"></span>
-					<span class="info" id="sim-info"></span>
-					<span class="info" id="render-info"></span>
-					<span class="info" id="param-info"></span>
-				</div>
-				<div class="clear-floats"></div>
-			</div>
-			<div id="tab-3">
-				<div id="agents-container"><table id="agents" class="compact stripe">
-					<thead><tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Start</th>
-						<th>Dest</th>
-						<th>Path left</th>
-						<th>Start TS</th>
-						<th>Stuck TS</th>
-						<th>Total dist.</th>
-					</tr></thead>
-				</table></div>
-				<span id="agent-details"></span>
-			</div>
 			<div id="tab-4">
-				<!-- <canvas id="jams" width="500" height="200"></canvas> -->
+				<canvas id="jams" width="500" height="200"></canvas>
 				<h1>Average speed of the Agents with and without memory. </h1>
 				<canvas id="speed_average" width="1000" height="200"></canvas>
 				<h1>Do we need this graph?!</h1>
@@ -102,6 +102,7 @@
         		<canvas id="pie" width="800" height="200"></canvas>
         		<canvas id="pie2" width="800" height="200"></canvas>
 			</div>
+-->
 		</div>
 	</div>
 </body>

@@ -35,7 +35,7 @@ $(document).ready(function() {
 	/* LOCAL FUNCTIONS */
 
 	var setupInterface = function() {
-		$('#tabs').tabs({'active': 2});
+		$('#tabs').tabs({'active': 0});
 
 		var parens = function(data, type, full, meta) {
 			return "(" + data + ")";
