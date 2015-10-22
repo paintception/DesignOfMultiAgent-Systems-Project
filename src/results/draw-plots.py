@@ -66,14 +66,20 @@ def main():
     with_stdevs, without_stdevs = np.std(with_stacked, axis=0), np.std(without_stacked, axis=0)
 
     # TODO: print errors, print vertical lines indicating the days more clearly, plot point cloud?
+    # TODO: show number of cars still travelling at the end of each day
 
     plt.plot(with_means, '0.8', label="Jam occurrences with memory")
     plt.plot(without_means, '0.2', label="Jam occurrences without memory")
+    # plt.errorbar(with_means, '0.8', yerr=with_stdevs, label="Jam occurrences with memory")
+    # plt.errorbar(without_means, '0.2', yerr=without_stdevs, label="Jam occurrences without memory")
     pylab.legend(loc='upper left')
     plt.xlabel("Timestep")
-    plt.xticks(np.arange(0, 300, 30))
-    plt.ylabel("Average of total jams occurred per intersection (err or is it?)")
-    plt.title("Occurence of jams with vs without memory (averaged over %i simulations)" % n_sims)
+    # max_y = max(np.amax(with_means), np.amax(without_means))
+    # round to nearest 0.5 and use for yticks?
+    # plt.yticks(np.arange(0.0, max_y + 0.0001, 0.1))
+    plt.xticks(np.arange(0, 301, 30))
+    plt.ylabel("Average of total jams occurred per intersection")
+    # plt.title("Occurrence of jams with vs without memory (averaged over %i simulations)" % n_sims)
     plt.show()
 
 if __name__ == '__main__':

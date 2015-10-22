@@ -6,6 +6,10 @@
 - test avoid list in Grid.get_path()
 - replace direction map in astar.py with the one from Utils.py?
 
+# metrics / fuel consumption
+- find base research to validate our calculation: parameterisation of fuel consumption as function of speed (EU?)
+  * related to traffic jams: http://www.vwi.tu-dresden.de/~treiber/publications/fuelModel.pdf
+  * maybe: http://publications.jrc.ec.europa.eu/repository/bitstream/111111111/22474/1/co2_report_jrc_format_final2.pdf
 
 # larger picture
 
