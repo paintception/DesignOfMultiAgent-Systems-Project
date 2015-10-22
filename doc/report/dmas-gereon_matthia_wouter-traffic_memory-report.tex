@@ -55,60 +55,61 @@ The new idea of our project proposal is to see if memory can actually have an im
 
 \section{Method}
 \subsection{Simulation model}
-The model as used in the base article is a commonly used car following model called the Krauss model (TODO: add ref). This uses a limited number of parameters controlling the distance agents want to keep to their predecessor, their desired velocity, and maximum acceleration and breaking capacities. They run their simulation on a circular road, without intersections and with only a single lane. \\
+The model as used in the base article is a commonly used car following model called the Krauss model, published in \cite{krauss1998microscopic}. This uses a limited number of parameters controlling the distance agents want to keep to their predecessor, their desired velocity, and maximum acceleration and breaking capacities. They run their simulation on a circular road, without intersections and with only a single lane. \\
 Since the follow-up experiment described in this article requires agents to have choice in planning their route, a grid road pattern was chosen. Although extensions to the Krauss model have been developed to support this, it was too complex to implement this given the limited time-scope of this project. Instead, a simpler model has been implemented, which is described in the remainder of this subsection.
 
 The model consists of a 7 by 7 grid of intersections. Each of those has a maximum capacity of agents it can hold simultaneously, set to 3. The maximum number of agents in the system is thus $7*7*3=147$ agents. This value is also the amount of agents which can travel through the junction per time step. Leading away from each junction to its neighbouring junction is a street, which has a maximum throughput capacity, set to 5. \\
 Time is modelled as days, which consist of 30 time steps, giving enough time for agents to travel the longest possible route (i.e., a Manhattan distance of $7*7$ junctions). \\
-The agents restart their route every day, computing their route using the A* algorithm. Their routes are randomly generated at the start of each simulation run. Depending on whether memory has been enabled, this is either unweighted or weighted using jam counters for each junction.
+The agents restart their route every day, computing their route using the A* algorithm. Their routes are randomly generated at the start of each simulation run. Depending on whether memory has been enabled, this is either non-weighted or weighted using jam counters for each junction.
 Figure \ref{fig:grid} shows a visualization of the grid, green indicating empty cells and red indicating cells having reached their capacity.
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width = 0.7\linewidth]{grid}
-\label{fig:grid}
-\caption{Traffic Scenario \label{overflow}}
+\caption{Traffic Scenario \label{fig:grid}}
 \end{figure} 
 
 Traffic jams can occur if agents try to enter a junction from multiple directions and then try to leave it simultaneously, this way the junction can become a bottleneck. This aspect of the model is makes the comparison possible. When memory has been enabled, at the end of the each simulation day the agents remember the how many jams occurred in each junction and for the following day they use this information to re-plan their routes avoiding the most busy locations. \\
 The memory has been implemented as a global model, so agents all use the same information, as if this has been shared for instance by Internet-enabled navigation systems.
 
-\subsection{Experiment design - doorlezen/aanpassen}
+\subsection{Experiment design}
 
-As already explained we have divided our whole simulation into 2 parts, the first one is preparatory for the second one since it is where the agents acquire the memory knowledge they will need in the second one in order to improve the traffic flow. During the 10 days of the 2 simulations we have measured and tracked the following parameters for every agent. First of all the starting point and the destination point that have been randomly assigned in order to get an idea where the agents needed to go. We also have measured the relocation process in order to see if and how they are moving, but the most important data comes from the Stuck TS parameter that measures how much each agent that is blocked in traffic is waiting before being able to reach its destination. We also have kept track of the overall distance that each agent has covered during its travelling period, the highest this parameter is, the more likely it is that the agent has bumped into a traffic jam. These parameters are all shown in the following figure:
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width = 1.0\linewidth]{data}
-\label{fig:measurements}
-\caption{Measurements Table \label{overflow}}
-\end{figure} 
-
-
-\section{Results - doorlezen/aanvullen}
-\subsection{Experiment findings}
-The output produced by the experiment is the total number of jams occurring in each part of the simulation. Namely the base simulation using a regular A* path finder versus the second part which uses weighted A* to implement memory.
+The output produced by the experiment is the total number of jams occurring in each part of the simulation. First the base simulation using a regular A* path finder, then the second part which uses weighted A* to implement memory.
 During the simulation this amount of jams that have occurred is saved for every time step over a period of 10 days. This process is repeated a 100 times in order to avoid effects due to chance, as the agent routes are randomized at the start of each simulation. \\
 In the next section the graphs that represent this simulation are discussed in order to show how the amount of jams has decreased over time when the agents were provided with memory.  
+
+%---TODO: beschrijving van tabel hier laten? maar zeggen dat we alleen het aantal files gemeten hebben (stuck TS is daar een andere weergave van)
+%During the 10 days of the 2 simulations we have measured and tracked the following parameters for every agent. First of all the starting point and the destination point that have been randomly assigned in order to get an idea where the agents needed to go. We also have measured the relocation process in order to see if and how they are moving, but the most important data comes from the Stuck TS parameter that measures how much each agent that is blocked in traffic is waiting before being able to reach its destination. We also have kept track of the overall distance that each agent has covered during its travelling period, the highest this parameter is, the more likely it is that the agent has bumped into a traffic jam. These parameters are all shown in figure \ref{fig:measurements}.
+%
+%\begin{figure}[ht!]
+%\centering
+%\includegraphics[width = 1.0\linewidth]{data}
+%\caption{Measurements Table \label{fig:measurements}}
+%\end{figure} 
+
+
+\section{Results}
+\subsection{Experiment findings}
+Contrary to the hypothesis, the experiment shows that the addition of memory has an adverse effect on traffic flow. Figure \ref{fig:jam-progression} shows that without memory, jams occur at the beginning of each day but these subside as agents reach their destination. With memory however, the amount of traffic jams occurring is ever increasing, possibly even causing agents not to reach their destination on the same day. \\
+One remark considering the graph: it may be slightly misleading since the data shown is cumulative. In other words, the lines show the total amount of jams occurred over the whole simulation time, so the simulation with memory enabled might look worse than it actually is.
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width = 0.7\linewidth]{100sims-mem-vs-nomem}
-\label{fig:jam-progression}
-\caption{Progression of traffic jams over time\label{overflow}}
+\caption{Progression of traffic jams over time \label{fig:jam-progression}}
 \end{figure} 
 
 \subsection{Interpretation of findings}
-In figure \ref{fig:jam-progression}, the results are shown.
-%\todo{wat zien we hier?}
-%\todo{opmerken dat het cumulatief is en dus het effect sterker lijkt dan het eigenlijk is}
-
-As visible, the outcome of the experiment is opposite to our hypothesis that the addition of memory would decrease the amount of traffic jams. One explanation for this behaviour is that since agents all try to avoid the same bottlenecks, they also tend to take the same detours, resulting in what is commonly known as cut-through driving. As all agents do this, the bottlenecks just shift to different locations.
-
-hier en in conclusie+discussie vertellen: What's the story? Why is happening what is happening? verwacht: sluiproutegedrag, en ToM nodig om dat te vermijden
+As noted, the outcome of the experiment is opposite to the hypothesis that the addition of memory would decrease the amount of traffic jams. One explanation for this behaviour is that since agents all try to avoid the same bottlenecks, they also tend to take the same detours, resulting in what is commonly known as cut-through driving. As all agents do this, the bottlenecks do not disappear, but shift to different locations.
 
 \section{Conclusion}
+The conclusion that can be drawn from this experiment is quite simple: only adding memory to route planning of traffic participants does not help reduce the amount of traffic jams. In fact it seems to make the situation worse.
+
 \subsection{Discussion}
+Although further investigation would be required to establish that cut-through driving is actually causing the increased occurrence of traffic jams, it might very well be a plausible explanation. Not without reason do inhabitants of areas around busy roads, or roads with long-term construction work often complain about this behaviour of passing drivers and do local governments take measures to counteract this.
+
+A possible next step to this experiment would be to add theory of mind. If agents reason about the jam-avoiding behaviour of others, they might come up with solutions to all take the same detour. For instance, they could add a little randomization to their route to that in total the traffic load will be spread more evenly.
+
 \subsection{Relevance}
 The intention of this experiment is to determine if the use of memory in a repeated traffic situation can improve flow and prevent jams. This information could be used to improve traffic guidance systems like GPS navigation. If applying local memory (in the sense that there is no cooperation) to agents can improve traffic flow, that would mean that even such a selfish change could cause improvement to the global situation. \\
 If that is not the case however, it would be required for agents (or navigation systems) to have communication between each other in order for the traffic system as a whole to improve. Such distribution of information would be far more difficult to implement with current technology.
